@@ -1,0 +1,6 @@
+-- Company controller.
+Cần có middlewares kiểm tra số lượng nhân viên.
+Kiểm tra định dạng tên có đúng không.
+Kiểm tra website có đúng là website không.
+
+Thêm cái địa chỉ chi nhánh vào.
