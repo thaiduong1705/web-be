@@ -1,18 +1,27 @@
 const express = require("express");
-const morgan = require("morgan");
 const methodOverride = require("method-override");
+const cors = require("cors");
+require("dotenv").config();
+import connectDatabase from "./src/config/db.connect.js";
 
-const initAPIroute = require("./routes/api");
+const initAPIroute = require("./src/routes");
 
 const app = express();
-const port = 8080;
 
 // Middleware mà Express đã build sẵn
+app.use(
+    cors({
+        origin: process.env.CLIENT_URL,
+        methods: ["POST", "GET", "PUT", "DELETE"],
+    }),
+);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
-// app.use(morgan("combined"));
 
 initAPIroute(app);
+connectDatabase();
+
+const port = process.env.PORT || 8080;
 
 app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
