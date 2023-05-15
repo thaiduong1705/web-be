@@ -19,14 +19,14 @@ module.exports = (sequelize, DataTypes) => {
     Candidate.init(
         {
             candidateName: DataTypes.STRING,
-            age: DataTypes.INT,
+            age: DataTypes.INTEGER,
             profileImage: DataTypes.STRING,
             CVImage: DataTypes.STRING,
             phoneNumber: DataTypes.STRING,
             email: DataTypes.STRING,
             homeAddress: DataTypes.TEXT,
             gender: DataTypes.BOOLEAN,
-            experienceYear: DataTypes.INT,
+            experienceYear: DataTypes.INTEGER,
             academicLevelId: DataTypes.STRING,
         },
         {

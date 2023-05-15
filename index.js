@@ -21,7 +21,6 @@ app.use(methodOverride("_method"));
 
 initAPIroute(app);
 connectDatabase();
-relationshipTester();
 
 const port = process.env.PORT || 8080;
 

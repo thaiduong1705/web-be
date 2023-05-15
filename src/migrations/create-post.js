@@ -27,8 +27,11 @@ module.exports = {
                     key: "id",
                 },
             },
-            salary: {
-                type: Sequelize.INTEGER,
+            salaryMin: {
+                type: Sequelize.BIGINT,
+            },
+            salaryMax: {
+                type: Sequelize.BIGINT,
             },
             experienceYear: {
                 type: Sequelize.INTEGER,
@@ -40,7 +43,10 @@ module.exports = {
                     key: "id",
                 },
             },
-            age: {
+            ageMin: {
+                type: Sequelize.INTEGER,
+            },
+            ageMax: {
                 type: Sequelize.INTEGER,
             },
             workingTypeId: {

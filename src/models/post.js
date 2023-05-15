@@ -11,7 +11,6 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             Post.belongsTo(models.Company, { foreignKey: "companyId" });
             Post.belongsTo(models.Position, { foreignKey: "positionId" });
-            Post.belongsTo(models.Experience, { foreignKey: "experienceId" });
             Post.belongsTo(models.AcademicLevel, { foreignKey: "academicLevelId" });
             Post.belongsTo(models.WorkingType, { foreignKey: "workingTypeId" });
             Post.belongsToMany(models.Career, { through: models.PostCareer });
@@ -23,8 +22,11 @@ module.exports = (sequelize, DataTypes) => {
             jobTitle: DataTypes.STRING,
             companyId: DataTypes.STRING,
             positionId: DataTypes.STRING,
-            salary: DataTypes.BIGINT,
-            experienceYear: DataTypes.INT,
+            salaryMin: DataTypes.BIGINT,
+            salaryMax: DataTypes.BIGINT,
+            ageMin: DataTypes.INTEGER,
+            ageMax: DataTypes.INTEGER,
+            experienceYear: DataTypes.INTEGER,
             academicLevelId: DataTypes.STRING,
             workingTypeId: DataTypes.STRING,
             viewCount: DataTypes.STRING,
@@ -33,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
             sex: DataTypes.BOOLEAN,
             jobDescribe: DataTypes.TEXT,
             benefits: DataTypes.TEXT,
-            jobRequirements: DataTypes.TEXT,
+            jobRequirement: DataTypes.TEXT,
             contact: DataTypes.TEXT,
         },
         {
