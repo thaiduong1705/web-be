@@ -17,6 +17,7 @@
 // module.exports = connection;
 const { Sequelize, Model } = require("sequelize");
 
+// Option 3: Passing parameters separately (other dialects)
 const sequelize = new Sequelize("job_recommendation", "root", null, {
     host: "localhost",
     dialect: "mysql",
