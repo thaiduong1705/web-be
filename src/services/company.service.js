@@ -3,7 +3,7 @@ import db from "../models";
 export const getCompaniesService = async () => {
     try {
         const res = await db.Company.findAll({
-            //include: [{ model: db.Company, as: "company", attributes: ["companyName", "imageLink"] }],
+            include: [{ model: db.Career, as: "career", attributes: ["careerName"] }],
         });
 
         return {

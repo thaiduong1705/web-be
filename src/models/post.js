@@ -37,6 +37,7 @@ module.exports = (sequelize, DataTypes) => {
             benefits: DataTypes.TEXT,
             jobRequirement: DataTypes.TEXT,
             contact: DataTypes.TEXT,
+            workingAddress: DataTypes.STRING,
         },
         {
             sequelize,
