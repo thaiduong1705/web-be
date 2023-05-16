@@ -7,7 +7,7 @@ export const getPositionsService = async () => {
         return {
             err: res ? 0 : 1,
             msg: res ? "Oke" : "Fail to get positions",
-            res,
+            data,
         };
     } catch (error) {
         return {

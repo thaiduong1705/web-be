@@ -41,16 +41,10 @@ export const createPost = async (req, res) => {
             !jobTitle ||
             !companyId ||
             !positionId ||
-            !salaryMin ||
-            !salaryMax ||
-            !ageMin ||
-            !ageMax ||
-            !experienceYear ||
             !academicLevelId ||
             !workingTypeId ||
             !endDate ||
             !needNumber ||
-            !sex ||
             !jobDescribe ||
             !benefits ||
             !jobRequirement ||

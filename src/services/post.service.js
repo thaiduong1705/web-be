@@ -10,7 +10,7 @@ export const getPostsService = async () => {
         return {
             err: res ? 0 : 1,
             msg: res ? "Oke" : "Fail to get posts",
-            res,
+            data,
         };
     } catch (error) {
         return {
@@ -50,20 +50,21 @@ export const createPostService = async ({
             jobTitle,
             companyId,
             positionId,
-            salaryMin,
-            salaryMax,
-            ageMin,
-            ageMax,
-            experienceYear,
+            salaryMin: salaryMin ?? null,
+            salaryMax: salaryMax ?? null,
+            ageMin: ageMin ?? null,
+            ageMax: ageMax ?? null,
+            experienceYear: experienceYear ?? null,
             academicLevelId,
             workingTypeId,
             endDate: new Date(endDate),
             needNumber,
-            sex,
+            sex: sex ?? 2,
             jobDescribe,
             benefits,
             jobRequirement,
             contact,
+            workingAddress,
         });
         const pc = await db.PostCareer.bulkCreate(
             careerList.map((careerId) => {
@@ -85,7 +86,7 @@ export const createPostService = async ({
         return {
             err: careerStatus && districtStatus ? 0 : 2,
             msg: careerStatus && districtStatus ? "Oke" : "Fail to create new post",
-            res: {
+            data: {
                 post,
                 pc,
                 pd,

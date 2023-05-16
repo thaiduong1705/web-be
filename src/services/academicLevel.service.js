@@ -7,7 +7,7 @@ export const getAcademicLevelsService = async () => {
         return {
             err: res ? 0 : 1,
             msg: res ? "Oke" : "Fail to get academic levels",
-            res,
+            data,
         };
     } catch (error) {
         return {

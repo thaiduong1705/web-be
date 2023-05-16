@@ -7,7 +7,7 @@ export const getCareersService = async () => {
         return {
             err: res ? 0 : 1,
             msg: res ? "Oke" : "Fail to get careers",
-            res,
+            data,
         };
     } catch (error) {
         return {

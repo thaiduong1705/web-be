@@ -19,25 +19,25 @@ module.exports = (sequelize, DataTypes) => {
     }
     Post.init(
         {
-            jobTitle: DataTypes.STRING,
-            companyId: DataTypes.STRING,
-            positionId: DataTypes.STRING,
+            jobTitle: DataTypes.STRING, // not null
+            companyId: DataTypes.STRING, // not null
+            positionId: DataTypes.STRING, // not null
             salaryMin: DataTypes.BIGINT,
             salaryMax: DataTypes.BIGINT,
             ageMin: DataTypes.INTEGER,
             ageMax: DataTypes.INTEGER,
             experienceYear: DataTypes.INTEGER,
-            academicLevelId: DataTypes.STRING,
-            workingTypeId: DataTypes.STRING,
+            academicLevelId: DataTypes.STRING, // not null
+            workingTypeId: DataTypes.STRING, // not null
             viewCount: DataTypes.STRING,
-            endDate: DataTypes.DATEONLY,
+            endDate: DataTypes.DATEONLY, // not null
             needNumber: DataTypes.INTEGER,
             sex: DataTypes.BOOLEAN,
-            jobDescribe: DataTypes.TEXT,
-            benefits: DataTypes.TEXT,
-            jobRequirement: DataTypes.TEXT,
-            contact: DataTypes.TEXT,
-            workingAddress: DataTypes.STRING,
+            jobDescribe: DataTypes.TEXT, // not null
+            benefits: DataTypes.TEXT, // not null
+            jobRequirement: DataTypes.TEXT, // not null
+            contact: DataTypes.TEXT, // not null
+            workingAddress: DataTypes.STRING, // not null
         },
         {
             sequelize,
