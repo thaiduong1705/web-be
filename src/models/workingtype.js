@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            WorkingType.hasMany(models.Post);
+            WorkingType.hasMany(models.Post, { foreignKey: "workingTypeId" });
         }
     }
     WorkingType.init(

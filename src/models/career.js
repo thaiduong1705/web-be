@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
                 through: models.CompanyCareer,
                 foreignKey: "careerId",
             });
-            Career.belongsToMany(models.Post, { through: models.PostCareer });
-            Career.belongsToMany(models.Candidate, { through: models.CandidateCareer });
+            Career.belongsToMany(models.Post, { through: models.PostCareer, foreignKey: "careerId" });
+            Career.belongsToMany(models.Candidate, { through: models.CandidateCareer, foreignKey: "candidateId" });
         }
     }
     Career.init(

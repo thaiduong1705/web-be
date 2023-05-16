@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            AcademicLevel.hasMany(models.Post);
+            AcademicLevel.hasMany(models.Post, { foreignKey: "academicLevelId" });
+            AcademicLevel.hasMany(models.Candidate, { foreignKey: "academicLevelId" });
         }
     }
     AcademicLevel.init(

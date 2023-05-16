@@ -45,65 +45,51 @@ export const createPostService = async ({
         let careerStatus = true;
         let districtStatus = true;
         const id = v4();
-        // const post = await db.Post.create({
-        //     id: id,
-        //     jobTitle,
-        //     companyId,
-        //     positionId,
-        //     salaryMin,
-        //     salaryMax,
-        //     ageMin,
-        //     ageMax,
-        //     experienceYear,
-        //     academicLevelId,
-        //     workingTypeId,
-        //     endDate: new Date(endDate),
-        //     needNumber,
-        //     sex,
-        //     jobDescribe,
-        //     benefits,
-        //     jobRequirement,
-        //     contact,
-        // });
-        // careerList.forEach((careerId) => {
-        //     db.PostCareer.create({
-        //         postId: 11,
-        //         careerId: careerId,
-        //     })
-        //         .then((result) => {})
-        //         .catch((err) => {
-        //             careerStatus = false;
-        //         });
-        // });
-        db.PostCareer.create({
-            postId: 11,
-            careerId: careerList[0],
-        })
-            .then((result) => {
-                console.log("oke");
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-        // districtList.forEach((districtId) => {
-        //     db.PostCareer.create({
-        //         postId: 12,
-        //         districtId: districtId,
-        //     })
-        //         .then((result) => {})
-        //         .catch((err) => {
-        //             districtId = false;
-        //         });
-        // });
+        const post = await db.Post.create({
+            id: id,
+            jobTitle,
+            companyId,
+            positionId,
+            salaryMin,
+            salaryMax,
+            ageMin,
+            ageMax,
+            experienceYear,
+            academicLevelId,
+            workingTypeId,
+            endDate: new Date(endDate),
+            needNumber,
+            sex,
+            jobDescribe,
+            benefits,
+            jobRequirement,
+            contact,
+        });
+        const pc = await db.PostCareer.bulkCreate(
+            careerList.map((careerId) => {
+                return {
+                    careerId,
+                    postId: post.id,
+                };
+            }),
+        );
+        const pd = await db.PostDistrict.bulkCreate(
+            districtList.map((districtId) => {
+                return {
+                    districtId,
+                    postId: post.id,
+                };
+            }),
+        );
 
         return {
             err: careerStatus && districtStatus ? 0 : 2,
             msg: careerStatus && districtStatus ? "Oke" : "Fail to create new post",
-            // res: {
-            //     post,
-            //     careerStatus,
-            //     districtStatus,
-            // },
+            res: {
+                post,
+                pc,
+                pd,
+            },
         };
     } catch (error) {
         return error;
