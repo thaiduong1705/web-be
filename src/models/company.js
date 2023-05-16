@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
                 through: models.CompanyCareer,
                 foreignKey: "companyId",
             });
-            Company.hasMany(models.Post);
+            Company.hasMany(models.Post, { foreignKey: "companyId", as: "posts" });
         }
     }
     Company.init(

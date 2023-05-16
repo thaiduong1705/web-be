@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Post.belongsTo(models.Company, { foreignKey: "companyId" });
+            Post.belongsTo(models.Company, { foreignKey: "companyId", targetKey: "id", as: "company" });
             Post.belongsTo(models.Position, { foreignKey: "positionId" });
             Post.belongsTo(models.AcademicLevel, { foreignKey: "academicLevelId" });
             Post.belongsTo(models.WorkingType, { foreignKey: "workingTypeId" });
