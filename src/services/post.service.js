@@ -19,6 +19,24 @@ export const getPostsService = async () => {
     }
 };
 
+export const getPostByIdService = async ({ id }) => {
+    try {
+        const response = await db.Post.findByPk(id, {
+            include: [
+                { model: db.Career, as: "Career", attributes: ["careerName"] },
+                { model: db.District, as: "District", attributes: ["districtName"] },
+            ],
+        });
+        return {
+            err: response ? 0 : 2,
+            msg: response ? "Oke" : "Fail to get company by id",
+            data: response,
+        };
+    } catch (error) {
+        return error;
+    }
+};
+
 export const createPostService = async ({
     jobTitle,
     companyId,
@@ -50,11 +68,11 @@ export const createPostService = async ({
             jobTitle,
             companyId,
             positionId,
-            salaryMin: salaryMin ?? null,
-            salaryMax: salaryMax ?? null,
-            ageMin: ageMin ?? null,
-            ageMax: ageMax ?? null,
-            experienceYear: experienceYear ?? null,
+            salaryMin: salaryMin,
+            salaryMax: salaryMax,
+            ageMin: ageMin,
+            ageMax: ageMax,
+            experienceYear: experienceYear,
             academicLevelId,
             workingTypeId,
             endDate: new Date(endDate),
@@ -84,12 +102,122 @@ export const createPostService = async ({
         );
 
         return {
-            err: careerStatus && districtStatus ? 0 : 2,
-            msg: careerStatus && districtStatus ? "Oke" : "Fail to create new post",
+            err: post && pc && pd ? 0 : 2,
+            msg: post && pc && pd ? "Oke" : "Fail to create new post",
             data: {
                 post,
                 pc,
                 pd,
+            },
+        };
+    } catch (error) {
+        return error;
+    }
+};
+
+export const updatePostService = async ({
+    id,
+    jobTitle,
+    companyId,
+    positionId,
+    salaryMin,
+    salaryMax,
+    ageMin,
+    ageMax,
+    experienceYear,
+    academicLevelId,
+    workingTypeId,
+    endDate,
+    needNumber,
+    sex,
+    jobDescribe,
+    benefits,
+    jobRequirement,
+    contact,
+    workingAddress,
+    careerOldList,
+    careerNewList,
+    districtOldList,
+    districtNewList,
+}) => {
+    try {
+        let careerDel = [];
+        let districtDel = [];
+        const res = await db.Post.update(
+            {
+                id: id,
+                jobTitle,
+                companyId,
+                positionId,
+                salaryMin: salaryMin,
+                salaryMax: salaryMax,
+                ageMin: ageMin,
+                ageMax: ageMax,
+                experienceYear: experienceYear,
+                academicLevelId,
+                workingTypeId,
+                endDate: new Date(endDate),
+                needNumber,
+                sex: sex ?? 2,
+                jobDescribe,
+                benefits,
+                jobRequirement,
+                contact,
+                workingAddress,
+            },
+            {
+                where: {
+                    id: id,
+                },
+            },
+        );
+        const post = await db.Company.findByPk(id);
+
+        for (const oldId of careerOldList) {
+            const temp = await db.PostCareer.destroy({
+                where: {
+                    [Op.and]: [{ postId: post.id }, { careerId: oldId }],
+                },
+            });
+            careerDel.push(temp);
+        }
+
+        for (const oldId of districtOldList) {
+            const temp = await db.PostDistrict.destroy({
+                where: {
+                    [Op.and]: [{ postId: post.id }, { districtId: oldId }],
+                },
+            });
+            districtDel.push(temp);
+        }
+
+        const hasZeroValues = careerDel.some((value) => value === 0) && districtDel.some((value) => value === 0);
+
+        const pc = await db.PostCareer.bulkCreate(
+            careerNewList.map((careerId) => {
+                return {
+                    careerId,
+                    postId: post.id,
+                };
+            }),
+        );
+        const pd = await db.PostDistrict.bulkCreate(
+            districtNewList.map((districtId) => {
+                return {
+                    districtId,
+                    postId: post.id,
+                };
+            }),
+        );
+
+        return {
+            err: post && pc && pd && !hasZeroValues ? 0 : 2,
+            msg: post && pc && pd && !hasZeroValues ? "Oke" : "Fail to create new post",
+            data: {
+                post,
+                pc,
+                pd,
+                hasZeroValues,
             },
         };
     } catch (error) {

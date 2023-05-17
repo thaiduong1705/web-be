@@ -82,6 +82,9 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.TEXT,
             },
+            workingAddress: {
+                type: Sequelize.STRING,
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

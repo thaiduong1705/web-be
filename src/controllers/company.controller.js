@@ -56,3 +56,39 @@ export const getCompanyById = async (req, res) => {
         });
     }
 };
+
+export const updateCompany = async (req, res) => {
+    try {
+        if (!req.params.id) {
+            return res.status(400).json({
+                err: 1,
+                msg: "Missing id!",
+            });
+        }
+        const { companyName, imageLink, url, address, introduction, companySize, careerOldList, careerNewList } =
+            req.body;
+        if (
+            !companyName ||
+            !imageLink ||
+            !address ||
+            !introduction ||
+            !companySize ||
+            !careerOldList ||
+            careerOldList.length === 0 ||
+            !careerNewList ||
+            careerNewList.length === 0
+        ) {
+            return res.status(400).json({
+                err: 1,
+                msg: "Missing Input!",
+            });
+        }
+        const response = await companyService.updateCompany({ ...req.body, ...req.params });
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({
+            err: -1,
+            msg: "Fail at updateCompany: " + error,
+        });
+    }
+};

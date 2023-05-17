@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
             Company.belongsToMany(models.Career, {
                 through: models.CompanyCareer,
                 foreignKey: "companyId",
-                as: "career",
+                as: "Career",
             });
             Company.hasMany(models.Post, { foreignKey: "companyId", as: "posts" });
         }

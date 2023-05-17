@@ -74,7 +74,7 @@ export const insertService = async () => {
         //     db.Post.create({
         //         id: id,
         //         jobTitle: data.header.jobTitle,
-        //         companyId: "0ae02326-f845-408c-ab30-be62708440ce",
+        //         companyId: "185e7ee8-6810-4b60-bc32-5d9bb4884c0b",
         //         salaryMin: 10,
         //         salaryMax: 12,
         //         ageMin: 18,
@@ -89,7 +89,10 @@ export const insertService = async () => {
         //         contact: mockJob.detailJobs[0].longInfo[3]["Thông tin liên hệ"].join("\n"),
         //     });
         // });
-        return;
+        return {
+            msg: "Done",
+            err: 0,
+        };
     } catch (error) {
         return error;
     }

@@ -13,8 +13,12 @@ module.exports = (sequelize, DataTypes) => {
             Post.belongsTo(models.Position);
             Post.belongsTo(models.AcademicLevel);
             Post.belongsTo(models.WorkingType);
-            Post.belongsToMany(models.Career, { through: models.PostCareer, foreignKey: "postId" });
-            Post.belongsToMany(models.District, { through: models.PostDistrict, foreignKey: "districtId" });
+            Post.belongsToMany(models.Career, { through: models.PostCareer, foreignKey: "postId", as: "Career" });
+            Post.belongsToMany(models.District, {
+                through: models.PostDistrict,
+                foreignKey: "postId",
+                as: "District",
+            });
         }
     }
     Post.init(
@@ -36,6 +40,7 @@ module.exports = (sequelize, DataTypes) => {
             jobDescribe: DataTypes.TEXT, // not null
             benefits: DataTypes.TEXT, // not null
             jobRequirement: DataTypes.TEXT, // not null
+            workingAddress: DataTypes.STRING,
             contact: DataTypes.TEXT, // not null
             workingAddress: DataTypes.STRING, // not null
         },
