@@ -7,7 +7,7 @@ export const getDistrictsService = async () => {
         return {
             err: res ? 0 : 1,
             msg: res ? "Oke" : "Fail to get districts",
-            res,
+            data,
         };
     } catch (error) {
         return {

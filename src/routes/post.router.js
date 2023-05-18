@@ -5,5 +5,7 @@ import * as postController from "../controllers/post.controller";
 // router.post("/register", authController.register);
 // router.post("/login", authController.login);
 router.post("/create-new", postController.createPost);
+router.put("/update-company/:id", postController.updatePost);
+router.get("/get-post/:id", postController.getPostById);
 router.get("/all", postController.getAllPosts);
 module.exports = router;

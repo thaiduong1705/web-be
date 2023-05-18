@@ -7,7 +7,7 @@ export const getWorkingTypesService = async () => {
         return {
             err: res ? 0 : 1,
             msg: res ? "Oke" : "Fail to get working types",
-            res,
+            data,
         };
     } catch (error) {
         return {

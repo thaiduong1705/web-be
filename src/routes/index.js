@@ -1,5 +1,6 @@
 const testRouter = require("./test.router");
 const authRouter = require("./auth.router");
+const careerRouter = require("./career.router");
 const companyRouter = require("./company.router");
 const insertRouter = require("./insert.router");
 const postRouter = require("./post.router");
@@ -13,6 +14,7 @@ function initAPIroute(app) {
     app.use("/api/v1/test", testRouter);
     app.use("/api/v1/auth", authRouter);
     app.use("/api/v1/company", companyRouter);
+    app.use("/api/v1/career", careerRouter);
     app.use("/api/v1/insert", insertRouter);
     app.use("/api/v1/post", postRouter);
     app.use("/api/v1/academic-level", academicLevelRouter);

@@ -69,27 +69,32 @@ export const insertService = async () => {
         //         },
         //     ]);
         // });
-        mockJob.detailJobs.forEach((data) => {
-            let id = v4();
-            db.Post.create({
-                id: id,
-                jobTitle: data.header.jobTitle,
-                companyId: "02a8daf4-b12c-4c3b-afd1-f539c2e093e6",
-                salaryMin: 10,
-                salaryMax: 12,
-                ageMin: 18,
-                ageMax: 40,
-                experienceYear: 1,
-                endDate: new Date("06/12/2023"),
-                needNumber: 3,
-                sex: 1,
-                jobDescribe: mockJob.detailJobs[0].longInfo[0]["Mô tả công việc"].join("\n"),
-                benefits: mockJob.detailJobs[0].longInfo[1]["Quyền lợi được hưởng"].join("\n"),
-                jobRequirement: mockJob.detailJobs[0].longInfo[2]["Yêu cầu công việc"].join("\n"),
-                contact: mockJob.detailJobs[0].longInfo[3]["Thông tin liên hệ"].join("\n"),
-            });
-        });
-        return;
+
+        // mockJob.detailJobs.forEach((data) => {
+        //     let id = v4();
+        //     db.Post.create({
+        //         id: id,
+        //         jobTitle: data.header.jobTitle,
+        //         companyId: "185e7ee8-6810-4b60-bc32-5d9bb4884c0b",
+        //         salaryMin: 10,
+        //         salaryMax: 12,
+        //         ageMin: 18,
+        //         ageMax: 40,
+        //         experienceYear: 1,
+        //         endDate: new Date("06/12/2023"),
+        //         needNumber: 3,
+        //         sex: 1,
+        //         jobDescribe: mockJob.detailJobs[0].longInfo[0]["Mô tả công việc"].join("\n"),
+        //         benefits: mockJob.detailJobs[0].longInfo[1]["Quyền lợi được hưởng"].join("\n"),
+        //         jobRequirement: mockJob.detailJobs[0].longInfo[2]["Yêu cầu công việc"].join("\n"),
+        //         contact: mockJob.detailJobs[0].longInfo[3]["Thông tin liên hệ"].join("\n"),
+        //     });
+        // });
+        return {
+            msg: "Done",
+            err: 0,
+        };
+        c0c;
     } catch (error) {
         return error;
     }

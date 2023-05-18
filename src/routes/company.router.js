@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-import { getAllCompanies, getCompaniesById } from "../controllers/company.controller";
+import { getAllCompanies, createCompany, getCompanyById, updateCompany } from "../controllers/company.controller";
 
 router.get("/all", getAllCompanies);
-router.get("/detail/:id", getCompaniesById);
 //router.get("/get-companies", companyController.getCompaniesByName);
 
-//router.post("/create-new-company", companyController.createCompany);
+router.get("/get-company/:id", getCompanyById);
+router.post("/create-company", createCompany);
 
-//router.put("/update-company/:id", companyController.updateCompany);
+router.put("/update-company/:id", updateCompany);
 module.exports = router;
