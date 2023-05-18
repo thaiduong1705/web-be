@@ -10,7 +10,7 @@ export const getCompaniesService = async () => {
         return {
             err: res ? 0 : 1,
             msg: res ? "Oke" : "Fail to get companies",
-            data,
+            res,
         };
     } catch (error) {
         return {
@@ -93,7 +93,7 @@ export const updateCompany = async ({
     try {
         let resDel = [];
         let cc;
-        const res = await db.Company.update(
+        const companyUpdate = await db.Company.update(
             {
                 companyName,
                 imageLink,
@@ -131,10 +131,10 @@ export const updateCompany = async ({
         }
 
         return {
-            err: res[0] === 1 && cc && !hasZeroValues ? 0 : 2,
-            msg: res[0] === 1 && cc && !hasZeroValues ? "Oke" : "Fail to update company!",
-            data: {
-                res,
+            err: companyUpdate[0] === 1 && cc && !hasZeroValues ? 0 : 2,
+            msg: companyUpdate[0] === 1 && cc && !hasZeroValues ? "Oke" : "Fail to update company!",
+            res: {
+                companyUpdate,
                 resDel,
                 cc,
             },

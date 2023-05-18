@@ -10,18 +10,16 @@ export const getPostsService = async () => {
         return {
             err: res ? 0 : 1,
             msg: res ? "Oke" : "Fail to get posts",
-            data,
+            res,
         };
     } catch (error) {
-        return {
-            error,
-        };
+        return error;
     }
 };
 
 export const getPostByIdService = async ({ id }) => {
     try {
-        const response = await db.Post.findByPk(id, {
+        const res = await db.Post.findByPk(id, {
             include: [
                 { model: db.Career, as: "Career", attributes: ["careerName"] },
                 { model: db.District, as: "District", attributes: ["districtName"] },
@@ -30,7 +28,7 @@ export const getPostByIdService = async ({ id }) => {
         return {
             err: response ? 0 : 2,
             msg: response ? "Oke" : "Fail to get company by id",
-            data: response,
+            res,
         };
     } catch (error) {
         return error;
@@ -104,7 +102,7 @@ export const createPostService = async ({
         return {
             err: post && pc && pd ? 0 : 2,
             msg: post && pc && pd ? "Oke" : "Fail to create new post",
-            data: {
+            res: {
                 post,
                 pc,
                 pd,
@@ -143,7 +141,7 @@ export const updatePostService = async ({
     try {
         let careerDel = [];
         let districtDel = [];
-        const res = await db.Post.update(
+        const postUpdate = await db.Post.update(
             {
                 id: id,
                 jobTitle,
@@ -211,10 +209,10 @@ export const updatePostService = async ({
         );
 
         return {
-            err: post && pc && pd && !hasZeroValues ? 0 : 2,
-            msg: post && pc && pd && !hasZeroValues ? "Oke" : "Fail to create new post",
-            data: {
-                post,
+            err: postUpdate[0] === 0 && pc && pd && !hasZeroValues ? 0 : 2,
+            msg: postUpdate[0] && pc && pd && !hasZeroValues ? "Oke" : "Fail to create new post",
+            res: {
+                postUpdate,
                 pc,
                 pd,
                 hasZeroValues,
