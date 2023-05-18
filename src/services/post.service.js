@@ -4,7 +4,10 @@ import db from "../models";
 export const getPostsService = async () => {
     try {
         const res = await db.Post.findAll({
-            include: [{ model: db.Company, as: "company", attributes: ["companyName", "imageLink"] }],
+            include: [
+                { model: db.Company, as: "company", attributes: ["companyName", "imageLink"] },
+                { model: db.Position, attributes: ["positionName"] },
+            ],
         });
 
         return {

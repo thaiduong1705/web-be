@@ -69,6 +69,7 @@ export const insertService = async () => {
         //         },
         //     ]);
         // });
+
         // mockJob.detailJobs.forEach((data) => {
         //     let id = v4();
         //     db.Post.create({
@@ -93,6 +94,7 @@ export const insertService = async () => {
             msg: "Done",
             err: 0,
         };
+        c0c;
     } catch (error) {
         return error;
     }

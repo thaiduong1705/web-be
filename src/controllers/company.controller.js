@@ -1,3 +1,4 @@
+import { ValidationError } from "sequelize";
 import * as companyService from "../services/company.service";
 
 export const getAllCompanies = async (req, res) => {
