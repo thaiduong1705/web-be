@@ -56,6 +56,9 @@ module.exports = {
                     key: "id",
                 },
             },
+            workingAddress: {
+                type: Sequelize.STRING,
+            },
             viewCount: {
                 type: Sequelize.INTEGER,
             },

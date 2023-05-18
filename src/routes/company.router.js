@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-import { getAllCompanies } from "../controllers/company.controller";
+import { getAllCompanies, getCompaniesById } from "../controllers/company.controller";
 
 router.get("/all", getAllCompanies);
-//router.get("/detail/:id", companyController.getCompanyById);
+router.get("/detail/:id", getCompaniesById);
 //router.get("/get-companies", companyController.getCompaniesByName);
 
 //router.post("/create-new-company", companyController.createCompany);
