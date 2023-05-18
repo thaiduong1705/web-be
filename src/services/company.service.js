@@ -4,7 +4,10 @@ import { v4 } from "uuid";
 export const getCompaniesService = async () => {
     try {
         const res = await db.Company.findAll({
-            include: [{ model: db.Career, as: "Career", attributes: ["careerName"] }],
+            include: [
+                { model: db.Career, as: "Career", attributes: ["careerName"] },
+                { model: db.Post, as: "Posts" },
+            ],
         });
 
         return {
@@ -64,13 +67,16 @@ export const createCompanyService = async ({
 
 export const getCompanyByIdService = async ({ id }) => {
     try {
-        const response = await db.Company.findByPk(id, {
-            include: [{ model: db.Career, as: "Career", attributes: ["careerName"] }],
+        const res = await db.Company.findByPk(id, {
+            include: [
+                { model: db.Career, as: "Career", attributes: ["careerName"] },
+                { model: db.Post, as: "Posts" },
+            ],
         });
         return {
-            err: response ? 0 : 2,
-            msg: response ? "Oke" : "Fail to get company by id",
-            data: response,
+            err: res ? 0 : 2,
+            msg: res ? "Oke" : "Fail to get company by id",
+            res,
         };
     } catch (error) {
         return {
