@@ -161,13 +161,19 @@ export const getLimitCompaniesService = async ({ page, limit, order, companyName
         if (order) queries.order = [order];
         if (companyName) query.companyName = { [Op.substring]: companyName };
 
-        const res = await db.Company.findAndCountAll({
+        const count = await db.Company.count({ where: query });
+        const res = await db.Company.findAll({
+            include: [
+                { model: db.Post, as: "Posts" },
+                { model: db.Career, as: "Career", attributes: ["id", "careerName"] },
+            ],
             where: query,
             ...queries,
         });
         return {
             err: res ? 0 : 1,
             msg: res ? "Oke" : "Cant found companies.",
+            count,
             res,
         };
     } catch (error) {
