@@ -146,8 +146,31 @@ export const updateCompany = async ({
             },
         };
     } catch (error) {
-        console.log({
-            error,
+        return error;
+    }
+};
+
+export const getLimitCompaniesService = async ({ page, limit, order, companyName, ...query }) => {
+    try {
+        const queries = {};
+        const offset = !page || +page <= 1 ? 0 : +page - 1;
+        const numberOfItems = +limit || +process.env.LIMIT_BOOK;
+        queries.offset = offset * numberOfItems;
+        queries.limit = numberOfItems;
+
+        if (order) queries.order = [order];
+        if (companyName) query.companyName = { [Op.substring]: companyName };
+
+        const res = await db.Company.findAndCountAll({
+            where: query,
+            ...queries,
         });
+        return {
+            err: res ? 0 : 1,
+            msg: res ? "Oke" : "Cant found companies.",
+            res,
+        };
+    } catch (error) {
+        return error;
     }
 };
