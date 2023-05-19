@@ -13,7 +13,7 @@ export const getPostsService = async () => {
         return {
             err: res ? 0 : 1,
             msg: res ? "Oke" : "Fail to get posts",
-            data,
+            res,
         };
     } catch (error) {
         return {
