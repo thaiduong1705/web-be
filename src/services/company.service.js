@@ -67,13 +67,16 @@ export const createCompanyService = async ({
 
 export const getCompanyByIdService = async ({ id }) => {
     try {
-        const response = await db.Company.findByPk(id, {
-            include: [{ model: db.Career, as: "Career", attributes: ["careerName"] }],
+        const res = await db.Company.findByPk(id, {
+            include: [
+                { model: db.Career, as: "Career", attributes: ["careerName"] },
+                { model: db.Post, as: "Posts" },
+            ],
         });
         return {
-            err: response ? 0 : 2,
-            msg: response ? "Oke" : "Fail to get company by id",
-            data: response,
+            err: res ? 0 : 2,
+            msg: res ? "Oke" : "Fail to get company by id",
+            res,
         };
     } catch (error) {
         return {
@@ -96,7 +99,7 @@ export const updateCompany = async ({
     try {
         let resDel = [];
         let cc;
-        const res = await db.Company.update(
+        const companyUpdate = await db.Company.update(
             {
                 companyName,
                 imageLink,
@@ -134,10 +137,10 @@ export const updateCompany = async ({
         }
 
         return {
-            err: res[0] === 1 && cc && !hasZeroValues ? 0 : 2,
-            msg: res[0] === 1 && cc && !hasZeroValues ? "Oke" : "Fail to update company!",
-            data: {
-                res,
+            err: companyUpdate[0] === 1 && cc && !hasZeroValues ? 0 : 2,
+            msg: companyUpdate[0] === 1 && cc && !hasZeroValues ? "Oke" : "Fail to update company!",
+            res: {
+                companyUpdate,
                 resDel,
                 cc,
             },

@@ -8,7 +8,7 @@ export const getAcademicLevelsService = async () => {
         return {
             err: res ? 0 : 1,
             msg: res ? "Oke" : "Fail to get academic levels",
-            data,
+            res,
         };
     } catch (error) {
         return {
@@ -26,7 +26,7 @@ export const createAcademicLevelService = async ({ academicLevelName }) => {
         return {
             err: academicLevel ? 0 : 2,
             msg: academicLevel ? "Oke" : "Fail to create academic level",
-            data: academicLevel,
+            res: academicLevel,
         };
     } catch (error) {
         return {
