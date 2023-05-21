@@ -9,10 +9,14 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            Post.belongsTo(models.Company, { as: "Company" });
-            Post.belongsTo(models.Position);
-            Post.belongsTo(models.AcademicLevel);
-            Post.belongsTo(models.WorkingType);
+            Post.belongsTo(models.Company, { foreignKey: "companyId", targetKey: "id", as: "Company" });
+            Post.belongsTo(models.Position, { foreignKey: "positionId", targetKey: "id", as: "Position" });
+            Post.belongsTo(models.AcademicLevel, {
+                foreignKey: "academicLevelId",
+                targetKey: "id",
+                as: "AcademicLevel",
+            });
+            Post.belongsTo(models.WorkingType, { foreignKey: "workingTypeId", targetKey: "id", as: "WorkingType" });
             Post.belongsToMany(models.Career, { through: models.PostCareer, foreignKey: "postId", as: "Career" });
             Post.belongsToMany(models.District, {
                 through: models.PostDistrict,
@@ -24,15 +28,11 @@ module.exports = (sequelize, DataTypes) => {
     Post.init(
         {
             jobTitle: DataTypes.STRING, // not null
-            companyId: DataTypes.STRING, // not null
-            positionId: DataTypes.STRING, // not null
             salaryMin: DataTypes.BIGINT,
             salaryMax: DataTypes.BIGINT,
             ageMin: DataTypes.INTEGER,
             ageMax: DataTypes.INTEGER,
             experienceYear: DataTypes.INTEGER,
-            academicLevelId: DataTypes.STRING, // not null
-            workingTypeId: DataTypes.STRING, // not null
             viewCount: DataTypes.STRING,
             endDate: DataTypes.DATEONLY, // not null
             needNumber: DataTypes.INTEGER,
@@ -42,7 +42,10 @@ module.exports = (sequelize, DataTypes) => {
             jobRequirement: DataTypes.TEXT, // not null
             workingAddress: DataTypes.STRING,
             contact: DataTypes.TEXT, // not null
-            workingAddress: DataTypes.STRING, // not null
+            companyId: DataTypes.STRING,
+            positionId: DataTypes.STRING,
+            academicLevelId: DataTypes.STRING,
+            workingTypeId: DataTypes.STRING,
         },
         {
             sequelize,

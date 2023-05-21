@@ -1,8 +1,10 @@
-import db from "../models";
+import db, { sequelize } from "../models";
 
 export const getDistrictsService = async () => {
     try {
-        const res = await db.District.findAll({});
+        const res = await db.District.findAll({
+            order: [["districtName", "ASC"]],
+        });
 
         return {
             err: res ? 0 : 1,

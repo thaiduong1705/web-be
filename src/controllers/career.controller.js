@@ -30,3 +30,21 @@ export const createCareer = async (req, res) => {
         });
     }
 };
+
+export const getCareerById = async (req, res) => {
+    try {
+        if (!req.params.id) {
+            return res.status(400).json({
+                err: 1,
+                msg: "Missing id!",
+            });
+        }
+        const response = await careerService.getCareerByIdService(req.params);
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({
+            err: -1,
+            msg: "Fail at getCareerById: " + error,
+        });
+    }
+};

@@ -8,4 +8,5 @@ router.post("/create-new", postController.createPost);
 router.put("/update-company/:id", postController.updatePost);
 router.get("/get-post/:id", postController.getPostById);
 router.get("/all", postController.getAllPosts);
+router.get("/limit", postController.getLimitPosts);
 module.exports = router;

@@ -5,7 +5,7 @@ export const getCompaniesService = async () => {
     try {
         const res = await db.Company.findAll({
             include: [
-                { model: db.Career, as: "Career", attributes: ["careerName"] },
+                { model: db.Career, as: "Career", attributes: ["id", "careerName"] },
                 { model: db.Post, as: "Posts" },
             ],
         });
@@ -69,7 +69,7 @@ export const getCompanyByIdService = async ({ id }) => {
     try {
         const res = await db.Company.findByPk(id, {
             include: [
-                { model: db.Career, as: "Career", attributes: ["careerName"] },
+                { model: db.Career, as: "Career", attributes: ["id", "careerName"] },
                 { model: db.Post, as: "Posts" },
             ],
         });
@@ -150,9 +150,10 @@ export const updateCompany = async ({
     }
 };
 
-export const getLimitCompaniesService = async ({ page, limit, order, companyName, ...query }) => {
+export const getLimitCompaniesService = async ({ page, limit, order, companyName, careerId, ...query }) => {
     try {
         const queries = {};
+        const subQuery = {};
         const offset = !page || +page <= 1 ? 0 : +page - 1;
         const numberOfItems = +limit || +process.env.LIMIT_BOOK;
         queries.offset = offset * numberOfItems;
@@ -160,12 +161,27 @@ export const getLimitCompaniesService = async ({ page, limit, order, companyName
 
         if (order) queries.order = [order];
         if (companyName) query.companyName = { [Op.substring]: companyName };
-
-        const count = await db.Company.count({ where: query });
+        if (careerId) subQuery.id = { [Op.eq]: careerId };
+        const count = await db.Company.count({
+            where: query,
+            include: [
+                {
+                    model: db.Career,
+                    as: "Career",
+                    where: subQuery,
+                },
+            ],
+            distinct: true,
+        });
         const res = await db.Company.findAll({
             include: [
                 { model: db.Post, as: "Posts" },
-                { model: db.Career, as: "Career", attributes: ["id", "careerName"] },
+                {
+                    model: db.Career,
+                    as: "Career",
+                    attributes: ["id", "careerName"],
+                    where: subQuery,
+                },
             ],
             where: query,
             ...queries,

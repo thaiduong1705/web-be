@@ -3,7 +3,9 @@ import db from "../models";
 
 export const getCareersService = async () => {
     try {
-        const res = await db.Career.findAll({});
+        const res = await db.Career.findAll({
+            include: [{ model: db.Post }],
+        });
 
         return {
             err: res ? 0 : 1,
@@ -17,7 +19,7 @@ export const getCareersService = async () => {
     }
 };
 
-export const createCareer = async ({ careerName }) => {
+export const createCareerService = async ({ careerName }) => {
     try {
         const career = await db.Career.create({
             id: v4(),
@@ -31,6 +33,24 @@ export const createCareer = async ({ careerName }) => {
     } catch (error) {
         return {
             err: 1,
+            error,
+        };
+    }
+};
+
+export const getCareerByIdService = async ({ id }) => {
+    try {
+        const res = await db.Career.findByPk(id, {
+            include: [{ model: db.Post }],
+        });
+
+        return {
+            err: res ? 0 : 1,
+            msg: res ? "Oke" : "Fail to get careers by id",
+            res,
+        };
+    } catch (error) {
+        return {
             error,
         };
     }
