@@ -2,7 +2,9 @@ import db from "../models";
 
 export const getCandidatesService = async () => {
     try {
-        const res = await db.Candidate.findAll({});
+        const res = await db.Candidate.findAll({
+            include: [{ model: db.AcademicLevel, attributes: ["academicLevelName"] }],
+        });
 
         return {
             err: res ? 0 : 1,

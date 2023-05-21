@@ -4,7 +4,7 @@ import db from "../models";
 export const getCareersService = async () => {
     try {
         const res = await db.Career.findAll({
-            include: [{ model: db.Post }],
+            attributes: ["id", ["careerName", "value"]],
         });
 
         return {

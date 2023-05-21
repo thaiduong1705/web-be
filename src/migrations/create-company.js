@@ -17,6 +17,12 @@ module.exports = {
             url: {
                 type: Sequelize.STRING,
             },
+            email: {
+                type: Sequelize.TEXT,
+            },
+            phone: {
+                type: Sequelize.TEXT,
+            },
             address: {
                 type: Sequelize.TEXT,
             },
