@@ -15,14 +15,18 @@ export const getAllCompanies = async (req, res) => {
 
 export const createCompany = async (req, res) => {
     try {
-        const { companyName, imageLink, url, address, introduction, companySize, careerList } = req.body;
+        console.log(req.body);
+        const { companyName, /*imageLink, url,*/ address, email, phone, introduction, companySize, careerList } =
+            req.body;
         if (
             !companyName ||
-            !imageLink ||
+            // !imageLink ||
             !address ||
             !introduction ||
             !companySize ||
             !careerList ||
+            !email ||
+            !phone ||
             careerList.length === 0
         ) {
             return res.status(400).json({

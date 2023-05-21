@@ -27,6 +27,8 @@ export const createCompanyService = async ({
     imageLink,
     url,
     address,
+    email,
+    phone,
     introduction,
     companySize,
     careerList,
@@ -34,10 +36,12 @@ export const createCompanyService = async ({
     try {
         const company = await db.Company.create({
             id: v4(),
-            companyName,
+            companyName: companyName,
             imageLink,
             url: url ?? null,
             address: address,
+            email: email,
+            phone: phone,
             introduction,
             companySize,
         });
