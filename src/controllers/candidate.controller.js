@@ -14,12 +14,13 @@ export const getAllCandidates = async (req, res) => {
 };
 
 export const createCandidate = async (req, res) => {
+    console.log(req.body);
     try {
         const {
             candidateName,
             age,
-            profileImage,
-            CVImage,
+            // profileImage,
+            // CVImage,
             phoneNumber,
             email,
             homeAddress,
@@ -32,12 +33,12 @@ export const createCandidate = async (req, res) => {
         if (
             !candidateName ||
             !age ||
-            !profileImage ||
-            !CVImage ||
+            // !profileImage ||
+            // !CVImage ||
             !phoneNumber ||
             !email ||
             !homeAddress ||
-            !gender ||
+            isNaN(gender) ||
             !experienceYear ||
             !academicLevelId ||
             !careerList ||
