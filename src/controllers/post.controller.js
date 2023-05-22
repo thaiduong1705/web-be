@@ -66,7 +66,6 @@ export const createPost = async (req, res) => {
             !jobDescribe ||
             !benefits ||
             !jobRequirement ||
-            !contact ||
             !workingAddress ||
             !careerList ||
             careerList.length === 0 ||
@@ -132,7 +131,6 @@ export const updatePost = async (req, res) => {
             !jobDescribe ||
             !benefits ||
             !jobRequirement ||
-            !contact ||
             !workingAddress ||
             !careerOldList ||
             careerOldList.length === 0 ||
@@ -161,7 +159,6 @@ export const updatePost = async (req, res) => {
 export const getLimitPosts = async (req, res) => {
     try {
         const response = await postService.getLimitPostsService(req.query);
-        console.log(response);
         return res.status(200).json(response);
     } catch (error) {
         return res.status(500).json({

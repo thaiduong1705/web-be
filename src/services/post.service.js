@@ -244,6 +244,8 @@ export const getLimitPostsService = async ({ page, limit, order, ...query }) => 
         queries.limit = numberOfItems;
 
         if (order) queries.order = [order];
+
+        console.log(query);
         if (query.jobTitle) filter.jobTitle = { [Op.substring]: query.jobTitle };
         if (query.age) {
             filter.ageMax = { [Op.lte]: query.age[1] };
@@ -265,8 +267,8 @@ export const getLimitPostsService = async ({ page, limit, order, ...query }) => 
         if (query.createdAt) filter.createdAt = { [Op.between]: [...query.createdAt] };
 
         if (query.academicLevelId) filter.academicLevelId = { [Op.eq]: query.academicLevelId };
-        if (query.positionId) filter.positionId = { [Op.eq]: query.position };
-        if (query.workingTypeId) filter.workingTypeId = { [Op.eq]: query.workingType };
+        if (query.positionId) filter.positionId = { [Op.eq]: query.positionId };
+        if (query.workingTypeId) filter.workingTypeId = { [Op.eq]: query.workingTypeId };
         if (query.career) subFilter.career = { [Op.or]: query.career };
         if (query.district) subFilter.district = { [Op.or]: query.career };
         const count = await db.Post.count({

@@ -82,7 +82,7 @@ module.exports = {
                 type: Sequelize.TEXT,
             },
             contact: {
-                allowNull: false,
+                allowNull: true,
                 type: Sequelize.TEXT,
             },
             workingAddress: {

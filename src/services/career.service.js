@@ -3,9 +3,7 @@ import db from "../models";
 
 export const getCareersService = async () => {
     try {
-        const res = await db.Career.findAll({
-            attributes: ["id", ["careerName", "value"]],
-        });
+        const res = await db.Career.findAll({});
 
         return {
             err: res ? 0 : 1,
