@@ -245,12 +245,12 @@ export const getLimitPostsService = async ({ page, limit, order, ...query }) => 
 
         if (order) queries.order = [order];
         if (query.jobTitle) filter.jobTitle = { [Op.substring]: query.jobTitle };
-        if (query.age) {
+        if (query.age && query.age.length !== 0) {
             filter.ageMax = { [Op.lte]: query.age[1] };
             filter.ageMin = { [Op.gte]: query.age[0] };
         }
 
-        if (query.salary) {
+        if (query.salary && query.salary.length !== 0) {
             if (query.salary[0] === 0 && query.salary[1] === 0) {
                 filter.salaryMin = { [Op.eq]: query.salary[0] };
                 filter.salaryMax = { [Op.eq]: query.salary[1] };
@@ -267,8 +267,8 @@ export const getLimitPostsService = async ({ page, limit, order, ...query }) => 
         if (query.academicLevelId) filter.academicLevelId = { [Op.eq]: query.academicLevelId };
         if (query.positionId) filter.positionId = { [Op.eq]: query.position };
         if (query.workingTypeId) filter.workingTypeId = { [Op.eq]: query.workingType };
-        if (query.career) subFilter.career = { [Op.or]: query.career };
-        if (query.district) subFilter.district = { [Op.or]: query.career };
+        if (query.career && query.career.length !== 0) subFilter.career = { [Op.or]: [...query.career] };
+        if (query.district && query.district.length !== 0) subFilter.district = { [Op.or]: [...query.district] };
         const count = await db.Post.count({
             where: filter,
             include: [
