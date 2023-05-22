@@ -245,7 +245,6 @@ export const getLimitPostsService = async ({ page, limit, order, ...query }) => 
 
         if (order) queries.order = [order];
 
-        console.log(query);
         if (query.jobTitle) filter.jobTitle = { [Op.substring]: query.jobTitle };
         if (query.age && query.age.length !== 0) {
             filter.ageMax = { [Op.lte]: query.age[1] };
