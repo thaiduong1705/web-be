@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import db from "../models";
 
 export const getCandidatesService = async () => {
@@ -195,49 +196,51 @@ export const updateCandidate = async ({
     }
 };
 
-// export const getLimitCandidatesService = async ({ page, limit, order, candidateName, careerId, ...query }) => {
-//     try {
-//         const queries = {};
-//         const subQuery = {};
-//         const offset = !page || +page <= 1 ? 0 : +page - 1;
-//         const numberOfItems = +limit || +process.env.LIMIT_BOOK;
-//         queries.offset = offset * numberOfItems;
-//         queries.limit = numberOfItems;
+export const getLimitCandidatesService = async ({ page, limit, order, ...query }) => {
+    try {
+        const filter = {};
+        const queries = {};
+        const subQuery = {};
+        const offset = !page || +page <= 1 ? 0 : +page - 1;
+        const numberOfItems = +limit || +process.env.LIMIT_BOOK;
+        queries.offset = offset * numberOfItems;
+        queries.limit = numberOfItems;
 
-//         if (order) queries.order = [order];
-//         if (candidateName) query.candidateName = { [Op.substring]: candidateName };
-//         if (careerId) subQuery.id = { [Op.eq]: careerId };
-//         const count = await db.Candidate.count({
-//             where: query,
-//             include: [
-//                 {
-//                     model: db.Career,
-//                     as: "Career",
-//                     where: subQuery,
-//                 },
-//             ],
-//             distinct: true,
-//         });
-//         const res = await db.Candidate.findAll({
-//             include: [
-//                 { model: db.Post, as: "Posts" },
-//                 {
-//                     model: db.Career,
-//                     as: "Career",
-//                     attributes: ["id", "careerName"],
-//                     where: subQuery,
-//                 },
-//             ],
-//             where: query,
-//             ...queries,
-//         });
-//         return {
-//             err: res ? 0 : 1,
-//             msg: res ? "Oke" : "Cant found candidates.",
-//             count,
-//             res,
-//         };
-//     } catch (error) {
-//         return error;
-//     }
-// };
+        if (order) queries.order = [order];
+        if (query.age) filter.age = { [Op.between]: [...query.age] };
+        if (query.experienceYear) filter.experienceYear = { [Op.lte]: query.experienceYear };
+        if (query.academicLevelId) filter.academicLevelId = { [Op.eq]: query.academicLevelId };
+        const count = await db.Candidate.count({
+            where: filter,
+            include: [
+                {
+                    model: db.Career,
+                    as: "Career",
+                    where: subQuery,
+                },
+            ],
+            distinct: true,
+        });
+        const res = await db.Candidate.findAll({
+            include: [
+                { model: db.Post, as: "Posts" },
+                {
+                    model: db.Career,
+                    as: "Career",
+                    attributes: ["id", "careerName"],
+                    where: subQuery,
+                },
+            ],
+            where: filter,
+            ...queries,
+        });
+        return {
+            err: res ? 0 : 1,
+            msg: res ? "Oke" : "Cant found candidates.",
+            count,
+            res,
+        };
+    } catch (error) {
+        return error;
+    }
+};

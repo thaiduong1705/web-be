@@ -15,7 +15,6 @@ export const getAllCompanies = async (req, res) => {
 
 export const createCompany = async (req, res) => {
     try {
-        console.log(req.body);
         const { companyName, /*imageLink, url,*/ address, email, phone, introduction, companySize, careerList } =
             req.body;
         if (
