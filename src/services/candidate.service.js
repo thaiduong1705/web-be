@@ -205,8 +205,8 @@ export const getLimitCandidatesService = async ({ page, limit, order, ...query }
         const numberOfItems = +limit || +process.env.LIMIT_BOOK;
         queries.offset = offset * numberOfItems;
         queries.limit = numberOfItems;
-
         if (order) queries.order = [order];
+
         if (query.age) filter.age = { [Op.between]: [...query.age] };
         if (query.experienceYear) filter.experienceYear = { [Op.lte]: query.experienceYear };
         if (query.academicLevelId) filter.academicLevelId = { [Op.eq]: query.academicLevelId };

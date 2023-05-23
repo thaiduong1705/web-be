@@ -37,8 +37,9 @@ export const createCandidate = async (req, res) => {
             !phoneNumber ||
             !email ||
             !homeAddress ||
-            !gender ||
-            !experienceYear ||
+            isNaN(gender) ||
+            isNaN(experienceYear) ||
+            experienceYear <= -1 ||
             !academicLevelId ||
             !careerList ||
             careerList.length === 0 ||

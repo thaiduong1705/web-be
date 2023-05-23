@@ -62,6 +62,7 @@ export const createPost = async (req, res) => {
             !academicLevelId ||
             !workingTypeId ||
             !endDate ||
+            isNaN(sex) ||
             !needNumber ||
             !jobDescribe ||
             !benefits ||
