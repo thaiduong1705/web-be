@@ -1,4 +1,5 @@
 import { Op } from "sequelize";
+import { v4 } from "uuid";
 import db from "../models";
 
 export const getCandidatesService = async () => {
