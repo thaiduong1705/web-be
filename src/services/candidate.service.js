@@ -1,4 +1,5 @@
 import { Op } from "sequelize";
+import { v4 } from "uuid";
 import db from "../models";
 
 export const getCandidatesService = async () => {
@@ -26,7 +27,6 @@ export const createCandidateService = async ({
     CVImage,
     phoneNumber,
     email,
-    homeAddress,
     gender,
     experienceYear,
     academicLevelId,
@@ -42,7 +42,6 @@ export const createCandidateService = async ({
             CVImage,
             phoneNumber,
             email,
-            homeAddress,
             gender,
             experienceYear,
             academicLevelId,

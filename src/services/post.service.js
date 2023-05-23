@@ -268,8 +268,8 @@ export const getLimitPostsService = async ({ page, limit, order, ...query }) => 
         if (query.academicLevelId) filter.academicLevelId = { [Op.eq]: query.academicLevelId };
         if (query.positionId) filter.positionId = { [Op.eq]: query.positionId };
         if (query.workingTypeId) filter.workingTypeId = { [Op.eq]: query.workingTypeId };
-        if (query.career && query.career.length !== 0) subFilter.career = { [Op.or]: [...query.career] };
-        if (query.district && query.district.length !== 0) subFilter.district = { [Op.or]: [...query.district] };
+        if (query.career && query.career.length !== 0) subFilter.career = { [Op.or]: query.career };
+        if (query.district && query.district.length !== 0) subFilter.district = { [Op.or]: query.district };
         const count = await db.Post.count({
             where: filter,
             include: [

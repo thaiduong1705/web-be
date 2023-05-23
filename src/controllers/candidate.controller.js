@@ -52,6 +52,7 @@ export const createCandidate = async (req, res) => {
             });
         }
         const response = await candidateService.createCandidateService(req.body);
+        console.log(response);
         return res.status(200).json(response);
     } catch (error) {
         return res.status(500).json({
