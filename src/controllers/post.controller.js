@@ -90,13 +90,8 @@ export const createPost = async (req, res) => {
 
 export const updatePost = async (req, res) => {
     try {
-        if (!req.params.id) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing id!",
-            });
-        }
         const {
+            id,
             jobTitle,
             companyId,
             positionId,
@@ -121,6 +116,12 @@ export const updatePost = async (req, res) => {
             districtNewList,
         } = req.body;
 
+        if (!id) {
+            return res.status(400).json({
+                err: 1,
+                msg: "Missing Id!",
+            });
+        }
         if (
             !jobTitle ||
             !companyId ||
@@ -134,11 +135,9 @@ export const updatePost = async (req, res) => {
             !jobRequirement ||
             !workingAddress ||
             !careerOldList ||
-            careerOldList.length === 0 ||
             !careerNewList ||
             careerNewList.length === 0 ||
             !districtOldList ||
-            districtOldList.length === 0 ||
             !districtNewList ||
             districtNewList.length === 0
         ) {
@@ -147,7 +146,7 @@ export const updatePost = async (req, res) => {
                 msg: "Missing Input!",
             });
         }
-        const response = await postService.updatePostService({ ...req.body, ...req.params });
+        const response = await postService.updatePostService({ ...req.body });
         return res.status(200).json(response);
     } catch (error) {
         return res.status(500).json({
@@ -165,6 +164,30 @@ export const getLimitPosts = async (req, res) => {
         return res.status(500).json({
             err: -1,
             msg: "Fail at getLimitPosts: " + error,
+        });
+    }
+};
+
+export const getRelatedPostsFromCareer = async (req, res) => {
+    try {
+        if (!req.query.postId) {
+            return res.status(400).json({
+                err: 1,
+                msg: "Missing id!",
+            });
+        }
+        if (!req.query.careerIds) {
+            return res.status(400).json({
+                err: 1,
+                msg: "Missing career ids!",
+            });
+        }
+        const response = await postService.getRelatedPostFromCareerService(req.query);
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({
+            err: -1,
+            msg: "Fail at getCareerById: " + error,
         });
     }
 };
