@@ -63,22 +63,21 @@ export const getCompanyById = async (req, res) => {
 
 export const updateCompany = async (req, res) => {
     try {
-        if (!req.params.id) {
+        const { id, companyName, imageLink, url, address, introduction, companySize, careerOldList, careerNewList } =
+            req.body;
+        if (!id) {
             return res.status(400).json({
                 err: 1,
                 msg: "Missing id!",
             });
         }
-        const { companyName, imageLink, url, address, introduction, companySize, careerOldList, careerNewList } =
-            req.body;
         if (
             !companyName ||
-            !imageLink ||
+            // !imageLink ||
             !address ||
             !introduction ||
             !companySize ||
             !careerOldList ||
-            careerOldList.length === 0 ||
             !careerNewList ||
             careerNewList.length === 0
         ) {

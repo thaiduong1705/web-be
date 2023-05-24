@@ -14,7 +14,6 @@ export const getAllCandidates = async (req, res) => {
 };
 
 export const createCandidate = async (req, res) => {
-    console.log(req.body);
     try {
         const {
             candidateName,
@@ -82,13 +81,8 @@ export const getCandidateById = async (req, res) => {
 
 export const updateCandidate = async (req, res) => {
     try {
-        if (!req.params.id) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing id!",
-            });
-        }
         const {
+            id,
             candidateName,
             age,
             profileImage,
@@ -104,6 +98,12 @@ export const updateCandidate = async (req, res) => {
             districtOldList,
             districtNewList,
         } = req.body;
+        if (!id) {
+            return res.status(400).json({
+                err: 1,
+                msg: "Missing id!",
+            });
+        }
         if (
             !candidateName ||
             !age ||
@@ -129,7 +129,7 @@ export const updateCandidate = async (req, res) => {
                 msg: "Missing Input!",
             });
         }
-        const response = await candidateService.updateCompany({ ...req.body, ...req.params });
+        const response = await candidateService.updateCandidate({ ...req.body, ...req.params });
         return res.status(200).json(response);
     } catch (error) {
         return res.status(500).json({
