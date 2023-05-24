@@ -200,3 +200,22 @@ export const getLimitCompaniesService = async ({ page, limit, order, companyName
         return error;
     }
 };
+
+export const getRelatedCompanyFromCareerService = async ({ companyId, careerId }) => {
+    try {
+        const res = await db.Company.findAll({
+            include: [
+                { model: db.Career, as: "Career", where: { id: { [Op.or]: careerId } } },
+                { model: db.Post, as: "Posts" },
+            ],
+            district: true,
+        });
+        return {
+            err: res ? 0 : 1,
+            msg: res ? "Oke" : "Cant found posts.",
+            res,
+        };
+    } catch (error) {
+        console.log(error);
+    }
+};

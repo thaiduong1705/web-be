@@ -35,21 +35,3 @@ export const createCareerService = async ({ careerName }) => {
         };
     }
 };
-
-export const getCareerByIdService = async ({ id }) => {
-    try {
-        const res = await db.Career.findByPk(id, {
-            include: [{ model: db.Post }],
-        });
-
-        return {
-            err: res ? 0 : 1,
-            msg: res ? "Oke" : "Fail to get careers by id",
-            res,
-        };
-    } catch (error) {
-        return {
-            error,
-        };
-    }
-};

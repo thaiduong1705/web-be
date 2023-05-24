@@ -108,3 +108,27 @@ export const getLimitCompanies = async (req, res) => {
         });
     }
 };
+
+export const getRelatedCompaniesFromCareer = async (req, res) => {
+    try {
+        if (!req.query.companyId) {
+            return res.status(400).json({
+                err: 1,
+                msg: "Missing id!",
+            });
+        }
+        if (!req.query.careerIds) {
+            return res.status(400).json({
+                err: 1,
+                msg: "Missing career ids!",
+            });
+        }
+        const response = await companyService.getRelatedCompanyFromCareerService(req.query);
+        return res.status(200).json(response);
+    } catch (error) {
+        return res.status(500).json({
+            err: -1,
+            msg: "Fail at getCareerById: " + error,
+        });
+    }
+};

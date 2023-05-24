@@ -29,12 +29,12 @@ export const getPostByIdService = async ({ id }) => {
     try {
         const res = await db.Post.findByPk(id, {
             include: [
-                { model: db.AcademicLevel, as: "AcademicLevel", attributes: ["academicLevelName"] },
-                { model: db.WorkingType, as: "WorkingType", attributes: ["workingTypeName"] },
+                { model: db.AcademicLevel, as: "AcademicLevel" },
+                { model: db.WorkingType, as: "WorkingType" },
                 { model: db.Company, as: "Company" },
                 { model: db.Position, as: "Position" },
-                { model: db.Career, as: "Career", attributes: ["careerName"] },
-                { model: db.District, as: "District", attributes: ["districtName"] },
+                { model: db.Career, as: "Career" },
+                { model: db.District, as: "District" },
             ],
         });
         return {
@@ -149,11 +149,11 @@ export const updatePostService = async ({
     districtNewList,
 }) => {
     try {
+        console.log(id);
         let careerDel = [];
         let districtDel = [];
         const postUpdate = await db.Post.update(
             {
-                id: id,
                 jobTitle,
                 companyId,
                 positionId,
@@ -179,8 +179,7 @@ export const updatePostService = async ({
                 },
             },
         );
-        const post = await db.Company.findByPk(id);
-
+        const post = await db.Post.findByPk(id);
         for (const oldId of careerOldList) {
             const temp = await db.PostCareer.destroy({
                 where: {
@@ -219,7 +218,7 @@ export const updatePostService = async ({
         );
 
         return {
-            err: postUpdate[0] === 0 && pc && pd && !hasZeroValues ? 0 : 2,
+            err: postUpdate[0] === 1 && pc && pd && !hasZeroValues ? 0 : 2,
             msg: postUpdate[0] && pc && pd && !hasZeroValues ? "Oke" : "Fail to create new post",
             res: {
                 postUpdate,
@@ -335,5 +334,31 @@ export const getLimitPostsService = async ({ page, limit, order, ...query }) => 
         };
     } catch (error) {
         return error;
+    }
+};
+
+export const getRelatedPostFromCareerService = async ({ postId, careerId }) => {
+    try {
+        const res = await db.Post.findAll({
+            where: {
+                id: {
+                    [Op.ne]: postId,
+                },
+            },
+            include: [
+                { model: db.Career, as: "Career", where: { id: { [Op.or]: careerId } } },
+                { model: db.Company, as: "Company" },
+                { model: db.Position, as: "Position" },
+                { model: db.District, as: "District" },
+            ],
+            district: true,
+        });
+        return {
+            err: res ? 0 : 1,
+            msg: res ? "Oke" : "Cant found posts.",
+            res,
+        };
+    } catch (error) {
+        console.log(error);
     }
 };
