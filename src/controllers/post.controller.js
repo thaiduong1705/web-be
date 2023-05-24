@@ -46,7 +46,6 @@ export const createPost = async (req, res) => {
             workingTypeId,
             endDate,
             needNumber,
-            sex,
             jobDescribe,
             benefits,
             jobRequirement,
