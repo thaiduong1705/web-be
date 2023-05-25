@@ -8,9 +8,10 @@ export const uploadPhoto = async (file) => {
     }
 };
 
-export const deletePhoto = async () => {
+export const deletePhoto = async (public_id) => {
     try {
-        const response = await cloudinary.uploader.destroy();
+        const response = await cloudinary.uploader.destroy(public_id, { folder: "vieclam" });
+        return response;
     } catch (error) {
         console.log(error);
     }
