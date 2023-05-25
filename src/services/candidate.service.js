@@ -85,10 +85,7 @@ export const createCandidateService = async ({
 export const getCandidateByIdService = async ({ id }) => {
     try {
         const res = await db.Candidate.findByPk(id, {
-            include: [
-                { model: db.Career, as: "Career", attributes: ["id", "careerName"] },
-                { model: db.Post, as: "Posts" },
-            ],
+            include: [{ model: db.Career, as: "Career", attributes: ["id", "careerName"] }],
         });
         return {
             err: res ? 0 : 2,
@@ -204,6 +201,7 @@ export const getLimitCandidatesService = async ({ page, limit, order, ...query }
         const subQuery = {};
         const offset = !page || +page <= 1 ? 0 : +page - 1;
         const numberOfItems = +limit || +process.env.LIMIT_BOOK;
+        console.log("vào");
         queries.offset = offset * numberOfItems;
         queries.limit = numberOfItems;
         if (order) queries.order = [order];
@@ -224,7 +222,7 @@ export const getLimitCandidatesService = async ({ page, limit, order, ...query }
         });
         const res = await db.Candidate.findAll({
             include: [
-                { model: db.Post, as: "Posts" },
+                { model: db.District, as: "District" },
                 {
                     model: db.Career,
                     as: "Career",
@@ -242,6 +240,6 @@ export const getLimitCandidatesService = async ({ page, limit, order, ...query }
             res,
         };
     } catch (error) {
-        return error;
+        console.log(error);
     }
 };

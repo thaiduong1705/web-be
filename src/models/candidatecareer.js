@@ -3,13 +3,13 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
     class CandidateCareer extends Model {
         static associate(models) {
-            CandidateCareer.belongsTo(models.Company, { foreignKey: "companyId" });
+            CandidateCareer.belongsTo(models.Candidate, { foreignKey: "candidateId" });
             CandidateCareer.belongsTo(models.Career, { foreignKey: "careerId" });
         }
     }
     CandidateCareer.init(
         {
-            companyId: DataTypes.STRING,
+            candidateId: DataTypes.STRING,
             careerId: DataTypes.STRING,
         },
         {

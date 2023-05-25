@@ -204,6 +204,11 @@ export const getLimitCompaniesService = async ({ page, limit, order, companyName
 export const getRelatedCompanyFromCareerService = async ({ companyId, careerId }) => {
     try {
         const res = await db.Company.findAll({
+            where: {
+                id: {
+                    [Op.ne]: companyId,
+                },
+            },
             include: [
                 { model: db.Career, as: "Career", where: { id: { [Op.or]: careerId } } },
                 { model: db.Post, as: "Posts" },

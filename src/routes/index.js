@@ -9,6 +9,7 @@ const districtRouter = require("./district.router");
 const positionRouter = require("./position.router");
 const workingTypeRouter = require("./workingType.router");
 const candidateRouter = require("./candidate.router");
+const imageRouter = require("./image.router");
 
 function initAPIroute(app) {
     app.use("/api/v1/test", testRouter);
@@ -22,6 +23,7 @@ function initAPIroute(app) {
     app.use("/api/v1/position", positionRouter);
     app.use("/api/v1/working-type", workingTypeRouter);
     app.use("/api/v1/candidate", candidateRouter);
+    app.use("/api/v1/image", imageRouter);
     return app.get("/", (req, res) => {
         res.send("API started and wait for your go!");
     });

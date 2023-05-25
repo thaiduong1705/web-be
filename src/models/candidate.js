@@ -12,10 +12,12 @@ module.exports = (sequelize, DataTypes) => {
             Candidate.belongsToMany(models.Career, {
                 through: models.CandidateCareer,
                 foreignKey: "candidateId",
+                as: "Career",
             });
             Candidate.belongsToMany(models.District, {
                 through: models.CandidateDistrict,
                 foreignKey: "districtId",
+                as: "District",
             });
         }
     }
@@ -27,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
             CVImage: DataTypes.STRING,
             phoneNumber: DataTypes.STRING,
             email: DataTypes.STRING,
-            homeAddress: DataTypes.TEXT,
+            //homeAddress: DataTypes.TEXT,
             gender: DataTypes.BOOLEAN,
             experienceYear: DataTypes.INTEGER,
             academicLevelId: DataTypes.STRING,

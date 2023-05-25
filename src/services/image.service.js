@@ -1,6 +1,8 @@
-export const uploadPhoto = async () => {
+const cloudinary = require("../config/cloudinary");
+export const uploadPhoto = async (file) => {
     try {
-        const response = await cloudinary.uploader.upload();
+        const response = await cloudinary.uploader.upload(file.path, { folder: "vieclam" });
+        return response;
     } catch (error) {
         console.log(error);
     }
