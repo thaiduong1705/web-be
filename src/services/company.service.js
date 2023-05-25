@@ -74,7 +74,7 @@ export const getCompanyByIdService = async ({ id }) => {
         const res = await db.Company.findByPk(id, {
             include: [
                 { model: db.Career, as: "Career", attributes: ["id", "careerName"] },
-                { model: db.Post, as: "Posts" },
+                { model: db.Post, as: "Posts", include: [{ model: db.Company, as: "Company" }] },
             ],
         });
         return {
