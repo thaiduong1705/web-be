@@ -318,7 +318,7 @@ export const getLimitPostsService = async ({ page, limit, order, ...query }) => 
                           }
                         : null,
                 },
-                { model: db.Company, as: "Company", attributes: ["companyName"] },
+                { model: db.Company, as: "Company", attributes: ["companyName", "imageLink"] },
                 { model: db.AcademicLevel, as: "AcademicLevel", attributes: ["academicLevelName"] },
                 { model: db.Position, as: "Position", attributes: ["positionName"] },
                 { model: db.WorkingType, as: "WorkingType", attributes: ["workingTypeName"] },
