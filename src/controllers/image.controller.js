@@ -15,10 +15,10 @@ export const uploadController = async (req, res) => {
 
 export const deleteUploadController = async (req, res) => {
     try {
-        const public_id = req.body.image;
-        const response = await deletePhoto(public_id);
-        if (!response) {
-            return res.status(400).json({ err: 1 });
+        const imageLink = req.body.imageLink;
+        const response = await deletePhoto(imageLink);
+        if (!response || response?.result !== "ok") {
+            return res.status(400).json({ err: 1, res: response || "" });
         }
         return res.status(200).json({ err: 0, res: response });
     } catch (error) {

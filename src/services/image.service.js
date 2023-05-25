@@ -8,9 +8,12 @@ export const uploadPhoto = async (file) => {
     }
 };
 
-export const deletePhoto = async (public_id) => {
+export const deletePhoto = async (imageLink) => {
     try {
-        const response = await cloudinary.uploader.destroy(public_id, { folder: "vieclam" });
+        const publicIdRegex = /.*\/([^/]*\/[^/]*).*/;
+        const matches = imageLink.match(publicIdRegex);
+        const public_id = matches[1].replace(/\.[^.]+$/, "");
+        const response = cloudinary.uploader.destroy(public_id);
         return response;
     } catch (error) {
         console.log(error);

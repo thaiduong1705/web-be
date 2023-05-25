@@ -85,7 +85,11 @@ export const createCandidateService = async ({
 export const getCandidateByIdService = async ({ id }) => {
     try {
         const res = await db.Candidate.findByPk(id, {
-            include: [{ model: db.Career, as: "Career", attributes: ["id", "careerName"] }],
+            include: [
+                { model: db.Career, as: "Career", attributes: ["id", "careerName"] },
+                { model: db.District, as: "District", attributes: ["id", "districtName"] },
+                { model: db.AcademicLevel },
+            ],
         });
         return {
             err: res ? 0 : 2,
@@ -201,7 +205,6 @@ export const getLimitCandidatesService = async ({ page, limit, order, ...query }
         const subQuery = {};
         const offset = !page || +page <= 1 ? 0 : +page - 1;
         const numberOfItems = +limit || +process.env.LIMIT_BOOK;
-        console.log("vào");
         queries.offset = offset * numberOfItems;
         queries.limit = numberOfItems;
         if (order) queries.order = [order];
@@ -212,26 +215,21 @@ export const getLimitCandidatesService = async ({ page, limit, order, ...query }
         const count = await db.Candidate.count({
             where: filter,
             include: [
-                {
-                    model: db.Career,
-                    as: "Career",
-                    where: subQuery,
-                },
+                { model: db.AcademicLevel },
+                { model: db.Career, as: "Career" },
+                { model: db.District, as: "District" },
             ],
             distinct: true,
         });
         const res = await db.Candidate.findAll({
-            include: [
-                { model: db.District, as: "District" },
-                {
-                    model: db.Career,
-                    as: "Career",
-                    attributes: ["id", "careerName"],
-                    where: subQuery,
-                },
-            ],
             where: filter,
+            include: [
+                { model: db.AcademicLevel },
+                { model: db.Career, as: "Career" },
+                { model: db.District, as: "District" },
+            ],
             ...queries,
+            distinct: true,
         });
         return {
             err: res ? 0 : 1,

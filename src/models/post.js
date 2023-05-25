@@ -23,6 +23,11 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: "postId",
                 as: "District",
             });
+            Post.belongsToMany(models.Candidate, {
+                through: models.CandidatePost,
+                foreignKey: "postId",
+                as: "Candidate",
+            });
         }
     }
     Post.init(

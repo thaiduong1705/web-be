@@ -16,8 +16,13 @@ module.exports = (sequelize, DataTypes) => {
             });
             Candidate.belongsToMany(models.District, {
                 through: models.CandidateDistrict,
-                foreignKey: "districtId",
+                foreignKey: "candidateId",
                 as: "District",
+            });
+            Candidate.belongsToMany(models.Post, {
+                through: models.CandidatePost,
+                foreignKey: "candidateId",
+                as: "Post",
             });
         }
     }
@@ -29,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
             CVImage: DataTypes.STRING,
             phoneNumber: DataTypes.STRING,
             email: DataTypes.STRING,
-            //homeAddress: DataTypes.TEXT,
+            homeAddress: DataTypes.TEXT,
             gender: DataTypes.BOOLEAN,
             experienceYear: DataTypes.INTEGER,
             academicLevelId: DataTypes.STRING,
