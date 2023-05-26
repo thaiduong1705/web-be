@@ -28,10 +28,10 @@ module.exports = {
                 },
             },
             salaryMin: {
-                type: Sequelize.BIGINT,
+                type: Sequelize.DECIMAL,
             },
             salaryMax: {
-                type: Sequelize.BIGINT,
+                type: Sequelize.DECIMAL,
             },
             experienceYear: {
                 type: Sequelize.INTEGER,

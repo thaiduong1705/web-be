@@ -89,6 +89,7 @@ export const getCandidateByIdService = async ({ id }) => {
                 { model: db.Career, as: "Career", attributes: ["id", "careerName"] },
                 { model: db.District, as: "District", attributes: ["id", "districtName"] },
                 { model: db.AcademicLevel },
+                { model: db.Post, as: "Post" },
             ],
         });
         return {
@@ -97,6 +98,7 @@ export const getCandidateByIdService = async ({ id }) => {
             res,
         };
     } catch (error) {
+        console.log(error);
         return {
             error,
         };
@@ -210,7 +212,12 @@ export const getLimitCandidatesService = async ({ page, limit, order, ...query }
         if (order) queries.order = [order];
 
         if (query.age) filter.age = { [Op.between]: [...query.age] };
-        if (query.experienceYear) filter.experienceYear = { [Op.lte]: query.experienceYear };
+        if (query.experienceYear) {
+            if (query.experienceYear <= 4) {
+                filter.experienceYear = { [Op.lte]: query.experienceYear };
+            }
+            if (query.experienceYear === 5) filter.experienceYear = { [Op.gte]: query.experienceYear };
+        }
         if (query.academicLevelId) filter.academicLevelId = { [Op.eq]: query.academicLevelId };
         const count = await db.Candidate.count({
             where: filter,

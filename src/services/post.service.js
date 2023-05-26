@@ -261,7 +261,12 @@ export const getLimitPostsService = async ({ page, limit, order, ...query }) => 
         }
 
         if (query.sex) filter.sex = { [Op.eq]: query.sex };
-        if (query.experienceYear) filter.experienceYear = { [Op.lte]: query.experienceYear };
+        if (query.experienceYear) {
+            if (query.experienceYear <= 4) {
+                filter.experienceYear = { [Op.lte]: query.experienceYear };
+            }
+            if (query.experienceYear === 5) filter.experienceYear = { [Op.gte]: query.experienceYear };
+        }
         if (query.createdAt) filter.createdAt = { [Op.between]: [...query.createdAt] };
 
         if (query.academicLevelId) filter.academicLevelId = { [Op.eq]: query.academicLevelId };
@@ -358,6 +363,33 @@ export const getRelatedPostFromCareerService = async ({ postId, careerId }) => {
             msg: res ? "Oke" : "Cant found posts.",
             res,
         };
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const applyPostService = async ({ postId, candidateId }) => {
+    try {
+        const [candidatePost, created] = await db.CandidatePost.findOrCreate({
+            where: { candidateId: candidateId, postId: postId },
+            default: {
+                postId,
+                candidateId,
+            },
+        });
+        if (created) {
+            return {
+                err: 0,
+                msg: "Đăng kí ứng tuyển thành công!",
+                res: candidatePost,
+            };
+        } else {
+            return {
+                err: 1,
+                msg: "Ứng viên đã đăng kí bài tuyển dụng này rồi!",
+                res: candidatePost,
+            };
+        }
     } catch (error) {
         console.log(error);
     }
