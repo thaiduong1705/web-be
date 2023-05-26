@@ -144,9 +144,9 @@ export const updatePostService = async ({
     contact,
     workingAddress,
     careerOldList,
-    careerNewList,
+    careerList,
     districtOldList,
-    districtNewList,
+    districtList,
 }) => {
     try {
         console.log(id);
@@ -201,7 +201,7 @@ export const updatePostService = async ({
         const hasZeroValues = careerDel.some((value) => value === 0) && districtDel.some((value) => value === 0);
 
         const pc = await db.PostCareer.bulkCreate(
-            careerNewList.map((careerId) => {
+            careerList.map((careerId) => {
                 return {
                     careerId,
                     postId: post.id,
@@ -209,7 +209,7 @@ export const updatePostService = async ({
             }),
         );
         const pd = await db.PostDistrict.bulkCreate(
-            districtNewList.map((districtId) => {
+            districtList.map((districtId) => {
                 return {
                     districtId,
                     postId: post.id,

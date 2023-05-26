@@ -49,7 +49,6 @@ export const createPost = async (req, res) => {
             jobDescribe,
             benefits,
             jobRequirement,
-            contact,
             workingAddress,
             careerList,
             districtList,
@@ -58,6 +57,11 @@ export const createPost = async (req, res) => {
             !jobTitle ||
             !companyId ||
             !positionId ||
+            !salaryMin ||
+            !salaryMax ||
+            !ageMin ||
+            !ageMax ||
+            !experienceYear ||
             !academicLevelId ||
             !workingTypeId ||
             !endDate ||
@@ -106,12 +110,11 @@ export const updatePost = async (req, res) => {
             jobDescribe,
             benefits,
             jobRequirement,
-            contact,
             workingAddress,
             careerOldList,
-            careerNewList,
+            careerList,
             districtOldList,
-            districtNewList,
+            districtList,
         } = req.body;
 
         if (!id) {
@@ -124,6 +127,11 @@ export const updatePost = async (req, res) => {
             !jobTitle ||
             !companyId ||
             !positionId ||
+            !salaryMin ||
+            !salaryMax ||
+            !ageMin ||
+            !ageMax ||
+            !experienceYear ||
             !academicLevelId ||
             !workingTypeId ||
             !endDate ||
@@ -133,11 +141,11 @@ export const updatePost = async (req, res) => {
             !jobRequirement ||
             !workingAddress ||
             !careerOldList ||
-            !careerNewList ||
-            careerNewList.length === 0 ||
+            !careerList ||
+            careerList.length === 0 ||
             !districtOldList ||
-            !districtNewList ||
-            districtNewList.length === 0
+            !districtList ||
+            districtList.length === 0
         ) {
             return res.status(400).json({
                 err: 1,
