@@ -49,15 +49,20 @@ export const createPost = async (req, res) => {
             jobDescribe,
             benefits,
             jobRequirement,
-            contact,
             workingAddress,
             careerList,
             districtList,
         } = req.body;
+        console.log(req.body);
         if (
             !jobTitle ||
             !companyId ||
             !positionId ||
+            !salaryMin ||
+            !salaryMax ||
+            !ageMin ||
+            !ageMax ||
+            !experienceYear ||
             !academicLevelId ||
             !workingTypeId ||
             !endDate ||
