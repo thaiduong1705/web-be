@@ -13,5 +13,6 @@ router.get("/all", getAllCandidates);
 router.get("/limit", getLimitCandidates);
 router.get("/get-candidate/:id", getCandidateById);
 router.post("/create-candidate", createCandidate);
+router.put("/update-candidate", updateCandidate);
 
 module.exports = router;

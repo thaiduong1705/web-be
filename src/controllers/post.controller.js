@@ -221,6 +221,12 @@ export const applyPost = async (req, res) => {
 export const deletePost = async (req, res) => {
     try {
         const { id } = req.body;
+        if (!id) {
+            return res.status(400).json({
+                err: 1,
+                msg: "Missing Id",
+            });
+        }
         const response = await postService.deletePostService(id);
         return res.status(200).json(response);
     } catch (error) {

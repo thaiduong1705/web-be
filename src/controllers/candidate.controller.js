@@ -18,28 +18,32 @@ export const createCandidate = async (req, res) => {
         const {
             candidateName,
             age,
-            // profileImage,
-            // CVImage,
+            profileImage,
+            CVImage,
             phoneNumber,
             email,
             homeAddress,
             gender,
             experienceYear,
             academicLevelId,
+            positionId,
             careerList,
             districtList,
+            candidateCivilId,
         } = req.body;
         if (
             !candidateName ||
             !age ||
-            // !profileImage ||
-            // !CVImage ||
+            !profileImage ||
+            !CVImage ||
             !phoneNumber ||
             !email ||
             !homeAddress ||
+            !positionId ||
             isNaN(gender) ||
             isNaN(experienceYear) ||
             experienceYear <= -1 ||
+            !candidateCivilId ||
             !academicLevelId ||
             !careerList ||
             careerList.length === 0 ||
@@ -93,6 +97,8 @@ export const updateCandidate = async (req, res) => {
             gender,
             experienceYear,
             academicLevelId,
+            candidateCivilId,
+            positionId,
             careerOldList,
             careerNewList,
             districtOldList,
@@ -115,6 +121,8 @@ export const updateCandidate = async (req, res) => {
             !gender ||
             !experienceYear ||
             !academicLevelId ||
+            !candidateCivilId ||
+            !positionId ||
             !careerOldList ||
             careerOldList.length === 0 ||
             !districtOldList ||

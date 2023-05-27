@@ -201,7 +201,7 @@ export const getLimitCompaniesService = async ({ page, limit, order, companyName
     }
 };
 
-export const getRelatedCompanyFromCareerService = async ({ companyId, careerId }) => {
+export const getRelatedCompanyFromCareerService = async ({ companyId, careerIds }) => {
     try {
         const res = await db.Company.findAll({
             where: {
@@ -210,7 +210,7 @@ export const getRelatedCompanyFromCareerService = async ({ companyId, careerId }
                 },
             },
             include: [
-                { model: db.Career, as: "Career", where: { id: { [Op.or]: careerId } } },
+                { model: db.Career, as: "Career", where: { id: { [Op.or]: careerIds } } },
                 { model: db.Post, as: "Posts" },
             ],
             district: true,

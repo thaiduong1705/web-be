@@ -342,7 +342,7 @@ export const getLimitPostsService = async ({ page, limit, order, ...query }) => 
     }
 };
 
-export const getRelatedPostFromCareerService = async ({ postId, careerId }) => {
+export const getRelatedPostFromCareerService = async ({ postId, careerIds }) => {
     try {
         const res = await db.Post.findAll({
             where: {
@@ -351,7 +351,7 @@ export const getRelatedPostFromCareerService = async ({ postId, careerId }) => {
                 },
             },
             include: [
-                { model: db.Career, as: "Career", where: { id: { [Op.or]: careerId } } },
+                { model: db.Career, as: "Career", where: { id: { [Op.or]: careerIds } } },
                 { model: db.Company, as: "Company" },
                 { model: db.Position, as: "Position" },
                 { model: db.District, as: "District" },
@@ -395,16 +395,16 @@ export const applyPostService = async ({ postId, candidateId }) => {
     }
 };
 
-export const deletePostService = async ({ id }) => {
+export const deletePostService = async (id) => {
     try {
-        await db.Post.delete({
+        await db.Post.destroy({
             where: {
                 id,
             },
         });
         return {
-            err: 1,
-            msg: "Oke",
+            err: 0,
+            msg: "Success",
         };
     } catch (error) {
         console.log(error);

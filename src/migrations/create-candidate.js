@@ -42,6 +42,13 @@ module.exports = {
                     key: "id",
                 },
             },
+            positionId: {
+                type: Sequelize.STRING,
+                references: {
+                    model: "Positions",
+                    key: "id",
+                },
+            },
             candidateCivilId: {
                 type: Sequelize.STRING,
                 unique: true,

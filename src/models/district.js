@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     class District extends Model {
         static associate(models) {
             District.belongsToMany(models.Post, { through: models.PostDistrict, foreignKey: "districtId" });
-            District.belongsToMany(models.Candidate, { through: models.CandidateDistrict, foreignKey: "candidateId" });
+            District.belongsToMany(models.Candidate, { through: models.CandidateDistrict, foreignKey: "districtId" });
         }
     }
     District.init(

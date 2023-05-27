@@ -5,9 +5,12 @@ import db from "../models";
 export const getCandidatesService = async () => {
     try {
         const res = await db.Candidate.findAll({
-            include: [{ model: db.AcademicLevel, attributes: ["academicLevelName"] }],
+            include: [
+                { model: db.AcademicLevel },
+                { model: db.District, as: "District" },
+                { model: db.Career, as: "Career" },
+            ],
         });
-
         return {
             err: res ? 0 : 1,
             msg: res ? "Oke" : "Fail to get candidate",
@@ -33,48 +36,61 @@ export const createCandidateService = async ({
     academicLevelId,
     careerList,
     districtList,
-    candidateCivilId
+    positionId,
+    candidateCivilId,
 }) => {
     try {
-        const candidate = await db.Candidate.create({
-            id: v4(),
-            candidateName,
-            age,
-            profileImage,
-            CVImage,
-            phoneNumber,
-            email,
-            homeAddress,
-            gender,
-            experienceYear,
-            academicLevelId,
+        const existingRecord = await db.Candidate.findOne({
+            where: { candidateCivilId },
         });
-        const cc = await db.CandidateCareer.bulkCreate(
-            careerList.map((careerId) => {
-                return {
-                    candidateId: candidate.id,
-                    careerId,
-                };
-            }),
-        );
-        const cd = await db.CandidateDistrict.bulkCreate(
-            districtList.map((districtId) => {
-                return {
-                    candidateId: candidate.id,
-                    districtId,
-                };
-            }),
-        );
+        if (!existingRecord) {
+            const candidate = await db.Candidate.create({
+                id: v4(),
+                candidateName,
+                age,
+                profileImage,
+                CVImage,
+                phoneNumber,
+                email,
+                homeAddress,
+                gender,
+                experienceYear,
+                academicLevelId,
+                positionId,
+                candidateCivilId,
+            });
+            const cc = await db.CandidateCareer.bulkCreate(
+                careerList.map((careerId) => {
+                    return {
+                        candidateId: candidate.id,
+                        careerId,
+                    };
+                }),
+            );
+            const cd = await db.CandidateDistrict.bulkCreate(
+                districtList.map((districtId) => {
+                    return {
+                        candidateId: candidate.id,
+                        districtId,
+                    };
+                }),
+            );
 
-        return {
-            err: candidate && cc && cd ? 0 : 2,
-            msg: candidate && cc && cd ? "Oke" : "Fail to create candidate",
-            data: {
-                candidate,
-                cc,
-                cd,
-            },
-        };
+            return {
+                err: candidate && cc && cd ? 0 : 2,
+                msg: candidate && cc && cd ? "Oke" : "Fail to create candidate",
+                data: {
+                    candidate,
+                    cc,
+                    cd,
+                },
+            };
+        } else {
+            return {
+                err: 3,
+                msg: "Đã có sẵn ứng viên có căn cước công dân này!",
+            };
+        }
     } catch (error) {
         console.log(error);
         return {
@@ -87,8 +103,8 @@ export const getCandidateByIdService = async ({ id }) => {
     try {
         const res = await db.Candidate.findByPk(id, {
             include: [
-                { model: db.Career, as: "Career", attributes: ["id", "careerName"] },
-                { model: db.District, as: "District", attributes: ["id", "districtName"] },
+                { model: db.Career, as: "Career" },
+                { model: db.District, as: "District" },
                 { model: db.AcademicLevel },
                 { model: db.Post, as: "Post" },
             ],
@@ -118,6 +134,8 @@ export const updateCandidate = async ({
     gender,
     experienceYear,
     academicLevelId,
+    positionId,
+    candidateCivilId,
     careerOldList,
     careerNewList,
     districtOldList,
@@ -128,74 +146,86 @@ export const updateCandidate = async ({
         let districtDel = [];
         let cc;
         let cd;
-        const candidateUpdate = await db.Candidate.update(
-            {
-                candidateName,
-                age,
-                profileImage,
-                CVImage,
-                phoneNumber,
-                email,
-                homeAddress,
-                gender,
-                experienceYear,
-                academicLevelId,
-            },
-            {
-                where: {
-                    id: id,
+        const existingRecord = await db.Candidate.findOne({
+            where: { candidateCivilId },
+        });
+        if (!existingRecord) {
+            const candidateUpdate = await db.Candidate.update(
+                {
+                    candidateName,
+                    age,
+                    profileImage,
+                    CVImage,
+                    phoneNumber,
+                    email,
+                    homeAddress,
+                    gender,
+                    experienceYear,
+                    academicLevelId,
+                    positionId,
+                    candidateCivilId,
                 },
-            },
-        );
-        const candidate = await db.Candidate.findByPk(id);
-
-        for (const oldId of careerOldList) {
-            const temp = await db.CandidateCareer.destroy({
-                where: {
-                    [Op.and]: [{ candidateId: candidate.id }, { careerId: oldId }],
+                {
+                    where: {
+                        id: id,
+                    },
                 },
-            });
-            careerDel.push(temp);
-        }
-
-        for (const oldId of districtOldList) {
-            const temp = await db.CandidateDistrict.destroy({
-                where: {
-                    [Op.and]: [{ candidateId: candidate.id }, { districtId: oldId }],
-                },
-            });
-            districtDel.push(temp);
-        }
-        const hasZeroValues = careerDel.some((value) => value === 0) && districtDel.some((value) => value === 0);
-        if (!hasZeroValues) {
-            cc = await db.CandidateCareer.bulkCreate(
-                careerNewList.map((careerId) => {
-                    return {
-                        candidateId: candidate.id,
-                        careerId,
-                    };
-                }),
             );
-            cd = await db.CandidateDistrict.bulkCreate(
-                districtNewList.map((districtId) => {
-                    return {
-                        candidateId: candidate.id,
-                        districtId,
-                    };
-                }),
-            );
-        }
+            const candidate = await db.Candidate.findByPk(id);
 
-        return {
-            err: candidateUpdate[0] === 1 && cc && cd && !hasZeroValues ? 0 : 2,
-            msg: candidateUpdate[0] === 1 && cc && cd && !hasZeroValues ? "Oke" : "Fail to update candidate!",
-            res: {
-                candidateUpdate,
-                resDel,
-                cc,
-                cd,
-            },
-        };
+            for (const oldId of careerOldList) {
+                const temp = await db.CandidateCareer.destroy({
+                    where: {
+                        [Op.and]: [{ candidateId: candidate.id }, { careerId: oldId }],
+                    },
+                });
+                careerDel.push(temp);
+            }
+
+            for (const oldId of districtOldList) {
+                const temp = await db.CandidateDistrict.destroy({
+                    where: {
+                        [Op.and]: [{ candidateId: candidate.id }, { districtId: oldId }],
+                    },
+                });
+                districtDel.push(temp);
+            }
+            const hasZeroValues = careerDel.some((value) => value === 0) && districtDel.some((value) => value === 0);
+            if (!hasZeroValues) {
+                cc = await db.CandidateCareer.bulkCreate(
+                    careerNewList.map((careerId) => {
+                        return {
+                            candidateId: candidate.id,
+                            careerId,
+                        };
+                    }),
+                );
+                cd = await db.CandidateDistrict.bulkCreate(
+                    districtNewList.map((districtId) => {
+                        return {
+                            candidateId: candidate.id,
+                            districtId,
+                        };
+                    }),
+                );
+            }
+
+            return {
+                err: candidateUpdate[0] === 1 && cc && cd && !hasZeroValues ? 0 : 2,
+                msg: candidateUpdate[0] === 1 && cc && cd && !hasZeroValues ? "Oke" : "Fail to update candidate!",
+                res: {
+                    candidateUpdate,
+                    resDel,
+                    cc,
+                    cd,
+                },
+            };
+        } else {
+            return {
+                err: 3,
+                msg: "Đã có sẵn ứng viên có căn cước công dân này!",
+            };
+        }
     } catch (error) {
         return error;
     }

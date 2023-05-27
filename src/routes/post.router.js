@@ -6,6 +6,7 @@ import * as postController from "../controllers/post.controller";
 // router.post("/login", authController.login);
 router.post("/create-post", postController.createPost);
 router.post("/apply", postController.applyPost);
+router.post("/soft-delete", postController.deletePost);
 router.put("/update-post", postController.updatePost);
 router.get("/get-post/:id", postController.getPostById);
 router.get("/get-related-post", postController.getRelatedPostsFromCareer);
