@@ -28,10 +28,10 @@ module.exports = {
                 },
             },
             salaryMin: {
-                type: Sequelize.BIGINT,
+                type: Sequelize.DECIMAL,
             },
             salaryMax: {
-                type: Sequelize.BIGINT,
+                type: Sequelize.DECIMAL,
             },
             experienceYear: {
                 type: Sequelize.INTEGER,
@@ -94,6 +94,10 @@ module.exports = {
             },
             updatedAt: {
                 allowNull: false,
+                type: Sequelize.DATE,
+            },
+            deleteAt: {
+                allowNull: true,
                 type: Sequelize.DATE,
             },
         });

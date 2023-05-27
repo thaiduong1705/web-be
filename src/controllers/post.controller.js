@@ -197,3 +197,37 @@ export const getRelatedPostsFromCareer = async (req, res) => {
         });
     }
 };
+
+export const applyPost = async (req, res) => {
+    try {
+        const { postId, candidateId } = req.body;
+        if (!postId || !candidateId) {
+            return res.status(400).json({
+                err: 2,
+                msg: "Missing input!",
+            });
+        }
+        const response = await postService.applyPostService(req.body);
+        return res.status(200).json(response);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            err: -1,
+            msg: "Fail at applyPost: " + error,
+        });
+    }
+};
+
+export const deletePost = async (req, res) => {
+    try {
+        const { id } = req.body;
+        const response = await postService.deletePostService(id);
+        return res.status(200).json(response);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            err: -1,
+            msg: "Fail at deletePost: " + error,
+        });
+    }
+};
