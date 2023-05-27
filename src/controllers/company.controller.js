@@ -15,11 +15,9 @@ export const getAllCompanies = async (req, res) => {
 
 export const createCompany = async (req, res) => {
     try {
-        const { companyName, /*imageLink, url,*/ address, email, phone, introduction, companySize, careerList } =
-            req.body;
+        const { companyName, imageLink, url, address, email, phone, introduction, companySize, careerList } = req.body;
         if (
             !companyName ||
-            // !imageLink ||
             !address ||
             !introduction ||
             !companySize ||
@@ -73,7 +71,6 @@ export const updateCompany = async (req, res) => {
         }
         if (
             !companyName ||
-            // !imageLink ||
             !address ||
             !introduction ||
             !companySize ||
