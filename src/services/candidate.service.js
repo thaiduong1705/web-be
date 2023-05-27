@@ -33,6 +33,7 @@ export const createCandidateService = async ({
     academicLevelId,
     careerList,
     districtList,
+    candidateCivilId
 }) => {
     try {
         const candidate = await db.Candidate.create({

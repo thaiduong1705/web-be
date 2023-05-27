@@ -42,6 +42,10 @@ module.exports = {
                     key: "id",
                 },
             },
+            candidateCivilId: {
+                type: Sequelize.STRING,
+                unique: true,
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

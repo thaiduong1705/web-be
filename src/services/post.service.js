@@ -394,3 +394,19 @@ export const applyPostService = async ({ postId, candidateId }) => {
         console.log(error);
     }
 };
+
+export const deletePostService = async ({ id }) => {
+    try {
+        await db.Post.delete({
+            where: {
+                id,
+            },
+        });
+        return {
+            err: 1,
+            msg: "Oke",
+        };
+    } catch (error) {
+        console.log(error);
+    }
+};
