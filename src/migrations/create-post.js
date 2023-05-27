@@ -96,9 +96,9 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.DATE,
             },
-            deleteAt: {
-                allowNull: true,
+            deletedAt: {
                 type: Sequelize.DATE,
+                allowNull: true,
             },
         });
     },
