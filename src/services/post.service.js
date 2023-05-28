@@ -35,6 +35,14 @@ export const getPostByIdService = async ({ id }) => {
                 { model: db.Position, as: "Position" },
                 { model: db.Career, as: "Career" },
                 { model: db.District, as: "District" },
+                {
+                    model: db.Candidate,
+                    as: "Candidate",
+                    include: [
+                        { model: db.AcademicLevel, as: "AcademicLevel" },
+                        { model: db.Position, as: "Position" },
+                    ],
+                },
             ],
         });
         return {
