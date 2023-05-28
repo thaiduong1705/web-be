@@ -118,8 +118,8 @@ export const updateCandidate = async (req, res) => {
             !phoneNumber ||
             !email ||
             !homeAddress ||
-            !gender ||
-            !experienceYear ||
+            isNaN(gender) ||
+            isNaN(experienceYear) ||
             !academicLevelId ||
             !candidateCivilId ||
             !positionId ||

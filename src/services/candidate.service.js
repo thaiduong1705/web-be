@@ -39,6 +39,7 @@ export const createCandidateService = async ({
     positionId,
     candidateCivilId,
 }) => {
+    console.log(positionId, candidateCivilId);
     try {
         const existingRecord = await db.Candidate.findOne({
             where: { candidateCivilId },
@@ -147,7 +148,7 @@ export const updateCandidate = async ({
         let cc;
         let cd;
         const existingRecord = await db.Candidate.findOne({
-            where: { candidateCivilId },
+            where: { candidateCivilId, id: { [Op.ne]: id } },
         });
         if (!existingRecord) {
             const candidateUpdate = await db.Candidate.update(
@@ -215,7 +216,8 @@ export const updateCandidate = async ({
                 msg: candidateUpdate[0] === 1 && cc && cd && !hasZeroValues ? "Oke" : "Fail to update candidate!",
                 res: {
                     candidateUpdate,
-                    resDel,
+                    careerDel,
+                    districtDel,
                     cc,
                     cd,
                 },

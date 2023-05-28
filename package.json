@@ -5,10 +5,10 @@
     "main": "index.js",
     "scripts": {
         "start": "nodemon --exec babel-node index.js",
-        "first-migrate": "cd src && npx sequelize-cli db:migrate --to create-candidate.js",
+        "first-migrate": "cd src && npx sequelize-cli db:migrate --name create-academiclevel.js",
         "second-migrate": "cd src && npx sequelize-cli db:migrate --from create-candidatepost.js --to create-company.js && npx sequelize-cli db:migrate --name create-workingtype.js",
         "third-migrate": "cd src && npx sequelize-cli db:migrate --from create-companycareer.js --to create-position.js",
-        "semi-migrate": "cd src && npx sequelize-cli db:migrate --name create-post.js",
+        "semi-migrate": "cd src && npx sequelize-cli db:migrate --name create-post.js && npx sequelize-cli db:migrate --name create-candidate.js",
         "final-migrate": "cd src && npx sequelize-cli db:migrate",
         "migrate": "npm run first-migrate && npm run second-migrate && npm run third-migrate && npm run semi-migrate && npm run final-migrate"
     },

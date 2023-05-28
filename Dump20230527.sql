@@ -145,12 +145,14 @@ CREATE TABLE `candidates` (
   `experienceYear` int DEFAULT NULL,
   `academicLevelId` varchar(255) DEFAULT NULL,
   `candidateCivilId` varchar(255) DEFAULT NULL,
+  `positionId` varchar(255) DEFAULT NULL,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `candidateCivilId` (`candidateCivilId`),
   KEY `academicLevelId` (`academicLevelId`),
-  CONSTRAINT `candidates_ibfk_1` FOREIGN KEY (`academicLevelId`) REFERENCES `academiclevels` (`id`)
+  CONSTRAINT `candidates_ibfk_1` FOREIGN KEY (`academicLevelId`) REFERENCES `academiclevels` (`id`),
+  CONSTRAINT `candidates_ibfk_2` FOREIGN KEY (`positionId`) REFERENCES `positions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
