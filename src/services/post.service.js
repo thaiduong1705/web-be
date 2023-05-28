@@ -410,3 +410,28 @@ export const deletePostService = async (id) => {
         console.log(error);
     }
 };
+
+export const getDeletePostService = async () => {
+    try {
+        const deletedPosts = await db.Post.findAll({
+            include: [
+                { model: db.Company, as: "Company", attributes: ["companyName", "imageLink"] },
+                { model: db.Position, as: "Position", attributes: ["positionName"] },
+                { model: db.AcademicLevel, as: "AcademicLevel" },
+                { model: db.WorkingType, as: "WorkingType" },
+                { model: db.Career, as: "Career" },
+                { model: db.District, as: "District" },
+            ],
+            where: {
+                deletedAt: { [Op.not]: null },
+            },
+            paranoid: false,
+        });
+        return {
+            err: deletedPosts ? 0 : 1,
+            deletedPosts,
+        };
+    } catch (error) {
+        console.log(error);
+    }
+};
