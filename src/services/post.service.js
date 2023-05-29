@@ -419,7 +419,7 @@ export const deletePostService = async (id) => {
     }
 };
 
-export const getDeletePostService = async () => {
+export const getDeletedPostService = async () => {
     try {
         const deletedPosts = await db.Post.findAll({
             include: [
@@ -434,6 +434,36 @@ export const getDeletePostService = async () => {
                 deletedAt: { [Op.not]: null },
             },
             paranoid: false,
+        });
+        return {
+            err: deletedPosts ? 0 : 1,
+            deletedPosts,
+        };
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const getDeletedPostOfCompanyService = async (companyId) => {
+    try {
+        const deletedPosts = await db.Post.findAll({
+            where: {
+                deletedAt: { [Op.not]: null },
+            },
+            paranoid: false,
+            include: [
+                {
+                    model: db.Company,
+                    as: "Company",
+                    attributes: ["companyName", "imageLink"],
+                    where: { id: companyId },
+                },
+                { model: db.Position, as: "Position", attributes: ["positionName"] },
+                { model: db.AcademicLevel, as: "AcademicLevel" },
+                { model: db.WorkingType, as: "WorkingType" },
+                { model: db.Career, as: "Career" },
+                { model: db.District, as: "District" },
+            ],
         });
         return {
             err: deletedPosts ? 0 : 1,

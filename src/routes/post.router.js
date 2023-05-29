@@ -13,4 +13,5 @@ router.get("/get-related-post", postController.getRelatedPostsFromCareer);
 router.get("/all", postController.getAllPosts);
 router.get("/limit", postController.getLimitPosts);
 router.get("/get-delete", postController.getDeletedPost);
+router.get("get-delete-post-of-company", postController.getDeletedPostOfCompany);
 module.exports = router;

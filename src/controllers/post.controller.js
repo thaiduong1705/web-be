@@ -240,13 +240,32 @@ export const deletePost = async (req, res) => {
 
 export const getDeletedPost = async (req, res) => {
     try {
-        const response = await postService.getDeletePostService();
+        const response = await postService.getDeletedPostService();
         return res.status(200).json(response);
     } catch (error) {
         console.log(error);
         return res.status(500).json({
             err: -1,
-            msg: "Fail at deletePost: " + error,
+            msg: "Fail at getDeletedPost: " + error,
+        });
+    }
+};
+
+export const getDeletedPostOfCompany = async (req, res) => {
+    try {
+        if (!req.params.id) {
+            return res.status(400).json({
+                err: 1,
+                msg: "Missing company id!",
+            });
+        }
+        const response = await postService.getDeletedPostOfCompanyService(req.params.id);
+        return res.status(500).json(response);
+    } catch (error) {
+        console.log(error, "getDeletedPostOfCompany");
+        return res.status(500).json({
+            err: -1,
+            msg: "Fail at getDeletedPostOfCompany: " + error,
         });
     }
 };
