@@ -10,7 +10,7 @@ const positionRouter = require("./position.router");
 const workingTypeRouter = require("./workingType.router");
 const candidateRouter = require("./candidate.router");
 const imageRouter = require("./image.router");
-
+const userRouter = require("./user.router");
 function initAPIroute(app) {
     app.use("/api/v1/test", testRouter);
     app.use("/api/v1/auth", authRouter);
@@ -24,6 +24,7 @@ function initAPIroute(app) {
     app.use("/api/v1/working-type", workingTypeRouter);
     app.use("/api/v1/candidate", candidateRouter);
     app.use("/api/v1/image", imageRouter);
+    app.use("/api/v1/user", userRouter);
     return app.get("/", (req, res) => {
         res.send("API started and wait for your go!");
     });
