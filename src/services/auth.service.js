@@ -38,7 +38,7 @@ export const loginService = async ({ userName, password }) => {
         const token = isCorrectPass && jwt.sign({ id: response.id }, process.env.SECRET_KEY, { expiresIn: "2d" });
         return {
             err: token ? 0 : 2,
-            msg: token ? "Login is successful!" : response ? "Password is not correct!" : "Not found username",
+            msg: token ? "Đăng nhập thành công" : response ? "Sai mật khẩu!" : "Không tìm thấy tên tài khoản",
             token: token || null,
         };
     } catch (error) {
