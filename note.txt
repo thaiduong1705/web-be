@@ -4,3 +4,7 @@ Kiểm tra định dạng tên có đúng không.
 Kiểm tra website có đúng là website không.
 
 Thêm cái địa chỉ chi nhánh vào.
+
+a123456789!
+gioithieuvieclam62@gmail.com
+pass app: lgwxifazxtxklwnf

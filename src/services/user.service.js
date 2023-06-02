@@ -11,7 +11,7 @@ export const getCurrentUserService = async (id) => {
         return {
             err: response ? 0 : 1,
             msg: response ? "OK" : "Failed to get provinces.",
-            response,
+            res: response,
         };
     } catch (error) {
         console.log(error);
