@@ -15,7 +15,7 @@ module.exports = {
                 type: Sequelize.INTEGER,
             },
             dateReport: {
-                type: Sequelize.DATE,
+                type: Sequelize.DATEONLY,
                 unique: true,
             },
             createdAt: {
