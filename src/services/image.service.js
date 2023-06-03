@@ -1,8 +1,17 @@
 const cloudinary = require("../config/cloudinary");
+const fs = require("fs");
 export const uploadPhoto = async (file) => {
     try {
         const response = await cloudinary.uploader.upload(file.path, { folder: "vieclam" });
-        return response;
+        const result = fs.unlink(file.path, (err) => {
+            if (err) {
+                return err;
+            } else {
+                return null;
+            }
+        });
+
+        return { response, result };
     } catch (error) {
         console.log(error);
     }
