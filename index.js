@@ -3,8 +3,8 @@ const methodOverride = require("method-override");
 const cors = require("cors");
 require("dotenv").config();
 import connectDatabase from "./src/config/db.connect.js";
-import relationshipTester from "./src/seeders/relationshipTester.js";
 const initAPIroute = require("./src/routes");
+import { initUpdatePost, initUpdateReport } from "./src/config/initScheduledJobs.js";
 
 const app = express();
 
@@ -21,6 +21,9 @@ app.use(methodOverride("_method"));
 
 initAPIroute(app);
 connectDatabase();
+
+initUpdatePost();
+initUpdateReport();
 
 const port = process.env.PORT || 8080;
 

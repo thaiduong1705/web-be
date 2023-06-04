@@ -22,6 +22,7 @@ const sequelize = new Sequelize("job_recommendation", "root", null, {
     host: "localhost",
     dialect: "mysql",
     logging: false,
+    timezone: "+07:00",
 });
 
 const connectDatabase = async () => {

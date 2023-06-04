@@ -4,21 +4,15 @@ import { Op } from "sequelize";
 
 export const getReports = async () => {
     try {
-        // const result = await db.Report.findAll({
-        //     where: {
-        //         dateReport: {
-        //             [Op.between]: [Date.now() - 60 * 60 * 1000 * 24, Date.now()],
-        //         },
-        //     },
-        // });
-        const result = await db.Post.count({
+        await updateReport();
+        const result = await db.Report.findAll({
             where: {
-                createdAt: {
-                    [Op.between]: [Date.now() - 60 * 60 * 1000 * 24 * 21, Date.now()],
+                dateReport: {
+                    [Op.between]: [Date.now() - 60 * 60 * 1000 * 24, Date.now()],
                 },
             },
-            paranoid: false,
         });
+
         return {
             err: 0,
             res: result,
@@ -34,7 +28,8 @@ export const updateReport = async () => {
         const posts = await db.Post.count({
             where: {
                 createdAt: {
-                    [Op.between]: [Date.now() - 60 * 60 * 1000 * 24, Date.now()],
+                    [Op.lte]: new Date(),
+                    [Op.gte]: new Date().setHours(0, 0, 0, 0),
                 },
             },
             paranoid: false,
@@ -42,13 +37,17 @@ export const updateReport = async () => {
         const appliedCandidate = await db.CandidatePost.count({
             where: {
                 createdAt: {
-                    [Op.between]: [Date.now() - 60 * 60 * 1000 * 24, Date.now()],
+                    [Op.lte]: new Date(),
+                    [Op.gte]: new Date().setHours(0, 0, 0, 0),
                 },
             },
         });
-        const report = await db.Report.find({
+        const report = await db.Report.findOne({
             where: {
-                dateReport: Date.now(),
+                dateReport: {
+                    [Op.lte]: new Date(),
+                    [Op.gte]: new Date().setHours(0, 0, 0, 0),
+                },
             },
         });
         if (!report) {
@@ -56,7 +55,7 @@ export const updateReport = async () => {
                 id: v4(),
                 appliedCount: appliedCandidate,
                 postCount: posts,
-                dateReport: Date.now(),
+                dateReport: new Date(),
             });
         } else {
             await db.Report.update(
@@ -65,12 +64,16 @@ export const updateReport = async () => {
                     postCount: posts,
                 },
                 {
-                    dateReport: Date.now(),
+                    where: {
+                        dateReport: {
+                            [Op.lte]: new Date(),
+                            [Op.gte]: new Date().setHours(0, 0, 0, 0),
+                        },
+                    },
                 },
             );
         }
     } catch (error) {
         console.log(error);
-        return error;
     }
 };

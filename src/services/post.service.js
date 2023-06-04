@@ -1,6 +1,7 @@
 import { v4 } from "uuid";
 import db from "../models";
 import { Op } from "sequelize";
+import { sendEmailService } from "./emailService";
 
 export const getPostsService = async () => {
     try {
@@ -403,6 +404,39 @@ export const applyPostService = async ({ postId, candidateId }) => {
     }
 };
 
+export const changeStatusApplied = async ({ postId, candidateId }) => {
+    try {
+        await db.CandidatePost.update(
+            {
+                isApplied: true,
+            },
+            {
+                where: {
+                    postId,
+                    candidateId,
+                },
+            },
+        );
+        const candidate = await db.Candidate.findOne({
+            where: {
+                id: candidateId,
+            },
+        });
+        const post = await db.Post.findOne({
+            where: {
+                id: postId,
+            },
+            include: [{ model: db.Company, as: "Company" }],
+        });
+        await sendEmailService(candidate.email, post.jobTitle, post.Company.companyName);
+        return {
+            err: 0,
+        };
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const deletePostService = async (id) => {
     try {
         await db.Post.destroy({
@@ -469,6 +503,28 @@ export const getDeletedPostOfCompanyService = async (companyId) => {
             err: deletedPosts ? 0 : 1,
             deletedPosts,
         };
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const updateExpiredPost = async () => {
+    try {
+        const posts = await db.Post.findAll({
+            where: {
+                endDate: {
+                    [Op.lte]: new Date(),
+                },
+            },
+        });
+
+        await db.Post.destroy({
+            where: {
+                id: {
+                    [Op.in]: posts.map((p) => p.id),
+                },
+            },
+        });
     } catch (error) {
         console.log(error);
     }
