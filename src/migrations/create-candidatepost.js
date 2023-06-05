@@ -21,7 +21,7 @@ module.exports = {
                     key: "id",
                 },
             },
-            applied: {
+            isApplied: {
                 type: Sequelize.BOOLEAN,
                 defaultValue: false,
                 allowNull: false,
