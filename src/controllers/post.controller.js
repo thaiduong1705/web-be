@@ -41,7 +41,6 @@ export const createPost = async (req, res) => {
             salaryMax,
             ageMin,
             ageMax,
-            experienceYear,
             academicLevelId,
             workingTypeId,
             endDate,
@@ -61,7 +60,6 @@ export const createPost = async (req, res) => {
             !salaryMax ||
             !ageMin ||
             !ageMax ||
-            !experienceYear ||
             !academicLevelId ||
             !workingTypeId ||
             !endDate ||
@@ -101,7 +99,6 @@ export const updatePost = async (req, res) => {
             salaryMax,
             ageMin,
             ageMax,
-            experienceYear,
             academicLevelId,
             workingTypeId,
             endDate,
@@ -131,7 +128,6 @@ export const updatePost = async (req, res) => {
             !salaryMax ||
             !ageMin ||
             !ageMax ||
-            !experienceYear ||
             !academicLevelId ||
             !workingTypeId ||
             !endDate ||

@@ -172,7 +172,11 @@ export const getLimitCompaniesService = async ({ page, limit, order, companyName
                 {
                     model: db.Career,
                     as: "Career",
-                    where: subQuery,
+                    where: careerId
+                        ? {
+                              id: careerId,
+                          }
+                        : null,
                 },
             ],
             distinct: true,
@@ -184,7 +188,11 @@ export const getLimitCompaniesService = async ({ page, limit, order, companyName
                     model: db.Career,
                     as: "Career",
                     attributes: ["id", "careerName"],
-                    where: subQuery,
+                    where: careerId
+                        ? {
+                              id: careerId,
+                          }
+                        : null,
                 },
             ],
             where: query,
