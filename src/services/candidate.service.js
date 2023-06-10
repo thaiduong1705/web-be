@@ -107,7 +107,7 @@ export const getCandidateByIdService = async ({ id }) => {
                 { model: db.Career, as: "Career" },
                 { model: db.District, as: "District" },
                 { model: db.AcademicLevel },
-                { model: db.Post, as: "Post" },
+                { model: db.Post, as: "Post", include: [{ model: db.Company, as: "Company" }] },
             ],
         });
         return {
