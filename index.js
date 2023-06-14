@@ -5,6 +5,7 @@ require("dotenv").config();
 import connectDatabase from "./src/config/db.connect.js";
 const initAPIroute = require("./src/routes");
 import { initUpdatePost, initUpdateReport } from "./src/config/initScheduledJobs.js";
+import { updateExpiredPost } from "./src/services/post.service.js";
 
 const app = express();
 
@@ -20,7 +21,9 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 
 initAPIroute(app);
-connectDatabase();
+connectDatabase().then(() => {
+    updateExpiredPost();
+});
 
 initUpdatePost();
 initUpdateReport();

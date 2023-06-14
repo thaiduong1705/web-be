@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     Position.init(
         {
             positionName: DataTypes.STRING,
+            keyCode: DataTypes.INTEGER,
         },
         {
             sequelize,

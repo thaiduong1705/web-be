@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     District.init(
         {
             districtName: DataTypes.STRING,
+            keyCode: DataTypes.INTEGER,
         },
         {
             sequelize,

@@ -3,7 +3,7 @@ import db, { sequelize } from "../models";
 export const getDistrictsService = async () => {
     try {
         const res = await db.District.findAll({
-            order: [["districtName", "ASC"]],
+            order: [["keyCode", "ASC"]],
         });
 
         return {

@@ -61,7 +61,7 @@ export const createPost = async (req, res) => {
             !salaryMax ||
             !ageMin ||
             !ageMax ||
-            !experienceYear ||
+            isNaN(experienceYear) ||
             !academicLevelId ||
             !workingTypeId ||
             !endDate ||
@@ -131,7 +131,7 @@ export const updatePost = async (req, res) => {
             !salaryMax ||
             !ageMin ||
             !ageMax ||
-            !experienceYear ||
+            isNaN(experienceYear) ||
             !academicLevelId ||
             !workingTypeId ||
             !endDate ||
@@ -220,14 +220,14 @@ export const applyPost = async (req, res) => {
 
 export const changeStatusApplied = async (req, res) => {
     try {
-        const { postId, candidateId } = req.body;
+        const { postId, candidateId, isApplied } = req.body;
         if (!postId || !candidateId) {
             return res.status(400).json({
                 err: 1,
                 msg: "Missing input!",
             });
         }
-        const response = await postService.changeStatusApplied(postId, candidateId);
+        const response = await postService.changeStatusApplied(req.body);
         return res.status(200).json(response);
     } catch (error) {
         console.log(error);

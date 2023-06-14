@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     AcademicLevel.init(
         {
             academicLevelName: DataTypes.STRING,
+            keyCode: DataTypes.INTEGER,
         },
         {
             sequelize,

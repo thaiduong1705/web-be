@@ -39,7 +39,6 @@ export const createCandidateService = async ({
     positionId,
     candidateCivilId,
 }) => {
-    console.log(positionId, candidateCivilId);
     try {
         const existingRecord = await db.Candidate.findOne({
             where: { candidateCivilId },

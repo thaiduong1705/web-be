@@ -200,7 +200,6 @@ CREATE TABLE `companies` (
   `id` varchar(255) NOT NULL,
   `companyName` text,
   `imageLink` varchar(255) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
   `email` text,
   `phone` text,
   `address` text,
@@ -389,7 +388,7 @@ CREATE TABLE `posts` (
   `contact` text,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `deleteAt` datetime DEFAULT NULL,
+  `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `companyId` (`companyId`),
   KEY `positionId` (`positionId`),
@@ -416,25 +415,9 @@ UNLOCK TABLES;
 -- Table structure for table `sequelizemeta`
 --
 
-DROP TABLE IF EXISTS `sequelizemeta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sequelizemeta` (
-  `name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  PRIMARY KEY (`name`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
 --
 -- Dumping data for table `sequelizemeta`
 --
-
-LOCK TABLES `sequelizemeta` WRITE;
-/*!40000 ALTER TABLE `sequelizemeta` DISABLE KEYS */;
-INSERT INTO `sequelizemeta` VALUES ('create-academiclevel.js'),('create-candidate.js'),('create-candidatecareer.js'),('create-candidatedistrict.js'),('create-candidatepost.js'),('create-career.js'),('create-company.js'),('create-companycareer.js'),('create-district.js'),('create-position.js'),('create-post.js'),('create-postcareer.js'),('create-postdistrict.js'),('create-user.js'),('create-workingtype.js');
-/*!40000 ALTER TABLE `sequelizemeta` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
@@ -488,6 +471,8 @@ INSERT INTO `workingtypes` VALUES ('392b5b66-e8d1-41bf-9163-b2c84800ed95','Theo 
 /*!40000 ALTER TABLE `workingtypes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+insert into `users` value('f060f873-c29f-414d-b8db-701f7f612a0e', 'admin', '$12$.GO9q3pQBvrTranj3E962uMJXl1Qyk/KXgnsdzxtl4mvpY4uMyZwK', '2023-05-31 10:43:54', '2023-05-31 10:43:54');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
