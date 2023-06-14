@@ -157,7 +157,6 @@ export const updatePostService = async ({
     districtList,
 }) => {
     try {
-        console.log(id);
         let careerDel = [];
         let districtDel = [];
         const postUpdate = await db.Post.update(

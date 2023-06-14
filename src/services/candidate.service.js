@@ -106,7 +106,7 @@ export const getCandidateByIdService = async ({ id }) => {
                 { model: db.Career, as: "Career" },
                 { model: db.District, as: "District" },
                 { model: db.AcademicLevel },
-                { model: db.Post, as: "Post" },
+                { model: db.Post, as: "Post", include: [{ model: db.Company, as: "Company" }] },
             ],
         });
         return {
@@ -236,7 +236,6 @@ export const getLimitCandidatesService = async ({ page, limit, order, ...query }
     try {
         const filter = {};
         const queries = {};
-        const subQuery = {};
         const offset = !page || +page <= 1 ? 0 : +page - 1;
         const numberOfItems = +limit || +process.env.LIMIT_BOOK;
         queries.offset = offset * numberOfItems;
