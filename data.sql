@@ -175,7 +175,6 @@ CREATE TABLE `companies` (
   `id` varchar(255) NOT NULL,
   `companyName` text,
   `imageLink` varchar(255) DEFAULT NULL,
-  `url` varchar(255) DEFAULT NULL,
   `email` text,
   `phone` text,
   `address` text,
@@ -444,6 +443,8 @@ INSERT INTO `workingtypes` VALUES ('392b5b66-e8d1-41bf-9163-b2c84800ed95','Theo 
 /*!40000 ALTER TABLE `workingtypes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+insert into `users` value('f060f873-c29f-414d-b8db-701f7f612a0e', 'admin', '$12$.GO9q3pQBvrTranj3E962uMJXl1Qyk/KXgnsdzxtl4mvpY4uMyZwK', '2023-05-31 10:43:54', '2023-05-31 10:43:54');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -11,6 +11,10 @@ module.exports = {
             workingTypeName: {
                 type: Sequelize.STRING,
             },
+            keyCode: {
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
+            },
             createdAt: {
                 allowNull: false,
                 type: Sequelize.DATE,

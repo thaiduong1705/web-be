@@ -14,9 +14,6 @@ module.exports = {
             imageLink: {
                 type: Sequelize.STRING,
             },
-            url: {
-                type: Sequelize.STRING,
-            },
             email: {
                 type: Sequelize.TEXT,
             },

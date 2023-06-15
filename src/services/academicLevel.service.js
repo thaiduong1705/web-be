@@ -3,7 +3,9 @@ import db from "../models";
 
 export const getAcademicLevelsService = async () => {
     try {
-        const res = await db.AcademicLevel.findAll({});
+        const res = await db.AcademicLevel.findAll({
+            order: [["keyCode", "ASC"]],
+        });
 
         return {
             err: res ? 0 : 1,

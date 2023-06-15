@@ -59,7 +59,7 @@ module.exports = {
             workingAddress: {
                 type: Sequelize.STRING,
             },
-            viewCount: {
+            appliedCount: {
                 type: Sequelize.INTEGER,
             },
             endDate: {
@@ -81,12 +81,8 @@ module.exports = {
                 allowNull: false,
                 type: Sequelize.TEXT,
             },
-            contact: {
-                allowNull: true,
-                type: Sequelize.TEXT,
-            },
             workingAddress: {
-                type: Sequelize.STRING,
+                type: Sequelize.TEXT,
             },
             createdAt: {
                 allowNull: false,

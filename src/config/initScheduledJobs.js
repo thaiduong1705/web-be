@@ -19,7 +19,7 @@ export const initUpdatePost = () => {
 
 export const initUpdateReport = () => {
     const scheduledJobFunction = CronJob.schedule(
-        "0 11 * * *",
+        "0 23 * * *",
         () => {
             console.log("I'm executed on a schedule of updateReport");
             updateReport();

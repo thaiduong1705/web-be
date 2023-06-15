@@ -73,7 +73,6 @@ export const createPostService = async ({
     jobDescribe,
     benefits,
     jobRequirement,
-    contact,
     careerList,
     districtList,
     workingAddress,
@@ -98,8 +97,8 @@ export const createPostService = async ({
             jobDescribe,
             benefits,
             jobRequirement,
-            contact,
             workingAddress,
+            appliedCount: 0,
         });
         const pc = await db.PostCareer.bulkCreate(
             careerList.map((careerId) => {
@@ -128,6 +127,7 @@ export const createPostService = async ({
             },
         };
     } catch (error) {
+        console.log(error);
         return error;
     }
 };
@@ -150,7 +150,6 @@ export const updatePostService = async ({
     jobDescribe,
     benefits,
     jobRequirement,
-    contact,
     workingAddress,
     careerOldList,
     careerList,
@@ -158,7 +157,6 @@ export const updatePostService = async ({
     districtList,
 }) => {
     try {
-        console.log(id);
         let careerDel = [];
         let districtDel = [];
         const postUpdate = await db.Post.update(
@@ -179,7 +177,6 @@ export const updatePostService = async ({
                 jobDescribe,
                 benefits,
                 jobRequirement,
-                contact,
                 workingAddress,
             },
             {
@@ -404,11 +401,11 @@ export const applyPostService = async ({ postId, candidateId }) => {
     }
 };
 
-export const changeStatusApplied = async ({ postId, candidateId }) => {
+export const changeStatusApplied = async ({ postId, candidateId, isApplied }) => {
     try {
         await db.CandidatePost.update(
             {
-                isApplied: true,
+                isApplied,
             },
             {
                 where: {
@@ -428,7 +425,13 @@ export const changeStatusApplied = async ({ postId, candidateId }) => {
             },
             include: [{ model: db.Company, as: "Company" }],
         });
-        await sendEmailService(candidate.email, post.jobTitle, post.Company.companyName);
+        const getStatus = await db.CandidatePost.findOne({
+            where: {
+                postId,
+                candidateId,
+            },
+        });
+        await sendEmailService(candidate.email, post.jobTitle, post.Company.companyName, getStatus.isApplied);
         return {
             err: 0,
         };

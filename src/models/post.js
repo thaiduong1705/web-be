@@ -38,15 +38,14 @@ module.exports = (sequelize, DataTypes) => {
             ageMin: DataTypes.INTEGER,
             ageMax: DataTypes.INTEGER,
             experienceYear: DataTypes.INTEGER,
-            viewCount: DataTypes.STRING,
+            appliedCount: DataTypes.INTEGER,
             endDate: DataTypes.DATEONLY, // not null
             needNumber: DataTypes.INTEGER,
             sex: DataTypes.BOOLEAN,
             jobDescribe: DataTypes.TEXT, // not null
             benefits: DataTypes.TEXT, // not null
             jobRequirement: DataTypes.TEXT, // not null
-            workingAddress: DataTypes.STRING,
-            contact: DataTypes.TEXT, // not null
+            workingAddress: DataTypes.TEXT,
             companyId: DataTypes.STRING,
             positionId: DataTypes.STRING,
             academicLevelId: DataTypes.STRING,

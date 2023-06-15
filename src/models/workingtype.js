@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     WorkingType.init(
         {
             workingTypeName: DataTypes.STRING,
+            keyCode: DataTypes.INTEGER,
         },
         {
             sequelize,

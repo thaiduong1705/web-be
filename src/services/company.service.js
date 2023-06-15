@@ -25,7 +25,6 @@ export const getCompaniesService = async () => {
 export const createCompanyService = async ({
     companyName,
     imageLink,
-    url,
     address,
     email,
     phone,
@@ -38,7 +37,6 @@ export const createCompanyService = async ({
             id: v4(),
             companyName: companyName,
             imageLink,
-            url: url ?? null,
             address: address,
             email: email,
             phone: phone,
@@ -93,7 +91,6 @@ export const updateCompany = async ({
     id,
     companyName,
     imageLink,
-    url,
     address,
     introduction,
     companySize,
@@ -107,7 +104,6 @@ export const updateCompany = async ({
             {
                 companyName,
                 imageLink,
-                url,
                 address,
                 introduction,
                 companySize,
@@ -172,7 +168,11 @@ export const getLimitCompaniesService = async ({ page, limit, order, companyName
                 {
                     model: db.Career,
                     as: "Career",
-                    where: subQuery,
+                    where: careerId
+                        ? {
+                              id: careerId,
+                          }
+                        : null,
                 },
             ],
             distinct: true,
@@ -184,7 +184,11 @@ export const getLimitCompaniesService = async ({ page, limit, order, companyName
                     model: db.Career,
                     as: "Career",
                     attributes: ["id", "careerName"],
-                    where: subQuery,
+                    where: careerId
+                        ? {
+                              id: careerId,
+                          }
+                        : null,
                 },
             ],
             where: query,
