@@ -127,32 +127,7 @@ UNLOCK TABLES;
 
 --
 -- Table structure for table `candidates`
---
-
-DROP TABLE IF EXISTS `candidates`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `candidates` (
-  `id` varchar(255) NOT NULL,
-  `candidateName` varchar(255) DEFAULT NULL,
-  `age` int DEFAULT NULL,
-  `profileImage` varchar(255) DEFAULT NULL,
-  `CVImage` varchar(255) DEFAULT NULL,
-  `phoneNumber` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `homeAddress` text,
-  `gender` tinyint(1) DEFAULT NULL,
-  `experienceYear` int DEFAULT NULL,
-  `academicLevelId` varchar(255) DEFAULT NULL,
-  `candidateCivilId` varchar(255) DEFAULT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `candidateCivilId` (`candidateCivilId`),
-  KEY `academicLevelId` (`academicLevelId`),
-  CONSTRAINT `candidates_ibfk_1` FOREIGN KEY (`academicLevelId`) REFERENCES `academiclevels` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+-- deleted
 
 --
 -- Dumping data for table `candidates`
@@ -299,7 +274,7 @@ CREATE TABLE `positions` (
 
 LOCK TABLES `positions` WRITE;
 /*!40000 ALTER TABLE `positions` DISABLE KEYS */;
-INSERT INTO `positions` VALUES ('33b02fbe-b053-4765-a0c2-56d66ffd6971','Nhân viên/Công nhân','2023-05-27 09:58:00','2023-05-27 09:58:00'),('5ad87bd9-b5d9-45f4-9595-8efa2148c2b3','Giám đốc','2023-05-27 09:58:00','2023-05-27 09:58:00'),('5d45bb5e-59ca-4616-a9d6-81f68e06c808','Phó giám đốc','2023-05-27 09:58:00','2023-05-27 09:58:00'),('73be7353-1b27-4a2d-876a-2f0fd4020879','Trưởng nhóm/giám sát','2023-05-27 09:58:00','2023-05-27 09:58:00'),('7564a4cd-2245-4735-85df-bbc211d7a7f9','Mới tốt nghiệp/Thực tập','2023-05-27 09:58:00','2023-05-27 09:58:00'),('a441e712-a6c6-4abf-94d3-fe31d7e78c4e','Trưởng phòng/Kế toán trưởng','2023-05-27 09:58:00','2023-05-27 09:58:00');
+INSERT INTO `positions` VALUES ('candidates33b02fbe-b053-4765-a0c2-56d66ffd6971','Nhân viên/Công nhân','2023-05-27 09:58:00','2023-05-27 09:58:00'),('5ad87bd9-b5d9-45f4-9595-8efa2148c2b3','Giám đốc','2023-05-27 09:58:00','2023-05-27 09:58:00'),('5d45bb5e-59ca-4616-a9d6-81f68e06c808','Phó giám đốc','2023-05-27 09:58:00','2023-05-27 09:58:00'),('73be7353-1b27-4a2d-876a-2f0fd4020879','Trưởng nhóm/giám sát','2023-05-27 09:58:00','2023-05-27 09:58:00'),('7564a4cd-2245-4735-85df-bbc211d7a7f9','Mới tốt nghiệp/Thực tập','2023-05-27 09:58:00','2023-05-27 09:58:00'),('a441e712-a6c6-4abf-94d3-fe31d7e78c4e','Trưởng phòng/Kế toán trưởng','2023-05-27 09:58:00','2023-05-27 09:58:00');
 /*!40000 ALTER TABLE `positions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -389,7 +364,7 @@ CREATE TABLE `posts` (
   `contact` text,
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
-  `deleteAt` datetime DEFAULT NULL,
+  `deletedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `companyId` (`companyId`),
   KEY `positionId` (`positionId`),
@@ -414,27 +389,8 @@ UNLOCK TABLES;
 
 --
 -- Table structure for table `sequelizemeta`
---
+-- deleted
 
-DROP TABLE IF EXISTS `sequelizemeta`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `sequelizemeta` (
-  `name` varchar(255) COLLATE utf8mb3_unicode_ci NOT NULL,
-  PRIMARY KEY (`name`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `sequelizemeta`
---
-
-LOCK TABLES `sequelizemeta` WRITE;
-/*!40000 ALTER TABLE `sequelizemeta` DISABLE KEYS */;
-INSERT INTO `sequelizemeta` VALUES ('create-academiclevel.js'),('create-candidate.js'),('create-candidatecareer.js'),('create-candidatedistrict.js'),('create-candidatepost.js'),('create-career.js'),('create-company.js'),('create-companycareer.js'),('create-district.js'),('create-position.js'),('create-post.js'),('create-postcareer.js'),('create-postdistrict.js'),('create-user.js'),('create-workingtype.js');
-/*!40000 ALTER TABLE `sequelizemeta` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `users`
