@@ -1,2 +1,2 @@
 # web-be
-Đây là backend của website trung tâm giới thiệu việc làm
+Đây là backend của website quản lý và hỗ trợ tìm kiếm việc làm
