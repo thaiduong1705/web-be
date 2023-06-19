@@ -51,6 +51,7 @@ export const createPost = async (req, res) => {
             workingAddress,
             careerList,
             districtList,
+            experienceYear,
         } = req.body;
         if (
             !jobTitle ||
@@ -113,6 +114,7 @@ export const updatePost = async (req, res) => {
             careerList,
             districtOldList,
             districtList,
+            experienceYear,
         } = req.body;
 
         if (!id) {
