@@ -238,7 +238,7 @@ export const updatePostService = async ({
     }
 };
 
-export const getLimitPostsService = async ({ page, limit, order, ...query }) => {
+export const getLimitPostsService = async ({ page, limit, order = ["createdAt", "desc"], ...query }) => {
     try {
         const filter = {};
         const queries = {};
@@ -414,6 +414,8 @@ export const changeStatusApplied = async ({ postId, candidateId, isApplied }) =>
                 },
             },
         );
+        await db.Post.increment({ appliedCount: 1 }, { where: { id: postId } });
+
         const candidate = await db.Candidate.findOne({
             where: {
                 id: candidateId,
