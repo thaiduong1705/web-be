@@ -35,7 +35,7 @@ export const loginService = async ({ userName, password }) => {
             raw: true, // raw trả về json object
         });
         const isCorrectPass = response && bcryptjs.compareSync(password, response.password);
-        const token = isCorrectPass && jwt.sign({ id: response.id }, process.env.SECRET_KEY, { expiresIn: "2d" });
+        const token = isCorrectPass && jwt.sign({ id: response.id }, process.env.SECRET_KEY, { expiresIn: "1d" });
         return {
             err: token ? 0 : 2,
             msg: token ? "Đăng nhập thành công" : response ? "Sai mật khẩu!" : "Không tìm thấy tên tài khoản",

@@ -8,7 +8,7 @@ export const getReports = async () => {
         const dailyReport = await db.Report.findAll({
             where: {
                 dateReport: {
-                    [Op.between]: [Date.now() - 60 * 60 * 1000 * 24, Date.now()],
+                    [Op.between]: [Date.now() - 60 * 60 * 1000 * 24 * 7, Date.now()],
                 },
             },
         });
