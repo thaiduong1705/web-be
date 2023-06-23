@@ -120,6 +120,15 @@ export const updateDailyReport = async () => {
                 },
             },
         });
+        const successedAppliedCount = await db.CandidatePost.count({
+            where: {
+                createdAt: {
+                    [Op.lte]: new Date(),
+                    [Op.gte]: new Date().setHours(0, 0, 0, 0),
+                },
+                isApplied: true,
+            },
+        });
         const report = await db.Report.findOne({
             where: {
                 dateReport: {
@@ -133,6 +142,7 @@ export const updateDailyReport = async () => {
                 id: v4(),
                 appliedCount: appliedCandidate,
                 postCount: posts,
+                successedAppliedCount,
                 dateReport: new Date(),
             });
         } else {
@@ -140,6 +150,7 @@ export const updateDailyReport = async () => {
                 {
                     appliedCount: appliedCandidate,
                     postCount: posts,
+                    successedAppliedCount,
                 },
                 {
                     where: {
