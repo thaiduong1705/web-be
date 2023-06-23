@@ -460,7 +460,7 @@ export const deletePostService = async (id) => {
 
 export const getDeletedPostService = async () => {
     try {
-        const deletedPosts = await db.Post.findAll({
+        const res = await db.Post.findAll({
             include: [
                 { model: db.Company, as: "Company", attributes: ["companyName", "imageLink"] },
                 { model: db.Position, as: "Position", attributes: ["positionName"] },
@@ -475,8 +475,8 @@ export const getDeletedPostService = async () => {
             paranoid: false,
         });
         return {
-            err: deletedPosts ? 0 : 1,
-            deletedPosts,
+            err: res ? 0 : 1,
+            res,
         };
     } catch (error) {
         console.log(error);
