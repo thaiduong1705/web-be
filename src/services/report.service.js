@@ -12,6 +12,11 @@ export const getReports = async () => {
                 },
             },
         });
+        const totalAppliedCandidate = await db.CandidatePost.count({
+            where: {
+                isApplied: true,
+            },
+        });
         const countCompany = await db.Company.count({});
         const countCandidate = await db.Candidate.count({});
         const countPost = await db.Post.count({ paranoid: false });
@@ -87,6 +92,7 @@ export const getReports = async () => {
                 countAvailablePost,
                 countFreqCareers,
                 countAppliedCareer,
+                totalAppliedCandidate,
             },
         };
     } catch (error) {
