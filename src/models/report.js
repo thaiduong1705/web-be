@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.DATE,
                 unique: true,
             },
+            successedAppliedCount: DataTypes.INTEGER,
         },
         {
             sequelize,

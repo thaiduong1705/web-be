@@ -14,6 +14,9 @@ module.exports = {
             postCount: {
                 type: Sequelize.INTEGER,
             },
+            successedAppliedCount: {
+                type: Sequelize.INTEGER,
+            },
             dateReport: {
                 type: Sequelize.DATEONLY,
                 unique: true,
