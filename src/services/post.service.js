@@ -248,7 +248,7 @@ export const getLimitPostsService = async ({ page, limit, order = "desc", ...que
         queries.offset = offset * numberOfItems;
         queries.limit = numberOfItems;
 
-        if (order) queries.order = ["createdAt", order];
+        if (order) queries.order = [["createdAt", order]];
 
         if (query.jobTitle) filter.jobTitle = { [Op.substring]: query.jobTitle };
         if (query.age && query.age.length !== 0) {
