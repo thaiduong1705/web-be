@@ -19,7 +19,7 @@ export const registerService = async ({ userName, password }) => {
         const token = response[1] && jwt.sign({ id: response[0].id }, process.env.SECRET_KEY, { expiresIn: "2d" });
         return {
             err: token ? 0 : 2,
-            msg: token ? "Register is successful!" : "Name has already been used!",
+            msg: token ? "Đăng kí thành công!" : "Tên đăng nhập này đã được sử dụng.",
             token: token || null,
         };
     } catch (error) {
@@ -35,7 +35,7 @@ export const loginService = async ({ userName, password }) => {
             raw: true, // raw trả về json object
         });
         const isCorrectPass = response && bcryptjs.compareSync(password, response.password);
-        const token = isCorrectPass && jwt.sign({ id: response.id }, process.env.SECRET_KEY, { expiresIn: "1d" });
+        const token = isCorrectPass && jwt.sign({ id: response.id }, process.env.SECRET_KEY, { expiresIn: "2d" });
         return {
             err: token ? 0 : 2,
             msg: token ? "Đăng nhập thành công" : response ? "Sai mật khẩu!" : "Không tìm thấy tên tài khoản",
