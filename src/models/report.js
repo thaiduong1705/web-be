@@ -28,3 +28,21 @@ module.exports = (sequelize, DataTypes) => {
     );
     return Report;
 };
+
+const { DataTypes } = require("sequelize");
+module.exports = (sequelize) => {
+    const Report = sequelize.define(
+        "Report",
+        {
+            appliedCount: DataTypes.INTEGER,
+            postCount: DataTypes.INTEGER,
+            dateReport: {
+                type: DataTypes.DATE,
+                unique: true,
+            },
+            successedAppliedCount: DataTypes.INTEGER,
+        },
+        {},
+    );
+    return Report;
+};

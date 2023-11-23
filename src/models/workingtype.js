@@ -24,3 +24,35 @@ module.exports = (sequelize, DataTypes) => {
     );
     return WorkingType;
 };
+
+const { DataTypes } = require("sequelize");
+module.exports = (sequelize) => {
+    const WorkingType = sequelize.define(
+        "WorkingType",
+        {
+            workingTypeName: {
+                type: DataTypes.UUID,
+                allowNull: false,
+                validate: {
+                    notNull: true,
+                    notEmpty: true,
+                },
+            },
+            keyCode: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                validate: {
+                    notNull: true,
+                    notEmpty: true,
+                },
+            },
+        },
+        {},
+    );
+
+    WorkingType.associate = (models) => {
+        WorkingType.hasMany(models.Post, { foreignKey: "workingTypeId" });
+    };
+
+    return WorkingType;
+};
