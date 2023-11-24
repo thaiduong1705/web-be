@@ -34,8 +34,18 @@ module.exports = (sequelize) => {
     const Career = sequelize.define(
         "Career",
         {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+                allowNull: false,
+            },
             careerName: {
                 type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                },
             },
         },
         {},

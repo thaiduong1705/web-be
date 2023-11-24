@@ -4,13 +4,14 @@
     "description": "Backend của web app",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon --exec babel-node index.js",
+        "start": "node index.js",
         "first-migrate": "cd src && npx sequelize-cli db:migrate --name create-academiclevel.js",
         "second-migrate": "cd src && npx sequelize-cli db:migrate --from create-candidatepost.js --to create-company.js && npx sequelize-cli db:migrate --name create-workingtype.js",
         "third-migrate": "cd src && npx sequelize-cli db:migrate --from create-companycareer.js --to create-position.js",
         "semi-migrate": "cd src && npx sequelize-cli db:migrate --name create-post.js && npx sequelize-cli db:migrate --name create-candidate.js",
         "final-migrate": "cd src && npx sequelize-cli db:migrate",
-        "migrate": "npm run first-migrate && npm run second-migrate && npm run third-migrate && npm run semi-migrate && npm run final-migrate"
+        "migrate": "npm run first-migrate && npm run second-migrate && npm run third-migrate && npm run semi-migrate && npm run final-migrate",
+        "dev": "nodemon --exec babel-node index.js"
     },
     "keywords": [],
     "author": "",
@@ -21,13 +22,12 @@
         "cors": "^2.8.5",
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
+        "express-async-handler": "^1.2.0",
         "jsonwebtoken": "^9.0.0",
-        "method-override": "^3.0.0",
         "multer": "^1.4.5-lts.1",
         "mysql2": "^3.3.1",
         "node-cron": "^3.0.2",
         "nodemailer": "^6.9.3",
-        "nodemon": "^2.0.22",
         "sequelize": "^6.31.1",
         "uuid": "^9.0.0"
     },
@@ -35,6 +35,7 @@
         "@babel/core": "^7.21.8",
         "@babel/node": "^7.20.7",
         "@babel/preset-env": "^7.21.5",
+        "nodemon": "^3.0.1",
         "sequelize-cli": "^6.6.0"
     }
 }

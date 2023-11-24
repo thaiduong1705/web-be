@@ -29,9 +29,19 @@ module.exports = (sequelize) => {
         {
             candidateId: {
                 type: DataTypes.UUID,
+                primaryKey: true,
+                references: {
+                    model: "Candidate",
+                    key: "id",
+                },
             },
             postId: {
                 type: DataTypes.UUID,
+                primaryKey: true,
+                references: {
+                    model: "Post",
+                    key: "id",
+                },
             },
             isApplied: {
                 type: DataTypes.BOOLEAN,
@@ -40,10 +50,5 @@ module.exports = (sequelize) => {
         },
         {},
     );
-    CandidatePost.associate = (models) => {
-        CandidatePost.belongsTo(models.Candidate, { foreignKey: "candidateId" });
-        CandidatePost.belongsTo(models.Post, { foreignKey: "postId" });
-    };
-
     return CandidatePost;
 };

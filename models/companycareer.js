@@ -28,17 +28,25 @@ module.exports = (sequelize) => {
         {
             companyId: {
                 type: DataTypes.UUID,
+                primaryKey: true,
+                allowNull: false,
+                references: {
+                    model: "Company",
+                    key: "id",
+                },
             },
             careerId: {
-                type: DataTypes.UUID,
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                allowNull: false,
+                references: {
+                    model: "Career",
+                    key: "id",
+                },
             },
         },
         {},
     );
-    CompanyCareer.associate = (models) => {
-        CompanyCareer.belongsTo(models.Company, { foreignKey: "companyId" });
-        CompanyCareer.belongsTo(models.Career, { foreignKey: "careerId" });
-    };
 
     return CompanyCareer;
 };

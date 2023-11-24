@@ -1,18 +1,24 @@
 const { DataTypes } = require("sequelize");
+
 module.exports = (sequelize) => {
-    const AcademicLevel = sequelize.define(
-        "AcademicLevel",
+    const StaffInformation = sequelize.define(
+        "StaffInformation",
         {
-            academicLevelName: {
+            id: {
                 type: DataTypes.UUID,
+                primaryKey: true,
+                allowNull: false,
+            },
+            name: {
+                type: DataTypes.STRING,
                 allowNull: false,
                 validate: {
                     notNull: true,
                     notEmpty: true,
                 },
             },
-            keyCode: {
-                type: DataTypes.UUID,
+            age: {
+                type: DataTypes.INTEGER,
                 allowNull: false,
                 validate: {
                     notNull: true,
@@ -22,11 +28,9 @@ module.exports = (sequelize) => {
         },
         {},
     );
-
-    AcademicLevel.associate = (models) => {
-        AcademicLevel.hasMany(models.Post, { foreignKey: "academicLevelId" });
-        AcademicLevel.hasMany(models.Candidate, { foreignKey: "academicLevelId" });
+    StaffInformation.associate = (models) => {
+        StaffInformation.belongsTo(models.UserAccount, { foreignKey: "id" });
     };
 
-    return AcademicLevel;
+    return StaffInformation;
 };

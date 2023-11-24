@@ -66,6 +66,11 @@ module.exports = (sequelize) => {
     const Post = sequelize.define(
         "Post",
         {
+            id: {
+                type: DataTypes.UUID,
+                primaryKey: true,
+                allowNull: false,
+            },
             jobTitle: {
                 type: DataTypes.STRING,
                 allowNull: false,
@@ -74,43 +79,21 @@ module.exports = (sequelize) => {
                     notEmpty: true,
                 },
             },
+            slug: {
+                type: DataTypes.TEXT,
+            },
             salaryMax: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
                 validate: {
-                    notNull: true,
                     isInt: true,
                 },
             },
             salaryMin: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
                 validate: {
-                    notNull: true,
                     isInt: true,
                     checkOverMaxSalary(value) {
                         if (parseInt(value) > parseInt(this.salaryMax)) {
-                            throw new Error("Lương min không lương max.");
-                        }
-                    },
-                },
-            },
-            ageMax: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-                validate: {
-                    notNull: true,
-                    isInt: true,
-                },
-            },
-            ageMin: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-                validate: {
-                    notNull: true,
-                    isInt: true,
-                    checkOverMaxAge(value) {
-                        if (parseInt(value) > parseInt(this.ageMax)) {
                             throw new Error("Lương min không lương max.");
                         }
                     },
@@ -141,7 +124,15 @@ module.exports = (sequelize) => {
                     },
                 },
             },
-            sex: {
+            requiredAmount: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                validate: {
+                    notNull: true,
+                    isInt: true,
+                },
+            },
+            gender: {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,
                 validate: {
@@ -181,7 +172,7 @@ module.exports = (sequelize) => {
                 },
             },
             academicLevelId: {
-                type: DataTypes.UUID,
+                type: DataTypes.INTEGER,
                 allowNull: false,
                 validate: {
                     notEmpty: true,
@@ -189,7 +180,7 @@ module.exports = (sequelize) => {
                 },
             },
             positionId: {
-                type: DataTypes.UUID,
+                type: DataTypes.INTEGER,
                 allowNull: false,
                 validate: {
                     notEmpty: true,
@@ -197,7 +188,7 @@ module.exports = (sequelize) => {
                 },
             },
             workingTypeId: {
-                type: DataTypes.UUID,
+                type: DataTypes.INTEGER,
                 allowNull: false,
                 validate: {
                     notEmpty: true,
@@ -211,25 +202,12 @@ module.exports = (sequelize) => {
         },
     );
     Post.associate = (models) => {
-        Post.belongsTo(models.Company, { foreignKey: "companyId", targetKey: "id", as: "Company" });
-        Post.belongsTo(models.Position, { foreignKey: "positionId", targetKey: "id", as: "Position" });
-        Post.belongsTo(models.AcademicLevel, {
-            foreignKey: "academicLevelId",
-            targetKey: "id",
-            as: "AcademicLevel",
-        });
-        Post.belongsTo(models.WorkingType, { foreignKey: "workingTypeId", targetKey: "id", as: "WorkingType" });
-        Post.belongsToMany(models.Career, { through: models.PostCareer, foreignKey: "postId", as: "Career" });
-        Post.belongsToMany(models.District, {
-            through: models.PostDistrict,
-            foreignKey: "postId",
-            as: "District",
-        });
-        Post.belongsToMany(models.Candidate, {
-            through: models.CandidatePost,
-            foreignKey: "postId",
-            as: "Candidate",
-        });
+        Post.belongsTo(models.Company, { foreignKey: "companyId" });
+        Post.belongsTo(models.Position, { foreignKey: "positionId" });
+        Post.belongsTo(models.AcademicLevel, { foreignKey: "academicLevelId" });
+        Post.belongsTo(models.WorkingType, { foreignKey: "workingTypeId" });
+        Post.belongsToMany(models.Career, { through: models.PostCareer, foreignKey: "postId" });
+        Post.belongsToMany(models.Candidate, { through: models.CandidatePost, foreignKey: "postId" });
     };
 
     return Post;

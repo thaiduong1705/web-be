@@ -31,16 +31,14 @@ module.exports = (sequelize) => {
     const Position = sequelize.define(
         "Position",
         {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+                allowNull: true,
+            },
             positionName: {
                 type: DataTypes.STRING,
-                allowNull: false,
-                validate: {
-                    notNull: true,
-                    notEmpty: true,
-                },
-            },
-            keyCode: {
-                type: DataTypes.INTEGER,
                 allowNull: false,
                 validate: {
                     notNull: true,
@@ -52,6 +50,7 @@ module.exports = (sequelize) => {
     );
     Position.associate = (models) => {
         Position.hasMany(models.Post, { foreignKey: "positionId" });
+        Position.hasMany(models.Candidate, { foreignKey: "positionId" });
     };
 
     return Position;

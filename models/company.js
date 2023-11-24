@@ -40,6 +40,11 @@ module.exports = (sequelize) => {
     const Company = sequelize.define(
         "Company",
         {
+            id: {
+                type: DataTypes.UUID,
+                primaryKey: true,
+                allowNull: false,
+            },
             companyName: {
                 type: DataTypes.TEXT,
                 allowNull: false,
@@ -47,6 +52,9 @@ module.exports = (sequelize) => {
                     notNull: true,
                     notEmpty: true,
                 },
+            },
+            slug: {
+                type: DataTypes.TEXT,
             },
             imageLink: {
                 type: DataTypes.STRING,
@@ -56,14 +64,20 @@ module.exports = (sequelize) => {
             },
             email: {
                 type: DataTypes.STRING,
+                allowNull: false,
                 validate: {
                     isEmail: true,
+                    notEmpty: true,
+                    notNull: true,
                 },
             },
             phone: {
                 type: DataTypes.STRING(10),
+                allowNull: false,
                 validate: {
                     is: /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/,
+                    notEmpty: true,
+                    notNull: false,
                 },
             },
             address: {
@@ -74,6 +88,30 @@ module.exports = (sequelize) => {
                     notEmpty: true,
                 },
             },
+            province: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                    notNull: true,
+                },
+            },
+            district: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                    notNull: true,
+                },
+            },
+            ward: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                    notNull: true,
+                },
+            },
             introduction: {
                 type: DataTypes.TEXT,
                 allowNull: false,
@@ -82,15 +120,18 @@ module.exports = (sequelize) => {
                     notNull: true,
                 },
             },
-            companySize: {
-                type: DataTypes.TEXT,
-                allowNull: false,
-                validate: {
-                    notEmpty: true,
-                },
+            companySizeMin: {
+                type: DataTypes.INTEGER,
             },
-            districtId: {
-                type: DataTypes.UUID,
+            companySizeMax: {
+                type: DataTypes.INTEGER,
+                validate: {
+                    checkGreaterThan(value) {
+                        if (parseInt(value) < parseInt(this.companySizeMin)) {
+                            throw new Error("companySizeMax phải lớn hơn companySizeMin");
+                        }
+                    },
+                },
             },
         },
         {},
@@ -99,10 +140,8 @@ module.exports = (sequelize) => {
         Company.belongsToMany(models.Career, {
             through: models.CompanyCareer,
             foreignKey: "companyId",
-            as: "Career",
         });
-        Company.hasMany(models.Post, { foreignKey: "companyId", as: "Posts" });
-        Company.belongsTo(models.District);
+        Company.hasMany(models.Post, { foreignKey: "companyId" });
     };
 
     return Company;

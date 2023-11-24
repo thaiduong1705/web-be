@@ -1,14 +1,14 @@
 const express = require("express");
-const methodOverride = require("method-override");
 const cors = require("cors");
 require("dotenv").config();
-import connectDatabase from "./src/config/db.connect.js";
-const initAPIroute = require("./src/routes");
-import { initUpdatePost, initUpdateReport } from "./src/config/initScheduledJobs.js";
-import db from "./src/models/index.js";
-import { updateExpiredPost } from "./src/services/post.service.js";
+
+const db = require("./models");
+const mainRouter = require("./routes");
+const notFound = require("./middleware/not-found");
+const errorHandlerMiddleware = require("./middleware/error-handler");
 
 const app = express();
+const port = process.env.PORT || 5000;
 
 // Middleware mà Express đã build sẵn
 app.use(
@@ -19,19 +19,20 @@ app.use(
 );
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(methodOverride("_method"));
 
-initAPIroute(app);
+app.use("/api/v1", mainRouter);
 
-const port = process.env.PORT || 8080;
+app.use(notFound);
+app.use(errorHandlerMiddleware);
 
 const startServer = async () => {
     try {
-        await db.sequelize.sync();
+        await db.sequelize.authenticate();
         console.log("Connected to database");
         app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
     } catch (error) {
         console.log(error);
+        await db.sequelize.close();
     }
 };
 

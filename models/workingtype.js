@@ -30,16 +30,14 @@ module.exports = (sequelize) => {
     const WorkingType = sequelize.define(
         "WorkingType",
         {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true,
+                allowNull: false,
+            },
             workingTypeName: {
                 type: DataTypes.UUID,
-                allowNull: false,
-                validate: {
-                    notNull: true,
-                    notEmpty: true,
-                },
-            },
-            keyCode: {
-                type: DataTypes.INTEGER,
                 allowNull: false,
                 validate: {
                     notNull: true,

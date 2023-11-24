@@ -33,17 +33,24 @@ module.exports = (sequelize) => {
         {
             postId: {
                 type: DataTypes.UUID,
+                primaryKey: true,
+                allowNull: false,
+                references: {
+                    model: "Post",
+                    key: "id",
+                },
             },
             careerId: {
-                type: DataTypes.UUID,
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                references: {
+                    model: "Career",
+                    key: "id",
+                },
             },
         },
         {},
     );
-    PostCareer.associate = (models) => {
-        PostCareer.belongsTo(models.Post, { foreignKey: "postId" });
-        PostCareer.belongsTo(models.Career, { foreignKey: "careerId" });
-    };
 
     return PostCareer;
 };

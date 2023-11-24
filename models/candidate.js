@@ -56,6 +56,19 @@ module.exports = (sequelize) => {
     const Candidate = sequelize.define(
         "Candidate",
         {
+            id: {
+                type: DataTypes.UUID,
+                primaryKey: true,
+                allowNull: false,
+            },
+            civilId: {
+                type: DataTypes.STRING(12),
+                unique: true,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                },
+            },
             candidateName: {
                 type: DataTypes.STRING,
                 allowNull: false,
@@ -63,6 +76,9 @@ module.exports = (sequelize) => {
                     notNull: true,
                     notEmpty: true,
                 },
+            },
+            slug: {
+                type: DataTypes.TEXT,
             },
             age: {
                 type: DataTypes.INTEGER,
@@ -79,12 +95,10 @@ module.exports = (sequelize) => {
                     isURL: true,
                 },
             },
-            CVImage: {
+            cvImage: {
                 type: DataTypes.STRING,
-                allowNull: false,
                 validate: {
                     isURL: true,
-                    notNull: true,
                 },
             },
             phoneNumber: {
@@ -101,8 +115,32 @@ module.exports = (sequelize) => {
                     isEmail: true,
                 },
             },
-            homeAddress: {
+            fullAddress: {
                 type: DataTypes.TEXT,
+            },
+            province: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                    notNull: true,
+                },
+            },
+            district: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                    notNull: true,
+                },
+            },
+            ward: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                    notNull: true,
+                },
             },
             gender: {
                 type: DataTypes.BOOLEAN,
@@ -113,20 +151,14 @@ module.exports = (sequelize) => {
             },
             experienceYear: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
-                validate: {
-                    min: 0,
-                    notNull: true,
-                },
+                defaultValue: 0,
             },
             academicLevelId: {
-                type: DataTypes.UUID,
+                type: DataTypes.INTEGER,
+                allowNull: false,
             },
             positionId: {
-                type: DataTypes.UUID,
-            },
-            candidateCivilId: {
-                type: DataTypes.UUID,
+                type: DataTypes.INTEGER,
             },
         },
         {
@@ -135,22 +167,17 @@ module.exports = (sequelize) => {
     );
 
     Candidate.associate = (models) => {
-        Candidate.belongsTo(models.AcademicLevel, { foreignKey: "academicLevelId", targetKey: "id" });
-        Candidate.belongsTo(models.Position, { foreignKey: "positionId", targetKey: "id" });
+        Candidate.belongsTo(models.UserAccount, { foreignKey: "id" });
+        Candidate.belongsTo(models.AcademicLevel, { foreignKey: "academicLevelId" });
+
+        Candidate.belongsTo(models.Position, { foreignKey: "positionId" });
         Candidate.belongsToMany(models.Career, {
             through: models.CandidateCareer,
             foreignKey: "candidateId",
-            as: "Career",
-        });
-        Candidate.belongsToMany(models.District, {
-            through: models.CandidateDistrict,
-            foreignKey: "candidateId",
-            as: "District",
         });
         Candidate.belongsToMany(models.Post, {
             through: models.CandidatePost,
             foreignKey: "candidateId",
-            as: "Post",
         });
     };
 
