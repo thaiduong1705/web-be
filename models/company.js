@@ -141,7 +141,7 @@ module.exports = (sequelize) => {
             through: models.CompanyCareer,
             foreignKey: "companyId",
         });
-        Company.hasMany(models.Post, { foreignKey: "companyId" });
+        Company.hasMany(models.Post, { foreignKey: "companyId", onDelete: "CASCADE" });
     };
 
     return Company;

@@ -28,7 +28,6 @@ module.exports = (sequelize) => {
             },
             roleId: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
             },
             refreshToken: {
                 type: DataTypes.TEXT,
@@ -37,8 +36,9 @@ module.exports = (sequelize) => {
         {},
     );
     UserAccount.associate = (models) => {
-        UserAccount.hasOne(models.Candidate, { foreignKey: "id" });
-        UserAccount.hasOne(models.StaffInformation, { foreignKey: "id" });
+        UserAccount.hasOne(models.Candidate, { foreignKey: "id", onDelete: "CASCADE" });
+        UserAccount.hasOne(models.StaffInformation, { foreignKey: "id", onDelete: "CASCADE" });
+        UserAccount.belongsTo(models.Role, { foreignKey: "roleId" });
     };
 
     return UserAccount;

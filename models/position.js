@@ -49,8 +49,8 @@ module.exports = (sequelize) => {
         {},
     );
     Position.associate = (models) => {
-        Position.hasMany(models.Post, { foreignKey: "positionId" });
-        Position.hasMany(models.Candidate, { foreignKey: "positionId" });
+        Position.hasMany(models.Post, { foreignKey: "positionId", onDelete: "SET NULL" });
+        Position.hasMany(models.Candidate, { foreignKey: "positionId", onDelete: "SET NULL" });
     };
 
     return Position;

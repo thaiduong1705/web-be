@@ -173,27 +173,12 @@ module.exports = (sequelize) => {
             },
             academicLevelId: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
-                validate: {
-                    notEmpty: true,
-                    notNull: true,
-                },
             },
             positionId: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
-                validate: {
-                    notEmpty: true,
-                    notNull: true,
-                },
             },
             workingTypeId: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
-                validate: {
-                    notEmpty: true,
-                    notNull: true,
-                },
             },
         },
         {

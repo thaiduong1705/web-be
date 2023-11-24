@@ -1,15 +1,15 @@
 const { DataTypes } = require("sequelize");
+
 module.exports = (sequelize) => {
-    const AcademicLevel = sequelize.define(
-        "AcademicLevel",
+    const Role = sequelize.define(
+        "Role",
         {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true,
-                allowNull: false,
             },
-            academicLevelName: {
+            roleName: {
                 type: DataTypes.STRING,
                 allowNull: false,
                 validate: {
@@ -20,11 +20,9 @@ module.exports = (sequelize) => {
         },
         {},
     );
-
-    AcademicLevel.associate = (models) => {
-        AcademicLevel.hasMany(models.Post, { foreignKey: "academicLevelId", onDelete: "SET NULL" });
-        AcademicLevel.hasMany(models.Candidate, { foreignKey: "academicLevelId", onDelete: "SET NULL" });
+    Role.associate = (models) => {
+        Role.hasMany(models.UserAccount, { foreignKey: "roleId", onDelete: "SET NULL" });
     };
 
-    return AcademicLevel;
+    return Role;
 };

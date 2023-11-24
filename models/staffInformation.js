@@ -29,7 +29,7 @@ module.exports = (sequelize) => {
         {},
     );
     StaffInformation.associate = (models) => {
-        StaffInformation.belongsTo(models.UserAccount, { foreignKey: "id" });
+        StaffInformation.belongsTo(models.UserAccount, { foreignKey: "id", onDelete: "CASCADE" });
     };
 
     return StaffInformation;

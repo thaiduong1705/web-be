@@ -27,6 +27,7 @@ app.use(errorHandlerMiddleware);
 
 const startServer = async () => {
     try {
+        //await db.sequelize.sync();
         await db.sequelize.authenticate();
         console.log("Connected to database");
         app.listen(port, () => console.log(`App listening at http://localhost:${port}`));
