@@ -55,6 +55,11 @@ module.exports = (sequelize) => {
             },
             slug: {
                 type: DataTypes.TEXT,
+                allowNull: false,
+                validate: {
+                    notEmpty: true,
+                    notNull: true,
+                },
             },
             imageLink: {
                 type: DataTypes.STRING,
@@ -122,10 +127,14 @@ module.exports = (sequelize) => {
             },
             companySizeMin: {
                 type: DataTypes.INTEGER,
+                validate: {
+                    isInt: true,
+                },
             },
             companySizeMax: {
                 type: DataTypes.INTEGER,
                 validate: {
+                    isInt: true,
                     checkGreaterThan(value) {
                         if (parseInt(value) < parseInt(this.companySizeMin)) {
                             throw new Error("companySizeMax phải lớn hơn companySizeMin");

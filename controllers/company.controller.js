@@ -1,97 +1,45 @@
-import { ValidationError } from "sequelize";
 import * as companyService from "../services/company.service";
 
-export const getAllCompanies = async (req, res) => {
-    try {
-        const response = await companyService.getCompaniesService();
-        return res.status(200).json(response);
-    } catch (error) {
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at getAllCompanies: " + error,
-        });
-    }
-};
+const db = require("../models");
+const { v4 } = require("uuid");
+const asyncHandler = require("express-async-handler");
+const createSlug = require("../utils/createSlug");
+const CustomError = require("../error/customError");
 
-export const createCompany = async (req, res) => {
-    try {
-        const { companyName, imageLink, url, address, email, phone, introduction, companySize, careerList } = req.body;
-        if (
-            !companyName ||
-            !address ||
-            !introduction ||
-            !companySize ||
-            !careerList ||
-            !email ||
-            !phone ||
-            careerList.length === 0
-        ) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing Input!",
-            });
-        }
-        const response = await companyService.createCompanyService(req.body);
-        return res.status(200).json(response);
-    } catch (error) {
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at createCompany: " + error,
-        });
-    }
-};
+export const getAllCompanies = asyncHandler(async (req, res) => {
+    const companies = await db.Company.findAll();
+    return res.status(200).json(companies);
+});
 
-export const getCompanyById = async (req, res) => {
-    try {
-        if (!req.params.id) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing id!",
-            });
-        }
-        const response = await companyService.getCompanyByIdService(req.params);
-        return res.status(200).json(response);
-    } catch (error) {
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at getAllCompanies: " + error,
+export const createCompany = asyncHandler(async (req, res) => {
+    const company = await db.Company.create({ ...req.body, slug: createSlug(req.body?.companyName), id: v4() });
+    let companycareer = null;
+    if (Array.isArray(req.body.careerList)) {
+        const insertedCompanyCareer = req.body.careerList.map((careerId) => {
+            return {
+                companyId: company.id,
+                careerId,
+            };
         });
+        companycareer = await db.CompanyCareer.bulkCreate(insertedCompanyCareer);
     }
-};
 
-export const updateCompany = async (req, res) => {
-    try {
-        const { id, companyName, imageLink, url, address, introduction, companySize, careerOldList, careerNewList } =
-            req.body;
-        if (!id) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing id!",
-            });
-        }
-        if (
-            !companyName ||
-            !address ||
-            !introduction ||
-            !companySize ||
-            !careerOldList ||
-            !careerNewList ||
-            careerNewList.length === 0
-        ) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing Input!",
-            });
-        }
-        const response = await companyService.updateCompany({ ...req.body, ...req.params });
-        return res.status(200).json(response);
-    } catch (error) {
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at updateCompany: " + error,
-        });
+    return res.status(201).json({
+        company,
+        companycareer,
+    });
+});
+
+export const getCompanyById = asyncHandler(async (req, res) => {
+    const company = await db.Company.findByPk(req.params.cid);
+
+    if (!company) {
+        throw new CustomError(`Không có id ${req.params.cid}`, 400);
     }
-};
+    return res.status(200).json(company);
+});
+
+export const updateCompany = asyncHandler(async (req, res) => {});
 
 export const getLimitCompanies = async (req, res) => {
     try {

@@ -1,69 +1,13 @@
-import { ValidationError } from "sequelize";
 import * as candidateService from "../services/candidate.service";
+const db = require("../models");
+const asyncHandler = require("express-async-handler");
 
-export const getAllCandidates = async (req, res) => {
-    try {
-        const response = await candidateService.getCandidatesService();
-        return res.status(200).json(response);
-    } catch (error) {
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at getAllCandidates: " + error,
-        });
-    }
-};
+export const getAllCandidates = asyncHandler(async (req, res) => {
+    const cLists = await db.Candidate.findAll();
+    return res.status(200).json(cLists);
+});
 
-export const createCandidate = async (req, res) => {
-    try {
-        const {
-            candidateName,
-            age,
-            profileImage,
-            CVImage,
-            phoneNumber,
-            email,
-            homeAddress,
-            gender,
-            experienceYear,
-            academicLevelId,
-            positionId,
-            careerList,
-            districtList,
-            candidateCivilId,
-        } = req.body;
-        if (
-            !candidateName ||
-            !age ||
-            !profileImage ||
-            !CVImage ||
-            !phoneNumber ||
-            !email ||
-            !homeAddress ||
-            !positionId ||
-            isNaN(gender) ||
-            isNaN(experienceYear) ||
-            experienceYear <= -1 ||
-            !candidateCivilId ||
-            !academicLevelId ||
-            !careerList ||
-            careerList.length === 0 ||
-            !districtList ||
-            districtList.length === 0
-        ) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing Input!",
-            });
-        }
-        const response = await candidateService.createCandidateService(req.body);
-        return res.status(200).json(response);
-    } catch (error) {
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at createCandidate: " + error,
-        });
-    }
-};
+export const createCandidate = asyncHandler(async (req, res) => {});
 
 export const getCandidateById = async (req, res) => {
     try {

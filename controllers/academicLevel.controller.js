@@ -6,15 +6,15 @@ const getAllAcademicLevels = asyncHander(async (req, res) => {
         order: [["id", "asc"]],
         attributes: ["id", "academicLevelName"],
     });
-    res.status(200).json(alLists);
+    return res.status(200).json(alLists);
 });
 
 const createAcademicLevel = asyncHander(async (req, res) => {
     const newResposne = await db.AcademicLevel.create({
-        academicLevelName: req.body.academicLevelName,
+        ...req.body,
     });
 
-    res.status(201).json(newResposne);
+    return res.status(201).json(newResposne);
 });
 
 const updateAL = asyncHander(async (req, res) => {
@@ -32,7 +32,7 @@ const updateAL = asyncHander(async (req, res) => {
         },
     );
 
-    res.status(204).send();
+    return res.status(204).send();
 });
 
 const deleteAL = asyncHander(async (req, res) => {
@@ -47,7 +47,7 @@ const deleteAL = asyncHander(async (req, res) => {
         },
     });
 
-    res.status(204).send();
+    return res.status(204).send();
 });
 
 module.exports = {

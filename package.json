@@ -29,6 +29,8 @@
         "node-cron": "^3.0.2",
         "nodemailer": "^6.9.3",
         "sequelize": "^6.31.1",
+        "slugify": "^1.6.6",
+        "unique-slug": "^4.0.0",
         "uuid": "^9.0.0"
     },
     "devDependencies": {
