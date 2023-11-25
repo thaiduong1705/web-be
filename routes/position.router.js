@@ -1,7 +1,13 @@
 const express = require("express");
 const router = express.Router();
 
-import { getAllPositions } from "../controllers/position.controller";
+const {
+    getAllPositions,
+    createNewPosition,
+    updatePosition,
+    deletePosition,
+} = require("../controllers/position.controller");
 
-router.get("/all", getAllPositions);
+router.route("/").get(getAllPositions).post(createNewPosition);
+router.route("/posid").put(updatePosition).delete(deletePosition);
 module.exports = router;

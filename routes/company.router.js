@@ -1,14 +1,14 @@
 const express = require("express");
 const router = express.Router();
-
-import {
+const {
     getAllCompanies,
     createCompany,
     getCompanyById,
+    getFilterCompanies,
     updateCompany,
-    getLimitCompanies,
+    deleteCompany,
     getRelatedCompaniesFromCareer,
-} from "../controllers/company.controller";
+} = require("../controllers/company.controller");
 
 // router.get("/all", getAllCompanies);
 // //router.get("/get-companies", companyController.getCompaniesByName);
@@ -19,5 +19,7 @@ import {
 
 // router.put("/update-company", updateCompany);
 router.route("/").get(getAllCompanies).post(createCompany);
-router.route("/:cid").get(getCompanyById);
+router.route("/filter").get(getFilterCompanies);
+router.route("/relate-comp").get(getRelatedCompaniesFromCareer);
+router.route("/:cid").get(getCompanyById).put(updateCompany).delete(deleteCompany);
 module.exports = router;

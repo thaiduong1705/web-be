@@ -8,7 +8,7 @@ const createSlug = (title) => {
         lower: true,
         locale: "vi",
     });
-    const uniqueHex = uniqueSlug(title);
+    const uniqueHex = uniqueSlug();
     return slugString + "-" + uniqueHex;
 };
 
