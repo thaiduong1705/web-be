@@ -1,18 +1,25 @@
 const express = require("express");
+const {
+    getAllPosts,
+    createPost,
+    getRelatedPostsFromCareer,
+    getDeletedPosts,
+    getDeletedPostOfCompany,
+    getPostById,
+    getFilterPosts,
+    updatePost,
+    deletePost,
+    applyPost,
+    changeStatusApplied,
+} = require("../controllers/post.controller");
+
 const router = express.Router();
-//import * as authController from "../controllers/auth.controller";
-import * as postController from "../controllers/post.controller";
-// router.post("/register", authController.register);
-// router.post("/login", authController.login);
-router.post("/create-post", postController.createPost);
-router.post("/apply", postController.applyPost);
-router.post("/soft-delete", postController.deletePost);
-router.post("/change-applied", postController.changeStatusApplied);
-router.put("/update-post", postController.updatePost);
-router.get("/get-post/:id", postController.getPostById);
-router.get("/get-related-post", postController.getRelatedPostsFromCareer);
-router.get("/all", postController.getAllPosts);
-router.get("/limit", postController.getLimitPosts);
-router.get("/get-delete", postController.getDeletedPost);
-router.get("/get-delete-post-of-company", postController.getDeletedPostOfCompany);
+
+router.route("/").get(getAllPosts).post(createPost);
+router.route("/filter").get(getFilterPosts);
+router.route("/relate").get(getRelatedPostsFromCareer);
+router.route("/delete-posts").get(getDeletedPosts);
+router.route("/delete-post-comp").get(getDeletedPostOfCompany);
+router.route("/apply").get(applyPost).put(changeStatusApplied);
+router.route("/:pid").get(getPostById).put(updatePost).delete(deletePost);
 module.exports = router;

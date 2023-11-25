@@ -96,7 +96,7 @@ const getFilterCompanies = asyncHandler(async (req, res) => {
     const { companyName } = req.query;
     const queries = {};
     if (companyName) {
-        queries[companyName] = { [Op.substring]: companyName };
+        queries.companyName = { [Op.substring]: companyName };
     }
 
     const page = Number(req.query.page) || 1;

@@ -9,5 +9,5 @@ const {
 } = require("../controllers/position.controller");
 
 router.route("/").get(getAllPositions).post(createNewPosition);
-router.route("/posid").put(updatePosition).delete(deletePosition);
+router.route("/:posid").put(updatePosition).delete(deletePosition);
 module.exports = router;

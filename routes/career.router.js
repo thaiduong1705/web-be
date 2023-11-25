@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-import { getAllCareers, createCareer, getCareerById } from "../controllers/career.controller";
+const { getAllCareers, createCareer, updateCareer, deleteCareer } = require("../controllers/career.controller");
 
-router.get("/all", getAllCareers);
-router.get("/get-career/:id", getCareerById);
-router.post("/create-career", createCareer);
+router.route("/").get(getAllCareers).post(createCareer);
+router.route("/:pid").put(updateCareer).delete(deleteCareer);
 module.exports = router;

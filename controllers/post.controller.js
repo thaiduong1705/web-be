@@ -1,25 +1,24 @@
-//import * as authService from "../services/auth.service";
 const db = require("../models");
 const asyncHander = require("express-async-handler");
 const CustomError = require("../error/customError");
 const { v4 } = require("uuid");
 const createSlug = require("../utils/createSlug");
+const { Op } = require("sequelize");
 
-export const getAllPosts = asyncHander(async (req, res) => {
+const getAllPosts = asyncHander(async (req, res) => {
     const posts = await db.Post.findAll({
         include: [
-            { model: db.Company, attributes: ["companyName", "imageLink"] },
+            { model: db.Company },
             { model: db.Position, attributes: ["positionName"] },
             { model: db.AcademicLevel, attributes: ["academicLevelName"] },
             { model: db.WorkingType, attributes: ["workingTypeName"] },
-            { model: db.Career, as: "Career" },
-            { model: db.District, as: "District" },
+            { model: db.Career, attributes: ["careerName"] },
         ],
     });
     return res.status(200).json(posts);
 });
 
-export const getPostById = asyncHander(async (req, res) => {
+const getPostById = asyncHander(async (req, res) => {
     const post = await db.Post.findByPk(req.params.pid);
     if (!post) {
         throw new CustomError(`Không có id ${req.params.pid}`, 400);
@@ -27,7 +26,7 @@ export const getPostById = asyncHander(async (req, res) => {
     return res.status(200).json(post);
 });
 
-export const createPost = asyncHander(async (req, res) => {
+const createPost = asyncHander(async (req, res) => {
     if (!Array.isArray(req.body.careerList)) {
         throw new CustomError("Không được thiếu ngành nghề của bài tuyển");
     }
@@ -47,202 +46,204 @@ export const createPost = asyncHander(async (req, res) => {
     return res.status(201).json({ newPost, newPostCareers });
 });
 
-export const updatePost = async (req, res) => {
-    try {
-        const {
-            id,
-            jobTitle,
-            companyId,
-            positionId,
-            salaryMin,
-            salaryMax,
-            ageMin,
-            ageMax,
-            academicLevelId,
-            workingTypeId,
-            endDate,
-            needNumber,
-            sex,
-            jobDescribe,
-            benefits,
-            jobRequirement,
-            workingAddress,
-            careerOldList,
-            careerList,
-            districtOldList,
-            districtList,
-            experienceYear,
-        } = req.body;
+const updatePost = asyncHander(async (req, res) => {
+    const targetPost = await db.Post.findByPk(req.params.pid);
 
-        if (!id) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing Id!",
-            });
-        }
-        if (
-            !jobTitle ||
-            !companyId ||
-            !positionId ||
-            !salaryMin ||
-            !salaryMax ||
-            !ageMin ||
-            !ageMax ||
-            isNaN(experienceYear) ||
-            !academicLevelId ||
-            !workingTypeId ||
-            !endDate ||
-            !needNumber ||
-            !jobDescribe ||
-            !benefits ||
-            !jobRequirement ||
-            !workingAddress ||
-            !careerOldList ||
-            !careerList ||
-            careerList.length === 0 ||
-            !districtOldList ||
-            !districtList ||
-            districtList.length === 0
-        ) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing Input!",
-            });
-        }
-        const response = await postService.updatePostService({ ...req.body });
-        return res.status(200).json(response);
-    } catch (error) {
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at updatePost: " + error,
-        });
+    if (!targetPost) {
+        throw new CustomError(`Không có id ${req.params.pid}`, 400);
     }
-};
 
-export const getLimitPosts = async (req, res) => {
-    try {
-        const response = await postService.getLimitPostsService(req.query);
-        return res.status(200).json(response);
-    } catch (error) {
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at getLimitPosts: " + error,
-        });
-    }
-};
+    await db.Post.update(
+        {
+            ...req.body,
+            slug: createSlug(req.body.jobTitle),
+        },
+        {
+            where: {
+                id: req.params.pid,
+            },
+        },
+    );
 
-export const getRelatedPostsFromCareer = async (req, res) => {
-    try {
-        if (!req.query.postId) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing id!",
-            });
-        }
-        if (!req.query.careerIds) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing career ids!",
-            });
-        }
-        const response = await postService.getRelatedPostFromCareerService(req.query);
-        return res.status(200).json(response);
-    } catch (error) {
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at getCareerById: " + error,
-        });
-    }
-};
+    const { careerList } = req.body;
 
-export const applyPost = async (req, res) => {
-    try {
-        const { postId, candidateId } = req.body;
-        if (!postId || !candidateId) {
-            return res.status(400).json({
-                err: 2,
-                msg: "Missing input!",
-            });
-        }
-        const response = await postService.applyPostService(req.body);
-        return res.status(200).json(response);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at applyPost: " + error,
+    if (Array.isArray(careerList)) {
+        await db.PostCareer.destroy({
+            where: {
+                postId: req.params.pid,
+            },
         });
-    }
-};
+        const insertBulk = req.body.careerList.map((c) => {
+            return {
+                postId: req.params.pid,
+                careerId: c,
+            };
+        });
 
-export const changeStatusApplied = async (req, res) => {
-    try {
-        const { postId, candidateId, isApplied } = req.body;
-        if (!postId || !candidateId) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing input!",
-            });
-        }
-        const response = await postService.changeStatusApplied(req.body);
-        return res.status(200).json(response);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at applyPost: " + error,
-        });
+        await db.PostCareer.bulkCreate(insertBulk);
     }
-};
 
-export const deletePost = async (req, res) => {
-    try {
-        const { id } = req.body;
-        if (!id) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing Id",
-            });
-        }
-        const response = await postService.deletePostService(id);
-        return res.status(200).json(response);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at deletePost: " + error,
-        });
-    }
-};
+    return res.status(204).send();
+});
 
-export const getDeletedPost = async (req, res) => {
-    try {
-        const response = await postService.getDeletedPostService();
-        return res.status(200).json(response);
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at getDeletedPost: " + error,
-        });
+const getFilterPosts = asyncHander(async (req, res) => {
+    const { jobTitle, salaryMax, salaryMin, experienceYear, careerId } = req.query;
+    const filter = {};
+    if (jobTitle) {
+        filter.jobTitle = { [Op.substring]: jobTitle };
     }
-};
 
-export const getDeletedPostOfCompany = async (req, res) => {
-    try {
-        if (!req.params.id) {
-            return res.status(400).json({
-                err: 1,
-                msg: "Missing company id!",
-            });
-        }
-        const response = await postService.getDeletedPostOfCompanyService(req.params.id);
-        return res.status(500).json(response);
-    } catch (error) {
-        console.log(error, "getDeletedPostOfCompany");
-        return res.status(500).json({
-            err: -1,
-            msg: "Fail at getDeletedPostOfCompany: " + error,
-        });
+    if (salaryMax) {
+        filter.salaryMax = { [Op.lte]: salaryMax };
     }
+    if (salaryMin) {
+        filter.salaryMin = { [Op.gte]: salaryMin };
+    }
+
+    if (experienceYear) {
+        filter.experienceYear = { [Op.lte]: experienceYear };
+    }
+
+    const subFilter = {};
+    if (careerId) {
+        subFilter.id = careerId;
+    }
+
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+
+    const post = await db.Post.findAll({
+        where: {
+            ...filter,
+        },
+        include: [{ model: db.Career, attributes: ["id", "careerName"], where: { ...subFilter } }],
+        limit: limit,
+        offset: skip,
+    });
+    return res.status(200).json(post);
+});
+
+const getRelatedPostsFromCareer = asyncHander(async (req, res) => {
+    if (!Array.isArray(req.query.careerIds)) {
+        throw new CustomError(`Thiếu id nghề`, 400);
+    }
+    if (!req.query.postId) {
+        throw new CustomError(`Thiếu id công ty`, 400);
+    }
+
+    const posts = db.Post.findAll({
+        where: {
+            id: {
+                [Op.ne]: req.query.postId,
+            },
+        },
+        include: [{ model: db.Career, where: { id: { [Op.or]: req.query.careerIds } } }],
+    });
+    return res.status(200).json(posts);
+});
+
+const applyPost = asyncHander(async (req, res) => {
+    if (!req.query.postId || !req.query.candidateId) {
+        throw new CustomError("Thiếu các id cần thiết ứng tuyển", 400);
+    }
+    const [newApply, created] = await db.CandidatePost.findOrCreate({
+        where: {
+            postId: req.query.postId,
+            candidateId: req.query.candidateId,
+        },
+    });
+
+    if (created) {
+        throw new CustomError("Đã ứng tuyển rồi", 400);
+    }
+
+    return res.status(204).send();
+});
+
+const changeStatusApplied = asyncHander(async (req, res) => {
+    if (!req.query.postId || !req.query.candidateId) {
+        throw new CustomError("Thiếu các id cần thiết ứng tuyển", 400);
+    }
+
+    const target = await db.CandidatePost.findOne({
+        where: {
+            postId: req.query.postId,
+            candidateId: req.query.candidateId,
+        },
+    });
+    await db.CandidatePost.update({
+        isApplied: !target?.isApplied,
+    });
+
+    return res.status(204).send();
+});
+
+const deletePost = asyncHander(async (req, res) => {
+    const target = await db.Post.findByPk(req.params.pid);
+    if (!target) {
+        throw new CustomError(`Không có id ${req.params.pid}`, 400);
+    }
+
+    await db.Post.delete({
+        where: {
+            id: req.params.pid,
+        },
+    });
+
+    return res.status(204).send();
+});
+
+const getDeletedPosts = asyncHander(async (req, res) => {
+    const deletedPosts = await db.Post.findAll({
+        include: [
+            { model: db.Company },
+            { model: db.Position, attributes: ["positionName"] },
+            { model: db.AcademicLevel, attributes: ["academicLevelName"] },
+            { model: db.WorkingType, attributes: ["workingTypeName"] },
+            { model: db.Career, attributes: ["careerName"] },
+        ],
+        where: {
+            deletedAt: { [Op.not]: null },
+        },
+        paranoid: false,
+    });
+    return res.status(200).json(deletedPosts);
+});
+
+const getDeletedPostOfCompany = asyncHander(async (req, res) => {
+    const deletedPosts = await db.Post.findAll({
+        where: {
+            deletedAt: { [Op.not]: null },
+        },
+        paranoid: false,
+        include: [
+            {
+                model: db.Company,
+                as: "Company",
+                attributes: ["companyName", "imageLink"],
+                where: { id: companyId },
+            },
+            { model: db.Company },
+            { model: db.Position, attributes: ["positionName"] },
+            { model: db.AcademicLevel, attributes: ["academicLevelName"] },
+            { model: db.WorkingType, attributes: ["workingTypeName"] },
+            { model: db.Career, attributes: ["careerName"] },
+        ],
+    });
+    return res.status(200).json(deletedPosts);
+});
+
+module.exports = {
+    getAllPosts,
+    getDeletedPostOfCompany,
+    getDeletedPosts,
+    getFilterPosts,
+    getPostById,
+    getRelatedPostsFromCareer,
+    createPost,
+    updatePost,
+    deletePost,
+    applyPost,
+    changeStatusApplied,
 };
