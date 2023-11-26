@@ -222,7 +222,7 @@ const getDeletedPostOfCompany = asyncHander(async (req, res) => {
                 model: db.Company,
                 as: "Company",
                 attributes: ["companyName", "imageLink"],
-                where: { id: companyId },
+                where: { id: req.query.companyId },
             },
             { model: db.Company },
             { model: db.Position, attributes: ["positionName"] },
