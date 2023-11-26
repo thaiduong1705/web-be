@@ -220,7 +220,6 @@ const getDeletedPostOfCompany = asyncHander(async (req, res) => {
         include: [
             {
                 model: db.Company,
-                as: "Company",
                 attributes: ["companyName", "imageLink"],
                 where: { id: req.query.companyId },
             },
