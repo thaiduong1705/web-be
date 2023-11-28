@@ -14,7 +14,9 @@ const imageRouter = require("./image.router");
 const userRouter = require("./user.router");
 const emailRouter = require("./email.router");
 const reportRouter = require("./report.router");
+const userAccountRouter = require("./userAccount.router");
 
+const { verifyToken, checkAdminOrNot } = require("../middleware/verifyToken");
 const router = express.Router();
 router.use("/auth", authRouter);
 router.use("/company", companyRouter);

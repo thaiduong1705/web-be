@@ -25,6 +25,16 @@ module.exports = (sequelize) => {
                     notEmpty: true,
                 },
             },
+            email: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                unique: true,
+                validate: {
+                    notEmpty: true,
+                    notNull: true,
+                    isEmail: true,
+                },
+            },
         },
         {},
     );

@@ -10,6 +10,7 @@ const {
     getRelatedCompaniesFromCareer,
 } = require("../controllers/company.controller");
 
+const { verifyToken, checkAdminOrNot } = require("../middleware/verifyToken");
 // router.get("/all", getAllCompanies);
 // //router.get("/get-companies", companyController.getCompaniesByName);
 // router.get("/limit", getLimitCompanies);
@@ -18,8 +19,13 @@ const {
 // router.post("/create-company", createCompany);
 
 // router.put("/update-company", updateCompany);
-router.route("/").get(getAllCompanies).post(createCompany);
+router.use(verifyToken, checkAdminOrNot).route("/").get(getAllCompanies).post(createCompany);
 router.route("/filter").get(getFilterCompanies);
 router.route("/relate-comp").get(getRelatedCompaniesFromCareer);
-router.route("/:cid").get(getCompanyById).put(updateCompany).delete(deleteCompany);
+router
+    .use(verifyToken)
+    .route("/:cid")
+    .get(getCompanyById)
+    .put(checkAdminOrNot, updateCompany)
+    .delete(checkAdminOrNot, deleteCompany);
 module.exports = router;

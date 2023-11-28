@@ -7,7 +7,8 @@ const {
     updateAL,
     deleteAL,
 } = require("../controllers/academicLevel.controller");
-router.route("/").get(getAllAcademicLevels).post(createAcademicLevel);
-router.route("/:alid").put(updateAL).delete(deleteAL);
+const { verifyToken, checkAdminOrNot } = require("../middleware/verifyToken");
+router.route("/").get(getAllAcademicLevels).post(verifyToken, checkAdminOrNot, createAcademicLevel);
+router.use(verifyToken, checkAdminOrNot).route("/:alid").put(updateAL).delete(deleteAL);
 
 module.exports = router;

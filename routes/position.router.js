@@ -8,6 +8,8 @@ const {
     deletePosition,
 } = require("../controllers/position.controller");
 
-router.route("/").get(getAllPositions).post(createNewPosition);
-router.route("/:posid").put(updatePosition).delete(deletePosition);
+const { verifyToken, checkAdminOrNot } = require("../middleware/verifyToken");
+
+router.route("/").get(getAllPositions).post(verifyToken, checkAdminOrNot, createNewPosition);
+router.use(verifyToken, checkAdminOrNot).route("/:posid").put(updatePosition).delete(deletePosition);
 module.exports = router;

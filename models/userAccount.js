@@ -32,6 +32,12 @@ module.exports = (sequelize) => {
             refreshToken: {
                 type: DataTypes.TEXT,
             },
+            resetToken: {
+                type: DataTypes.STRING(6),
+            },
+            resetTokenExpired: {
+                type: DataTypes.DATE,
+            },
         },
         {},
     );
