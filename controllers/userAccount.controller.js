@@ -2,7 +2,7 @@ const db = require("../models");
 const asyncHandler = require("express-async-handler");
 const CustomError = require("../error/customError");
 const createToken = require("../utils/createToken");
-const hashPassword = require("../utils/hashPassword");
+const { hashPassword, comparePassword } = require("../utils/hashPassword");
 const { v4 } = require("uuid");
 const sendCustomEmail = require("../utils/sendEmail");
 const { Op } = require("sequelize");
@@ -39,6 +39,7 @@ const createCandidateAccount = asyncHandler(async (req, res) => {
         experienceYear,
         academicLevelId,
         positionId,
+        careerList,
     } = req.body;
 
     const candidateInput = {
@@ -68,6 +69,17 @@ const createCandidateAccount = asyncHandler(async (req, res) => {
         id: newAccount.id,
     });
 
+    let newCandidateCareer;
+    if (Array.isArray(careerList)) {
+        const insertTarget = careerList.map((c) => {
+            return {
+                candidateId: newAccount.id,
+                careerId: c,
+            };
+        });
+        newCandidateCareer = await db.CandidateCareer.bulkCreate(insertTarget);
+    }
+
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         maxAge: 3600 * 1000 * 1,
@@ -75,6 +87,9 @@ const createCandidateAccount = asyncHandler(async (req, res) => {
 
     res.status(201).json({
         accessToken,
+        newAccount,
+        newCandiate,
+        newCandidateCareer,
     });
 }); // aka người dùng đăng kí
 
@@ -94,12 +109,13 @@ const createStaffAccount = asyncHandler(async (req, res) => {
         refreshToken,
     };
 
-    const { name, age } = req.body;
+    const { name, age, email } = req.body;
 
     const candidateInput = {
         id: userId,
         name,
         age,
+        email,
     };
     const newAccount = await db.UserAccount.create({
         ...accountInput,
@@ -117,6 +133,8 @@ const createStaffAccount = asyncHandler(async (req, res) => {
 
     return res.status(201).json({
         accessToken,
+        newAccount,
+        newCandiate,
     });
 }); // aka admin tạo account
 
@@ -145,15 +163,13 @@ const updateAccount = asyncHandler(async (req, res) => {
 // login account
 const loginAccount = asyncHandler(async (req, res) => {
     const { username, password } = req.body;
-    const hPassword = hashPassword(password);
     const user = await db.UserAccount.findOne({
         where: {
             username,
-            hPassword,
         },
     });
 
-    if (!user) {
+    if (!user || !comparePassword(password, user.password)) {
         throw new CustomError("Username hoặc password không trùng khớp", 404);
     }
 
@@ -165,11 +181,14 @@ const loginAccount = asyncHandler(async (req, res) => {
             refreshToken,
         },
         {
-            id: user.id,
+            where: {
+                id: user.id,
+            },
         },
     );
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
+        secure: true,
         maxAge: 3600 * 1000 * 24 * 3,
     });
 
@@ -211,15 +230,19 @@ const logoutAccount = asyncHandler(async (req, res) => {
 });
 
 const forgotPassword = asyncHandler(async (req, res) => {
-    const { email, isUser } = req.query;
+    const { email, isUser } = req.body;
     let user;
     if (isUser) {
         user = await db.Candidate.findOne({
-            email,
+            where: {
+                email: email,
+            },
         });
     } else {
         user = await db.StaffInformation.findOne({
-            email,
+            where: {
+                email: email,
+            },
         });
     }
 
@@ -241,7 +264,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     );
 
     const html = `Xin vui lòng click vào link này để thay đổi mật khẩu, link có hiệu lực 15 phút: <a href=
-${process.env.URL_SERVER}/auth/reset-password?email=${email}&resetToken=${resetToken}>Nhấn vào đây</a>`;
+${process.env.URL_SERVER}/auth/reset-password?email=${email}&resetToken=${randomKey}>Nhấn vào đây</a>`;
 
     await sendCustomEmail(user.email, html);
 
@@ -249,25 +272,44 @@ ${process.env.URL_SERVER}/auth/reset-password?email=${email}&resetToken=${resetT
 });
 
 const checkResetToken = asyncHandler(async (req, res) => {
-    const { resetToken, email, password } = req.body;
+    const { resetToken, email, password, isUser } = req.body;
 
-    if (!resetToken || !email || !password) {
+    if (!resetToken || !email || !password || !isUser) {
         throw new CustomError("Thiếu các trường dữ liệu", 400);
     }
 
-    const user = await db.UserAccount.findOne({
-        email,
-        resetToken,
-        resetTokenExpired: { [Op.gt]: Date.now() },
-    });
+    let rs;
+    if (isUser) {
+        rs = await db.Candidate.findOne({
+            where: {
+                email,
+            },
+        });
+    } else {
+        rs = await db.StaffInformation.findOne({
+            where: {
+                email,
+            },
+        });
+    }
 
+    if (!rs) {
+        throw new CustomError(`Không có user có email đc nhập`, 400);
+    }
+    const user = await db.UserAccount.findOne({
+        where: {
+            id: rs.id,
+            resetToken: resetToken,
+            resetTokenExpired: { [Op.gte]: Date.now() },
+        },
+    });
     if (!user) {
         throw new CustomError("Token reset hết hạn", 401);
     }
 
     await db.UserAccount.update(
         {
-            password,
+            password: hashPassword(password),
             resetToken: null,
             resetTokenExpired: null,
         },

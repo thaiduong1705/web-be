@@ -105,13 +105,13 @@ module.exports = (sequelize) => {
             academicLevelId: {
                 type: DataTypes.INTEGER,
                 validate: {
-                    isUUID: 4,
+                    isInt: true,
                 },
             },
             positionId: {
                 type: DataTypes.INTEGER,
                 validate: {
-                    isUUID: 4,
+                    isInt: true,
                 },
             },
         },

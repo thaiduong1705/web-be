@@ -18,7 +18,7 @@ const userAccountRouter = require("./userAccount.router");
 
 const { verifyToken, checkAdminOrNot } = require("../middleware/verifyToken");
 const router = express.Router();
-router.use("/auth", authRouter);
+router.use("/auth", userAccountRouter);
 router.use("/company", companyRouter);
 router.use("/career", careerRouter);
 router.use("/insert", insertRouter);
