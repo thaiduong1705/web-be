@@ -18,6 +18,7 @@ app.use(
     cors({
         origin: [process.env.ADMIN_URL, process.env.CLIENT_URL],
         methods: ["POST", "GET", "PUT", "DELETE"],
+        credentials: true,
     }),
 );
 app.use(express.urlencoded({ extended: true }));
