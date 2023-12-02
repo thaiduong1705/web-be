@@ -54,8 +54,9 @@ module.exports = (sequelize) => {
                 },
             },
             slug: {
-                type: DataTypes.TEXT,
+                type: DataTypes.STRING,
                 allowNull: false,
+                unique: true,
                 validate: {
                     notEmpty: true,
                     notNull: true,
