@@ -6,7 +6,7 @@ const verifyToken = asyncHandler(async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw new CustomError("Cant get a token", 401);
+        throw new CustomError("Không thể lấy token", 401);
     }
 
     const accessToken = authHeader.split(" ")[1];
@@ -42,12 +42,18 @@ const verifyToken = asyncHandler(async (req, res, next) => {
     }
 });
 
-const checkAdminOrNot = asyncHandler(async (req, res, next) => {
-    const { roleId } = req.user;
-    if (roleId !== 1) {
-        throw new CustomError("Không phải admin", 401);
+const checkRole = (allowedRoles) => async (req, res, next) => {
+    try {
+        const { roleId } = req.user;
+        if (!allowedRoles.includes(roleId)) {
+            throw new CustomError("Không phải admin", 401);
+        }
+        next();
+    } catch (error) {
+        next(error);
     }
-    next();
-});
+};
+
+const checkAdminOrNot = checkRole([1]);
 
 module.exports = { verifyToken, checkAdminOrNot };

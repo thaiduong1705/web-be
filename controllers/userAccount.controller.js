@@ -323,6 +323,25 @@ const checkResetToken = asyncHandler(async (req, res) => {
     return res.status(204).send();
 });
 
+const getCurrentUser = asyncHandler(async (req, res) => {
+    const { id } = req.user;
+    const currentUser = await db.Candidate.findByPK(id);
+
+    if (!currentUser) {
+        throw new CustomError("Không tìm thấy user của id này", 400);
+    }
+    return res.status(200).json(currentUser);
+});
+
+const getCurrentStaff = asyncHandler(async (req, res) => {
+    const { id } = req.user;
+    const currentStaff = await db.StaffInformation.findByPK(id);
+    if (!currentStaff) {
+        throw new CustomError("Không tìm thấy staff của id này", 400);
+    }
+    return res.status(200).json(currentStaff);
+});
+
 module.exports = {
     createCandidateAccount,
     createStaffAccount,
@@ -330,4 +349,6 @@ module.exports = {
     logoutAccount,
     forgotPassword,
     checkResetToken,
+    getCurrentStaff,
+    getCurrentUser,
 };
