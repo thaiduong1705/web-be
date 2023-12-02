@@ -1,7 +1,6 @@
 const express = require("express");
 
 const testRouter = require("./test.router");
-const authRouter = require("./auth.router");
 const careerRouter = require("./career.router");
 const companyRouter = require("./company.router");
 const insertRouter = require("./insert.router");
