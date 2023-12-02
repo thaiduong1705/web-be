@@ -1,5 +1,7 @@
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+
 require("dotenv").config();
 
 const db = require("./models");
@@ -11,9 +13,10 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 // Middleware mà Express đã build sẵn
+app.use(cookieParser());
 app.use(
     cors({
-        origin: [process.env.CLIENT_URL, process.env.CLIENT_URL],
+        origin: [process.env.ADMIN_URL, process.env.CLIENT_URL],
         methods: ["POST", "GET", "PUT", "DELETE"],
     }),
 );

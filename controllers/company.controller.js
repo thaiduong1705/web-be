@@ -30,7 +30,9 @@ const createCompany = asyncHandler(async (req, res) => {
 });
 
 const getCompanyById = asyncHandler(async (req, res) => {
-    const company = await db.Company.findByPk(req.params.cid);
+    const company = await db.Company.findByPk(req.params.cid, {
+        include: [{ model: db.Post }],
+    });
 
     if (!company) {
         throw new CustomError(`Không có id ${req.params.cid}`, 400);

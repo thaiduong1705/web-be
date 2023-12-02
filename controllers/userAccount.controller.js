@@ -83,6 +83,7 @@ const createCandidateAccount = asyncHandler(async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         maxAge: 3600 * 1000 * 1,
+        sameSite: "none",
     });
 
     res.status(201).json({
@@ -129,6 +130,7 @@ const createStaffAccount = asyncHandler(async (req, res) => {
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         maxAge: 3600 * 1000 * 1,
+        sameSite: "none",
     });
 
     return res.status(201).json({
@@ -223,7 +225,6 @@ const logoutAccount = asyncHandler(async (req, res) => {
     );
 
     res.clearCookie("refreshToken", {
-        secure: true,
         httpOnly: true,
     });
     res.status(200).send();

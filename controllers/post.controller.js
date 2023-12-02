@@ -117,9 +117,13 @@ const getFilterPosts = asyncHander(async (req, res) => {
         where: {
             ...filter,
         },
-        include: [{ model: db.Career, attributes: ["id", "careerName"], where: { ...subFilter } }],
+        include: [
+            { model: db.Career, attributes: ["id", "careerName"], where: { ...subFilter } },
+            { model: db.Company },
+        ],
         limit: limit,
         offset: skip,
+        paranoid: false,
     });
     return res.status(200).json(post);
 });

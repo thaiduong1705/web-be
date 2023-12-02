@@ -19,13 +19,13 @@ const { verifyToken, checkAdminOrNot } = require("../middleware/verifyToken");
 // router.post("/create-company", createCompany);
 
 // router.put("/update-company", updateCompany);
-router.use(verifyToken, checkAdminOrNot).route("/").get(getAllCompanies).post(createCompany);
 router.route("/filter").get(getFilterCompanies);
 router.route("/relate-comp").get(getRelatedCompaniesFromCareer);
 router
-    .use(verifyToken)
     .route("/:cid")
     .get(getCompanyById)
-    .put(checkAdminOrNot, updateCompany)
-    .delete(checkAdminOrNot, deleteCompany);
+    .put(verifyToken, checkAdminOrNot, updateCompany)
+    .delete(verifyToken, checkAdminOrNot, deleteCompany);
+router.use(verifyToken, checkAdminOrNot).route("/").get(getAllCompanies).post(createCompany);
+
 module.exports = router;
