@@ -3,7 +3,7 @@ const asyncHander = require("express-async-handler");
 const CustomError = require("../error/customError");
 const { v4 } = require("uuid");
 const createSlug = require("../utils/createSlug");
-const { Op } = require("sequelize");
+const { Op, DATE } = require("sequelize");
 
 const getAllPosts = asyncHander(async (req, res) => {
     const posts = await db.Post.findAll({
@@ -32,8 +32,9 @@ const createPost = asyncHander(async (req, res) => {
     }
     const newPost = await db.Post.create({
         ...req.body,
-        id: v4(),
         slug: createSlug(req.body.jobTitle),
+        endDate: new Date(req.body.endDate),
+        id: v4(),
     });
     const insertCareer = req.body.careerList.map((c) => {
         return {
@@ -42,7 +43,7 @@ const createPost = asyncHander(async (req, res) => {
         };
     });
 
-    const newPostCareers = await db.Post.bulkCreate(insertCareer);
+    const newPostCareers = await db.PostCareer.bulkCreate(insertCareer);
     return res.status(201).json({ newPost, newPostCareers });
 });
 

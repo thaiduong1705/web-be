@@ -123,9 +123,10 @@ module.exports = (sequelize) => {
                 allowNull: false,
                 validate: {
                     notNull: true,
-                    isDate: true,
                     compareDate(value) {
-                        if (Date(value) <= Date(this.createdAt)) {
+                        if (new Date(value) <= new Date(this.createdAt)) {
+                            console.log("Value:", new Date(value));
+                            console.log("createdAt:", new Date(this.createdAt));
                             throw new Error("Ngày hết hạn phải lớn hơn ngày hôm nay");
                         }
                     },
@@ -181,19 +182,19 @@ module.exports = (sequelize) => {
             academicLevelId: {
                 type: DataTypes.INTEGER,
                 validate: {
-                    isUUID: 4,
+                    isInt: true,
                 },
             },
             positionId: {
                 type: DataTypes.INTEGER,
                 validate: {
-                    isUUID: 4,
+                    isInt: true,
                 },
             },
             workingTypeId: {
                 type: DataTypes.INTEGER,
                 validate: {
-                    isUUID: 4,
+                    isInt: true,
                 },
             },
         },
