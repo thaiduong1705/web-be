@@ -3,7 +3,7 @@ const asyncHander = require("express-async-handler");
 const CustomError = require("../error/customError");
 const { v4 } = require("uuid");
 const createSlug = require("../utils/createSlug");
-const { Op, DATE } = require("sequelize");
+const { Op } = require("sequelize");
 
 const getAllPosts = asyncHander(async (req, res) => {
     const posts = await db.Post.findAll({
@@ -15,7 +15,7 @@ const getAllPosts = asyncHander(async (req, res) => {
             { model: db.Career, attributes: ["careerName"] },
         ],
     });
-    return res.status(200).json(posts);
+    return res.status(200).json({ count: posts.length, posts });
 });
 
 const getPostById = asyncHander(async (req, res) => {
@@ -88,25 +88,40 @@ const updatePost = asyncHander(async (req, res) => {
 });
 
 const getFilterPosts = asyncHander(async (req, res) => {
-    const { jobTitle, salaryMax, salaryMin, experienceYear, careerId } = req.query;
+    const { jobTitle, salaryMax, salaryMin, experienceYear, careerId, academicLevelId, positionId, workingTypeId } =
+        req.query;
     const filter = {};
     if (jobTitle) {
+        console.log("oke1");
         filter.jobTitle = { [Op.substring]: jobTitle };
     }
 
     if (salaryMax) {
+        console.log("oke2");
+
         filter.salaryMax = { [Op.lte]: salaryMax };
     }
     if (salaryMin) {
+        console.log("oke3");
+
         filter.salaryMin = { [Op.gte]: salaryMin };
     }
 
     if (experienceYear) {
+        console.log("oke4");
+
         filter.experienceYear = { [Op.lte]: experienceYear };
+    }
+
+    if (positionId) {
+        console.log("oke6");
+        filter.positionId = positionId;
     }
 
     const subFilter = {};
     if (careerId) {
+        console.log("oke5");
+
         subFilter.id = careerId;
     }
 
@@ -120,11 +135,13 @@ const getFilterPosts = asyncHander(async (req, res) => {
         },
         include: [
             { model: db.Career, attributes: ["id", "careerName"], where: { ...subFilter } },
+            { model: db.AcademicLevel },
+            { model: db.Position },
+            { model: db.WorkingType },
             { model: db.Company },
         ],
         limit: limit,
         offset: skip,
-        paranoid: false,
     });
     return res.status(200).json(post);
 });
