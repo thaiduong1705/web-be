@@ -4,7 +4,6 @@ const CustomError = require("../error/customError");
 const db = require("../models");
 const verifyToken = asyncHandler(async (req, res, next) => {
     const authHeader = req.headers.authorization;
-
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         throw new CustomError("Không thể lấy token", 401);
     }
@@ -55,5 +54,6 @@ const checkRole = (allowedRoles) => async (req, res, next) => {
 };
 
 const checkAdminOrNot = checkRole([1]);
+const checkCandidateOrNot = checkRole([2]);
 
-module.exports = { verifyToken, checkAdminOrNot };
+module.exports = { verifyToken, checkAdminOrNot, checkCandidateOrNot };

@@ -351,6 +351,33 @@ const getCurrentStaff = asyncHandler(async (req, res) => {
     return res.status(200).json(currentStaff);
 });
 
+const updateCandidate = asyncHandler(async (req, res) => {
+    const { id } = req.user;
+    const currentUser = await db.Candidate.findByPk(id);
+
+    if (!currentUser) {
+        throw new CustomError("Không tìm thấy staff của id này", 400);
+    }
+
+    const profileImageUrl = req.files["profileImage"][0];
+    const cvImageUrl = req.files["cvImage"][0];
+
+    await db.Candidate.update(
+        {
+            ...req.body,
+            profileImage: profileImageUrl.path,
+            cvImage: cvImageUrl.path,
+        },
+        {
+            where: {
+                id,
+            },
+        },
+    );
+
+    return res.status(204).send();
+});
+
 module.exports = {
     createCandidateAccount,
     createStaffAccount,
@@ -360,4 +387,5 @@ module.exports = {
     checkResetToken,
     getCurrentStaff,
     getCurrentUser,
+    updateCandidate,
 };
