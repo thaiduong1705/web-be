@@ -11,6 +11,13 @@ const errorHandlerMiddleware = (err, req, res, next) => {
         });
         customError.statusCode = 400;
     }
+    if (err?.name === "SequelizeUniqueConstraintError") {
+        customError.msg = "Lỗi constraint sql: ";
+        err.errors.forEach((e) => {
+            customError.msg += `${e.message}, `;
+        });
+        customError.statusCode = 400;
+    }
     return res.status(customError.statusCode).json(customError);
     //return res.status(customError.statusCode).json({ err });
 };

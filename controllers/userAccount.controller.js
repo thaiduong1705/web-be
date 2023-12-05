@@ -8,89 +8,97 @@ const sendCustomEmail = require("../utils/sendEmail");
 const { Op } = require("sequelize");
 
 const createCandidateAccount = asyncHandler(async (req, res) => {
-    const userId = v4();
+    return db.sequelize.transaction(async (t) => {
+        const userId = v4();
 
-    const accessToken = createToken(userId, 2, process.env.ACCESS_TOKEN_LT);
-    const refreshToken = createToken(userId, 2, process.env.REFRESH_TOKEN_LT);
+        const accessToken = createToken(userId, 2, process.env.ACCESS_TOKEN_LT);
+        const refreshToken = createToken(userId, 2, process.env.REFRESH_TOKEN_LT);
 
-    const hPassword = hashPassword(req.body.password);
+        const hPassword = hashPassword(req.body.password);
 
-    const accountInput = {
-        id: userId,
-        username: req.body.username,
-        password: hPassword,
-        roleId: 2,
-        refreshToken,
-    };
+        const accountInput = {
+            id: userId,
+            username: req.body.username,
+            password: hPassword,
+            roleId: 2,
+            refreshToken,
+        };
 
-    const {
-        civilId,
-        candidateName,
-        age,
-        profileImage,
-        cvImage,
-        phoneNumber,
-        email,
-        fullAddress,
-        province,
-        district,
-        ward,
-        gender,
-        experienceYear,
-        academicLevelId,
-        positionId,
-        careerList,
-    } = req.body;
+        const {
+            civilId,
+            candidateName,
+            age,
+            profileImage,
+            cvImage,
+            phoneNumber,
+            email,
+            fullAddress,
+            province,
+            district,
+            ward,
+            gender,
+            experienceYear,
+            academicLevelId,
+            positionId,
+            careerList,
+        } = req.body;
 
-    const candidateInput = {
-        id: userId,
-        civilId,
-        candidateName,
-        age,
-        profileImage,
-        cvImage,
-        phoneNumber,
-        email,
-        fullAddress,
-        province,
-        district,
-        ward,
-        gender,
-        experienceYear,
-        academicLevelId,
-        positionId,
-    };
-    const newAccount = await db.UserAccount.create({
-        ...accountInput,
-    });
+        const candidateInput = {
+            id: userId,
+            civilId,
+            candidateName,
+            age,
+            profileImage,
+            cvImage,
+            phoneNumber,
+            email,
+            fullAddress,
+            province,
+            district,
+            ward,
+            gender,
+            experienceYear,
+            academicLevelId,
+            positionId,
+        };
+        const newAccount = await db.UserAccount.create(
+            {
+                ...accountInput,
+            },
+            { transaction: t },
+        );
 
-    const newCandiate = await db.Candidate.create({
-        ...candidateInput,
-        id: newAccount.id,
-    });
+        const newCandiate = await db.Candidate.create(
+            {
+                ...candidateInput,
+                id: newAccount.id,
+            },
+            { transaction: t },
+        );
 
-    let newCandidateCareer;
-    if (Array.isArray(careerList)) {
-        const insertTarget = careerList.map((c) => {
-            return {
-                candidateId: newAccount.id,
-                careerId: c,
-            };
+        let newCandidateCareer;
+        if (Array.isArray(careerList)) {
+            const insertTarget = careerList.map((c) => {
+                return {
+                    candidateId: newAccount.id,
+                    careerId: c,
+                };
+            });
+            newCandidateCareer = await db.CandidateCareer.bulkCreate(insertTarget, { transaction: t });
+        }
+
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: false,
+            maxAge: 3600 * 1000 * 1,
+            secure: false,
         });
-        newCandidateCareer = await db.CandidateCareer.bulkCreate(insertTarget);
-    }
 
-    res.cookie("refreshToken", refreshToken, {
-        httpOnly: false,
-        maxAge: 3600 * 1000 * 1,
-        secure: false,
-    });
-
-    res.status(201).json({
-        accessToken,
-        newAccount,
-        newCandiate,
-        newCandidateCareer,
+        return res.status(201).json({
+            accessToken,
+            newAccount,
+            newCandiate,
+            newCandidateCareer,
+        });
     });
 }); // aka người dùng đăng kí
 
