@@ -191,6 +191,27 @@ const applyPost = asyncHander(async (req, res) => {
     return res.status(204).send();
 });
 
+const applyPostByCandidate = asyncHander(async (req, res) => {
+    const { id } = req.user;
+    if (req.query.postId) {
+        throw new CustomError("Thiếu id post để ứng tuyển", 400);
+    }
+
+    const checkApplied = await db.CandidatePost.findOne({
+        where: {
+            postId: req.query.postId,
+            candidateId: id,
+        },
+    });
+
+    if (checkApplied) {
+        throw new CustomError("Người này đã ứng tuyển bài viết này rồi", 400);
+    }
+
+    const newApply = await db.CandidatePost.create({ candidateId: id, postId: req.query.postId });
+    return res.status(201).json(newApply);
+});
+
 const changeStatusApplied = asyncHander(async (req, res) => {
     if (!req.query.postId || !req.query.candidateId) {
         throw new CustomError("Thiếu các id cần thiết ứng tuyển", 400);
@@ -275,4 +296,5 @@ module.exports = {
     deletePost,
     applyPost,
     changeStatusApplied,
+    applyPostByCandidate,
 };

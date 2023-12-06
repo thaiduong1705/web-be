@@ -11,6 +11,7 @@ const {
 } = require("../controllers/company.controller");
 
 const { verifyToken, checkAdminOrNot } = require("../middleware/verifyToken");
+const uploadCloud = require("../config/cloudinary");
 // router.get("/all", getAllCompanies);
 // //router.get("/get-companies", companyController.getCompaniesByName);
 // router.get("/limit", getLimitCompanies);
@@ -24,8 +25,12 @@ router.route("/relate-comp").get(getRelatedCompaniesFromCareer);
 router
     .route("/:cid")
     .get(getCompanyById)
-    .put(verifyToken, checkAdminOrNot, updateCompany)
+    .put(verifyToken, checkAdminOrNot, uploadCloud.single("imageLink"), updateCompany)
     .delete(verifyToken, checkAdminOrNot, deleteCompany);
-router.use(verifyToken, checkAdminOrNot).route("/").get(getAllCompanies).post(createCompany);
+router
+    .use(verifyToken, checkAdminOrNot)
+    .route("/")
+    .get(getAllCompanies)
+    .post(uploadCloud.single("imageLink"), createCompany);
 
 module.exports = router;

@@ -11,14 +11,16 @@ const {
     deletePost,
     applyPost,
     changeStatusApplied,
+    applyPostByCandidate,
 } = require("../controllers/post.controller");
-const { verifyToken, checkAdminOrNot } = require("../middleware/verifyToken");
+const { verifyToken, checkAdminOrNot, checkCandidateOrNot } = require("../middleware/verifyToken");
 
 const router = express.Router();
 
 router.route("/filter").get(getFilterPosts);
 router.route("/relate").get(getRelatedPostsFromCareer);
 router.use(verifyToken).route("/apply").get(applyPost).put(changeStatusApplied);
+router.route("/apply-post").get(verifyToken, checkCandidateOrNot, applyPostByCandidate);
 router
     .use(verifyToken)
     .route("/:pid")

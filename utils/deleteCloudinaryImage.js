@@ -10,8 +10,10 @@ const getPublicId = (imageUrl) => {
     return folderAndPublicId;
 };
 const deleteCloudinaryImage = async (imageUrl) => {
-    const publicId = getPublicId(imageUrl);
-    await cloudinary.uploader.destroy(publicId);
+    if (imageUrl) {
+        const publicId = getPublicId(imageUrl);
+        await cloudinary.uploader.destroy(publicId);
+    }
 };
 
 module.exports = deleteCloudinaryImage;

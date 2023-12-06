@@ -4,6 +4,7 @@ const { v4 } = require("uuid");
 const asyncHandler = require("express-async-handler");
 const createSlug = require("../utils/createSlug");
 const CustomError = require("../error/customError");
+const deleteCloudinaryImage = require("../utils/deleteCloudinaryImage");
 
 const getAllCompanies = asyncHandler(async (req, res) => {
     const companies = await db.Company.findAll();
@@ -11,7 +12,12 @@ const getAllCompanies = asyncHandler(async (req, res) => {
 });
 
 const createCompany = asyncHandler(async (req, res) => {
-    const company = await db.Company.create({ ...req.body, slug: createSlug(req.body?.companyName), id: v4() });
+    const company = await db.Company.create({
+        ...req.body,
+        slug: createSlug(req.body?.companyName),
+        id: v4(),
+        imageLink: req?.file?.path,
+    });
     let companycareer = null;
     if (Array.isArray(req.body.careerList)) {
         const insertedCompanyCareer = req.body.careerList.map((careerId) => {
@@ -46,10 +52,15 @@ const updateCompany = asyncHandler(async (req, res) => {
         throw new CustomError(`Không có id ${req.params.cid}`, 400);
     }
 
+    if (req.file) {
+        await deleteCloudinaryImage(company.imageLink);
+    }
+
     await db.Company.update(
         {
             ...req.body,
             slug: createSlug(req.body.companyName),
+            imageLink: req?.file?.path,
         },
         {
             where: {

@@ -6,6 +6,7 @@ const { hashPassword, comparePassword } = require("../utils/hashPassword");
 const { v4 } = require("uuid");
 const sendCustomEmail = require("../utils/sendEmail");
 const { Op } = require("sequelize");
+const deleteCloudinaryImage = require("../utils/deleteCloudinaryImage");
 
 const createCandidateAccount = asyncHandler(async (req, res) => {
     return db.sequelize.transaction(async (t) => {
@@ -358,15 +359,22 @@ const updateCandidate = asyncHandler(async (req, res) => {
     if (!currentUser) {
         throw new CustomError("Không tìm thấy staff của id này", 400);
     }
+    const profileImageUrl = req.files["profileImage"] ? req.files["profileImage"][0] : null;
+    const cvImageUrl = req.files["cvImage"] ? req.files["cvImage"][0] : null;
 
-    const profileImageUrl = req.files["profileImage"][0];
-    const cvImageUrl = req.files["cvImage"][0];
+    if (profileImageUrl) {
+        await deleteCloudinaryImage(currentUser.profileImage);
+    }
+
+    if (cvImageUrl) {
+        await deleteCloudinaryImage(currentUser.cvImage);
+    }
 
     await db.Candidate.update(
         {
             ...req.body,
-            profileImage: profileImageUrl.path,
-            cvImage: cvImageUrl.path,
+            profileImage: profileImageUrl?.path,
+            cvImage: cvImageUrl?.path,
         },
         {
             where: {
