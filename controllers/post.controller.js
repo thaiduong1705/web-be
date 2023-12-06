@@ -20,7 +20,13 @@ const getAllPosts = asyncHander(async (req, res) => {
 
 const getPostById = asyncHander(async (req, res) => {
     const post = await db.Post.findByPk(req.params.pid, {
-        include: [{ model: db.Company }],
+        include: [
+            { model: db.Company },
+            { model: db.Position },
+            { model: db.AcademicLevel },
+            { model: db.WorkingType },
+            { model: db.Career },
+        ],
     });
     if (!post) {
         throw new CustomError(`Không có id ${req.params.pid}`, 400);
