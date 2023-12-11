@@ -123,6 +123,7 @@ module.exports = (sequelize) => {
     Candidate.associate = (models) => {
         Candidate.belongsTo(models.UserAccount, { foreignKey: "id", onDelete: "CASCADE" });
         Candidate.belongsTo(models.AcademicLevel, { foreignKey: "academicLevelId" });
+        Candidate.hasMany(models.Comment, { foreignKey: "candidateId", onDelete: "CASCADE" });
 
         Candidate.belongsTo(models.Position, { foreignKey: "positionId" });
         Candidate.belongsToMany(models.Career, {
