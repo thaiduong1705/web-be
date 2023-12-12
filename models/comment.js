@@ -16,6 +16,10 @@ module.exports = (sequelize) => {
             rating: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
+                validate: {
+                    notEmpty: true,
+                    isInt: true,
+                },
             },
             postId: {
                 type: DataTypes.UUID,

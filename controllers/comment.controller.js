@@ -18,7 +18,8 @@ const getAllCommentFromPost = asyncHandler(async (req, res) => {
 });
 
 const createComment = asyncHandler(async (req, res) => {
-    const newComment = await db.Comment.create(req.body);
+    const { id } = req.user;
+    const newComment = await db.Comment.create({ ...req.body, candidateId: id });
     return res.status(201).json(newComment);
 });
 
@@ -33,4 +34,49 @@ const getCommentsOfUser = asyncHandler(async (req, res) => {
     return res.status(200).json(comments);
 });
 
-module.exports = { createComment, getAllCommentFromPost, getCommentsOfUser };
+const updateComment = asyncHandler(async (req, res) => {
+    const { id } = req.user;
+    const targetComment = await db.Comment.findOne({
+        where: {
+            id: req.params.comid,
+            candidateId: id,
+        },
+    });
+
+    if (!targetComment) {
+        throw new CustomError("Không có bình luận trùng khớp", 400);
+    }
+
+    await db.Comment.update(req.body, {
+        where: {
+            id: req.params.comid,
+            candidateId: id,
+        },
+    });
+
+    return res.status(204).send();
+});
+
+const deleteComment = asyncHandler(async (req, res) => {
+    const { id } = req.user;
+    const targetComment = await db.Comment.findOne({
+        where: {
+            id: req.params.comid,
+            candidateId: id,
+        },
+    });
+
+    if (!targetComment) {
+        throw new CustomError("Không có bình luận trùng khớp", 400);
+    }
+    await db.Comment.destroy({
+        where: {
+            id: req.params.comid,
+            candidateId: id,
+        },
+    });
+
+    return res.status(204).send();
+});
+
+module.exports = { createComment, getAllCommentFromPost, getCommentsOfUser, updateComment, deleteComment };

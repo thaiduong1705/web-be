@@ -7,6 +7,7 @@ const {
     loginAccount,
     logoutAccount,
     forgotPassword,
+    renewAccessToken,
     getCurrentUser,
     getCurrentStaff,
     updateCandidate,
@@ -22,6 +23,7 @@ router.route("/login").post(loginAccount);
 router.route("/logout").get(logoutAccount);
 router.route("/forgot-password").post(forgotPassword);
 router.route("/reset-token").post(checkResetToken);
+router.route("/renew-access-token").get(renewAccessToken);
 router.route("/current-user").get(verifyToken, getCurrentUser);
 router.route("/current-staff").get(verifyToken, checkAdminOrNot, getCurrentStaff);
 router.route("/update-candidate").post(

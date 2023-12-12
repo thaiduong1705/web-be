@@ -14,30 +14,23 @@ const verifyToken = asyncHandler(async (req, res, next) => {
         req.user = { id: decode._id, roleId: decode._roleId };
         next();
     } catch (error) {
-        const refreshToken = req.cookies.refreshToken;
-        if (!refreshToken) {
-            throw new CustomError("Không có refreshToken", 401);
-        }
+        throw new CustomError("Access token đã hết hạn", 401);
+    }
+});
 
-        try {
-            const decodeRefresh = jwt.verify(refreshToken, process.env.SECRET_KEY);
-            const user = await db.UserAccount.findOne({
-                where: {
-                    id: decodeRefresh._id,
-                    refreshToken: refreshToken,
-                },
-            });
+const verifyRefreshToken = asyncHandler(async (req, res, next) => {
+    const refreshToken = req.cookies.refreshToken;
 
-            if (!user) {
-                throw new CustomError("Không có user có refresh token này", 404);
-            }
+    if (!refreshToken) {
+        throw new CustomError("Không có refresh token", 401);
+    }
 
-            const newAccessToken = jwt.sign({ id: user.id, roleId: user.roleId }, process.env.SECRET_KEY, {
-                expiresIn: process.env.ACCESS_TOKEN_LT,
-            });
-        } catch (error) {
-            throw new CustomError("Refresh token hết hạn", 401);
-        }
+    try {
+        const decode = jwt.verify(refreshToken, process.env.SECRET_KEY);
+        req.user = { id: decode._id, roleId: decode._roleId, refreshToken };
+        next();
+    } catch (error) {
+        throw new CustomError("Refresh token đã hết hạn", 401);
     }
 });
 
@@ -56,4 +49,4 @@ const checkRole = (allowedRoles) => async (req, res, next) => {
 const checkAdminOrNot = checkRole([1]);
 const checkCandidateOrNot = checkRole([2]);
 
-module.exports = { verifyToken, checkAdminOrNot, checkCandidateOrNot };
+module.exports = { verifyToken, checkAdminOrNot, checkCandidateOrNot, verifyRefreshToken };

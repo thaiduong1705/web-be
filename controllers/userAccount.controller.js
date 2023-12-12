@@ -387,6 +387,25 @@ const updateCandidate = asyncHandler(async (req, res) => {
     return res.status(204).send();
 });
 
+const renewAccessToken = asyncHandler(async (req, res) => {
+    const { id, refreshToken, roleId } = req.user;
+
+    const userAccount = await db.UserAccount.findOne({
+        where: {
+            id,
+            refreshToken,
+        },
+    });
+
+    if (!userAccount) {
+        throw new CustomError("Không có user này để làm mới token", 401);
+    }
+
+    const newAccessToken = createToken(id, roleId, process.env.ACCESS_TOKEN_LT);
+
+    return res.status(201).json({ accessToken: newAccessToken });
+});
+
 module.exports = {
     createCandidateAccount,
     createStaffAccount,
@@ -397,4 +416,5 @@ module.exports = {
     getCurrentStaff,
     getCurrentUser,
     updateCandidate,
+    renewAccessToken,
 };

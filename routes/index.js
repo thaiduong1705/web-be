@@ -14,21 +14,23 @@ const userRouter = require("./user.router");
 const emailRouter = require("./email.router");
 const reportRouter = require("./report.router");
 const userAccountRouter = require("./userAccount.router");
+const commentRouter = require("./comment.router");
 
 const { verifyToken, checkAdminOrNot } = require("../middleware/verifyToken");
 const router = express.Router();
 router.use("/auth", userAccountRouter);
 router.use("/company", companyRouter);
 router.use("/career", careerRouter);
-router.use("/insert", insertRouter);
 router.use("/post", postRouter);
 router.use("/academic-level", academicLevelRouter);
 router.use("/position", positionRouter);
 router.use("/working-type", workingTypeRouter);
 router.use("/candidate", candidateRouter);
+router.use("/comment", commentRouter);
 router.use("/image", imageRouter);
 router.use("/user", userRouter);
 router.use("/email", emailRouter);
 router.use("/report", reportRouter);
+router.use("/insert", insertRouter);
 
 module.exports = router;

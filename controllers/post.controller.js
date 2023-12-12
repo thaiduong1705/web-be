@@ -26,6 +26,7 @@ const getPostById = asyncHander(async (req, res) => {
             { model: db.AcademicLevel },
             { model: db.WorkingType },
             { model: db.Career },
+            { model: db.Comment },
         ],
     });
     if (!post) {
@@ -100,36 +101,26 @@ const getFilterPosts = asyncHander(async (req, res) => {
         req.query;
     const filter = {};
     if (jobTitle) {
-        console.log("oke1");
         filter.jobTitle = { [Op.substring]: jobTitle };
     }
 
     if (salaryMax) {
-        console.log("oke2");
-
         filter.salaryMax = { [Op.lte]: salaryMax };
     }
     if (salaryMin) {
-        console.log("oke3");
-
         filter.salaryMin = { [Op.gte]: salaryMin };
     }
 
     if (experienceYear) {
-        console.log("oke4");
-
         filter.experienceYear = { [Op.lte]: experienceYear };
     }
 
     if (positionId) {
-        console.log("oke6");
         filter.positionId = positionId;
     }
 
     const subFilter = {};
     if (careerId) {
-        console.log("oke5");
-
         subFilter.id = careerId;
     }
 
