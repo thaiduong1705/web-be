@@ -36,9 +36,13 @@ const createCompany = asyncHandler(async (req, res) => {
 });
 
 const getCompanyById = asyncHandler(async (req, res) => {
-    const company = await db.Company.findByPk(req.params.cid, {
-        include: [{ model: db.Post }],
-    });
+    const { jobTitle } = req.query;
+    const subPost = {}; // query cho các post nếu có
+
+    if (jobTitle) {
+        subPost.jobTitle = jobTitle;
+    }
+    const company = await db.Company.findByPk(req.params.cid);
 
     if (!company) {
         throw new CustomError(`Không có id ${req.params.cid}`, 400);

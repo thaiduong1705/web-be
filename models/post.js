@@ -135,6 +135,9 @@ module.exports = (sequelize) => {
                     isInt: true,
                 },
             },
+            // avgRating: {
+            //     type: DataTypes.DOUBLE,
+            // },
         },
         {
             paranoid: true,
