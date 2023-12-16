@@ -336,7 +336,9 @@ const checkResetToken = asyncHandler(async (req, res) => {
 const getCurrentUser = asyncHandler(async (req, res) => {
     const { id } = req.user;
     console.log(id);
-    const currentUser = await db.Candidate.findByPk(id);
+    const currentUser = await db.Candidate.findByPk(id, {
+        include: [{ model: db.Career }],
+    });
 
     if (!currentUser) {
         throw new CustomError("Không tìm thấy user của id này", 400);
