@@ -12,7 +12,9 @@ const getPublicId = (imageUrl) => {
 const deleteCloudinaryImage = async (imageUrl) => {
     if (imageUrl) {
         const publicId = getPublicId(imageUrl);
-        await cloudinary.uploader.destroy(publicId);
+        if (public) {
+            await cloudinary.uploader.destroy(publicId);
+        }
     }
 };
 
