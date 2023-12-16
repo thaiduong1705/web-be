@@ -7,12 +7,13 @@ const getPublicId = (imageUrl) => {
 
     // The result will be in match[1]
     const folderAndPublicId = match ? match[1] : null;
+    console.log(folderAndPublicId);
     return folderAndPublicId;
 };
 const deleteCloudinaryImage = async (imageUrl) => {
     if (imageUrl) {
         const publicId = getPublicId(imageUrl);
-        if (public) {
+        if (publicId) {
             await cloudinary.uploader.destroy(publicId);
         }
     }
