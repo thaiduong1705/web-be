@@ -11,7 +11,7 @@ const {
 
 const { verifyToken, checkCandidateOrNot } = require("../middleware/verifyToken");
 
-router.route("/get-post-comment").get(getAllCommentFromPost);
+router.route("/get-post-comment/:pid").get(getAllCommentFromPost);
 router.route("/get-comment-user").get(getCommentsOfUser);
 router.route("/").post(verifyToken, checkCandidateOrNot, createComment);
 router

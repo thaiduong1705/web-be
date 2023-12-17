@@ -3,12 +3,14 @@ const db = require("../models");
 const asyncHandler = require("express-async-handler");
 
 const getAllCommentFromPost = asyncHandler(async (req, res) => {
-    const { postId } = req.params.pid;
+    const postId = req.params.pid;
+    console.log(req.params.pid);
 
     const comments = await db.Comment.findAll({
         where: {
             postId,
         },
+        include: [{ model: db.Candidate }],
     });
 
     if (!comments) {
