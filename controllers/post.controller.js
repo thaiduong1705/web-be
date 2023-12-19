@@ -154,6 +154,7 @@ const getFilterPosts = asyncHander(async (req, res) => {
             { model: db.WorkingType },
             { model: db.Company, where: { ...subComp } },
         ],
+        order: [["createdAt", "DESC"]],
         limit: limit,
         offset: skip,
     });
@@ -213,6 +214,7 @@ const getPostsOfCompany = asyncHander(async (req, res) => {
         include: { model: db.Career, where: {} },
         limit,
         offset: skip,
+        order: [["createdAt", "DESC"]],
     });
     const totalPosts = await db.Post.findAll({
         where: {
