@@ -1,6 +1,7 @@
 const CustomError = require("../error/customError");
 const db = require("../models");
 const asyncHander = require("express-async-handler");
+const { QueryTypes } = require("sequelize");
 
 const getAllCareers = asyncHander(async (req, res) => {
     const careers = await db.Career.findAll({
@@ -50,9 +51,19 @@ const deleteCareer = asyncHander(async (req, res) => {
     return res.status(204).send();
 });
 
+const getNumberPostForEachCareer = asyncHander(async (req, res) => {
+    const query = `Select c.careerName, COUNT(pc.postId) AS PostCount
+                FROM careers c LEFT JOIN postcareers pc ON c.id = pc.careerId 
+                GROUP BY c.id;`;
+    const categories = await db.sequelize.query(query, { type: QueryTypes.SELECT });
+    console.log(categories);
+    return res.status(200).send("fsdsd");
+});
+
 module.exports = {
     getAllCareers,
     createCareer,
     updateCareer,
     deleteCareer,
+    getNumberPostForEachCareer,
 };
