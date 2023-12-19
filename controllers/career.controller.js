@@ -56,8 +56,7 @@ const getNumberPostForEachCareer = asyncHander(async (req, res) => {
                 FROM careers c LEFT JOIN postcareers pc ON c.id = pc.careerId 
                 GROUP BY c.id;`;
     const categories = await db.sequelize.query(query, { type: QueryTypes.SELECT });
-    console.log(categories);
-    return res.status(200).send("fsdsd");
+    return res.status(200).send({ count: categories.length, categories });
 });
 
 module.exports = {
