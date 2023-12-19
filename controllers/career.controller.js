@@ -57,6 +57,7 @@ const getNumberPostForEachCareer = asyncHander(async (req, res) => {
                 GROUP BY c.id;`;
     const categories = await db.sequelize.query(query, { type: QueryTypes.SELECT });
     return res.status(200).send({ count: categories.length, categories });
+    // tesst
 });
 
 module.exports = {
