@@ -248,7 +248,7 @@ const applyPost = asyncHander(async (req, res) => {
 
 const applyPostByCandidate = asyncHander(async (req, res) => {
     const { id } = req.user;
-    if (req.query.postId) {
+    if (!req.query.postId) {
         throw new CustomError("Thiếu id post để ứng tuyển", 400);
     }
 
