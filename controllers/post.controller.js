@@ -184,14 +184,22 @@ const getRelatedPostsFromCareer = asyncHander(async (req, res) => {
         throw new CustomError(`Thiếu id công ty`, 400);
     }
 
-    const posts = db.Post.findAll({
+    const intCareerIds = req.query.careerIds.map((item) => {
+        return parseInt(item, 10);
+    });
+
+    const posts = await db.Post.findAll({
         where: {
             id: {
                 [Op.ne]: req.query.postId,
             },
         },
-        include: [{ model: db.Career, where: { id: { [Op.or]: req.query.careerIds } } }],
+        include: [{ model: db.Career, where: { id: { [Op.in]: intCareerIds } } }],
     });
+
+    if (!posts) {
+        throw new CustomError("Không có post", 400);
+    }
     return res.status(200).json(posts);
 });
 
