@@ -194,7 +194,7 @@ const getRelatedPostsFromCareer = asyncHander(async (req, res) => {
                 [Op.ne]: req.query.postId,
             },
         },
-        include: [{ model: db.Career, where: { id: { [Op.in]: intCareerIds } } }],
+        include: [{ model: db.Career, where: { id: { [Op.in]: intCareerIds } } }, { model: db.Company }],
     });
 
     if (!posts) {

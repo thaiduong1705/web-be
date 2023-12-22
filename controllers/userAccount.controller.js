@@ -274,7 +274,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
     );
 
     const html = `Xin vui lòng click vào link này để thay đổi mật khẩu, link có hiệu lực 15 phút: <a href=
-${process.env.URL_SERVER}/auth/reset-password?email=${email}&resetToken=${randomKey}>Nhấn vào đây</a>`;
+${process.env.CLIENT_URL}/reset?email=${email}&resetToken=${randomKey}>Nhấn vào đây</a>`;
 
     await sendCustomEmail(user.email, html);
 
