@@ -172,7 +172,8 @@ const getFilterPosts = asyncHander(async (req, res) => {
     });
 
     const totalPages = Math.ceil(totalPost.length / limit);
-    return res.status(200).json({ post, totalPages });
+    const postNumber = totalPost.length;
+    return res.status(200).json({ post, totalPages, postNumber });
 });
 
 const getRelatedPostsFromCareer = asyncHander(async (req, res) => {
