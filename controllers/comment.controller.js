@@ -4,7 +4,6 @@ const asyncHandler = require("express-async-handler");
 
 const getAllCommentFromPost = asyncHandler(async (req, res) => {
     const postId = req.params.pid;
-    console.log(req.params.pid);
 
     const comments = await db.Comment.findAll({
         where: {
