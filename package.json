@@ -11,7 +11,7 @@
         "semi-migrate": "cd src && npx sequelize-cli db:migrate --name create-post.js && npx sequelize-cli db:migrate --name create-candidate.js",
         "final-migrate": "cd src && npx sequelize-cli db:migrate",
         "migrate": "npm run first-migrate && npm run second-migrate && npm run third-migrate && npm run semi-migrate && npm run final-migrate",
-        "dev": "nodemon --exec babel-node index.js"
+        "dev": "nodemon index.js"
     },
     "keywords": [],
     "author": "",
